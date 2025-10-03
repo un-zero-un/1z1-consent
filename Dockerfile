@@ -25,7 +25,7 @@ VOLUME /var/www/.cache
 RUN --mount=type=cache,target=/var/cache/apt \
     set -eux; \
     apt-get update; \
-    apt-get install -y --no-install-recommends libnss3-tools git acl unzip; \
+    apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates; \
     php -v; \
     install-php-extensions zip pdo_pgsql pcntl opcache intl apcu redis; \
     apt-get clean; \
