@@ -96,7 +96,7 @@ jobs:
               uses: ramsey/composer-install@v3
 
             - name: Twig Lint
-              run: php bin/console lint:twig --format=github
+              run: php bin/console lint:twig --format=github templates
 
             - name: Container Lint
               run: php bin/console lint:container
