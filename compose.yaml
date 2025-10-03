@@ -6,6 +6,7 @@ services:
             target: php
             args:
                 EXTERNAL_USER_ID: ${EXTERNAL_USER_ID:-33}
+        command: [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile" ]
         environment:
             MAIN_DOMAIN: ${MAIN_DOMAIN:-localhost}
             SERVER_NAME: ${SERVER_NAME:-localhost, *.localhost}

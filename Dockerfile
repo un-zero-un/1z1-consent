@@ -73,8 +73,6 @@ RUN set -eux; \
     ln -vs /opt/yarn/bin/yarn /usr/local/bin/yarn
 
 
-
-
 FROM base AS node
 
 RUN set -eux; \
