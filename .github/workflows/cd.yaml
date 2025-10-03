@@ -75,6 +75,7 @@ jobs:
             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
             REDIS_URL: ${{ secrets.REDIS_URL }}
+            MAIN_DOMAIN: ${{ secrets.MAIN_DOMAIN }}
             IMAGE_TAG: ${{ github.ref_name }}
         steps:
             - name: Checkout
