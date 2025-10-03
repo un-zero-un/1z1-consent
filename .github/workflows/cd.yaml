@@ -90,6 +90,6 @@ jobs:
             - name: Docker login
               run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             - name: Deploy to staging
-              run: docker compose -f compose.yaml up -d --pull always --wait php --force-recreate --no-build --remove-orphans
+              run: docker compose -f compose.yaml up -d --pull always --wait php --force-recreate --no-build --remove-orphans || (docker compose logs && exit 1)
             - name: Prune server
               run: docker system prune -f --all --volumes
