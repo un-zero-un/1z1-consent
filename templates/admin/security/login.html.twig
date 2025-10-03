@@ -1,0 +1,38 @@
+{% extends '@EasyAdmin/page/login.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <style>
+        body.page-login {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .google-connect-wrapper {
+            margin-top: 2em;
+            align-self: center;
+        }
+
+        .google-connect-wrapper a {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: black;
+            background: white;
+            border-radius: .5em;
+            padding: .5em 2em;
+            box-shadow: rgba(100, 100, 100, 100) .2em .2em .5em;
+        }
+    </style>
+{% endblock %}
+
+{% block wrapper_wrapper %}
+    {{ parent() }}
+
+    <div class="google-connect-wrapper">
+        <a href="{{ path('connect_google') }}">
+            <img src="https://developers-dot-devsite-v2-prod.appspot.com/identity/sign-in/g-normal.png" alt="Google Login" />
+            Google Login
+        </a>
+    </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+:host {
+    --font-family: "Segoe UI", sans-serif;
+    --base-z-index: 10000;
+
+    --buttonBackground: black;
+    --buttonBackgroundHover: black;
+    --buttonShapeColor: #ffdb77;
+    --buttonColor: white;
+
+    --dialog-inline-size: min(100% - 2em, 38em);
+    --dialog-inset-inline: 0 auto;
+
+    --popin-color: #505050;
+    --popin-background: canvas;
+    --popin-font-family: var(--font-family);
+}

@@ -1,0 +1,28 @@
+{% if 'index' == ea.crud.currentAction %}
+    {% set accepted_trackers = entity.instance.trackerConsents.toArray|filter(tc => true == tc.accepted)|length %}
+    {% set total_trackers = entity.instance.website.trackers|length %}
+
+    {% if accepted_trackers == total_trackers %}
+        <span class="badge badge-success">{{ accepted_trackers }} / {{ total_trackers }}</span>
+    {% elseif 0 == accepted_trackers %}
+        <span class="badge badge-danger">{{ accepted_trackers }} / {{ total_trackers }}</span>
+    {% else %}
+        <span class="badge badge-warning">{{ accepted_trackers }} / {{ total_trackers }}</span>
+    {% endif %}
+{% else %}
+    <ul>
+        {% for tracker in entity.instance.website.trackers %}
+            {% set tracker_consent = entity.instance.trackerConsents.toArray|filter(tc => tc.tracker == tracker) %}
+            <li>
+                {{ tracker.name }} :
+                {% if 0 == tracker_consent|length %}
+                    <span class="badge-warning badge">Inconnu</span>
+                {% elseif (tracker_consent|first).accepted %}
+                    <span class="badge-success badge">Accepté</span>
+                {% else %}
+                    <span class="badge-danger badge">Refusé</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

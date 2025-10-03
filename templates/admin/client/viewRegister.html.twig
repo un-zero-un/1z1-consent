@@ -1,0 +1,12 @@
+{% extends ea.templatePath('layout') %}
+
+{% block main %}
+    <div>
+        <a href="{{ ea_url().setAction('viewPDFRegister') }}">
+            Voir en PDF
+        </a>
+    </div>
+    <div>
+        {{ include('admin/client/_register.html.twig', {client: client}, with_context: false) }}
+    </div>
+{% endblock %}

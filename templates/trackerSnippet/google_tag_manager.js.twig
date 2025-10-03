@@ -1,0 +1,9 @@
+(function (d, s) {
+    const t = d.getElementsByTagName(s)[0];
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', '{{ tracker.trackerId }}');
+    const a = d.createElement(s); a.async = true; a.src = '{{ tracker.customUrl ?: 'https://www.googletagmanager.com/gtag/js' }}?id={{ tracker.trackerId }}'; t.parentNode.insertBefore(a, t);
+    {{ tracker.customCode|spaceless|trim|raw }}
+})(document, 'script');

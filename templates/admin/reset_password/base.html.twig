@@ -1,0 +1,19 @@
+{% extends '@EasyAdmin/page/login_minimal.html.twig' %}
+
+{% block body_class 'page-login' %}
+
+{% block wrapper_wrapper %}
+    {{ include('@EasyAdmin/flash_messages.html.twig') }}
+
+    <div class="login-wrapper">
+        <header class="main-header">
+            <div id="header-logo">
+                <div class="logo {{ block('page_title')|length > 14 ? 'logo-long' }}">{{ block('page_title') }}</div>
+            </div>
+        </header>
+
+        <section class="content">
+            {% block box_body '' %}
+        </section>
+    </div>
+{% endblock %}

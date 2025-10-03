@@ -1,0 +1,20 @@
+services:
+    php:
+        image: ${IMAGE_PREFIX:-ghcr.io/un-zero-un/1z1-consent/}php:${IMAGE_TAG:-latest}
+        build:
+            context: .
+            target: php
+            args:
+                EXTERNAL_USER_ID: ${EXTERNAL_USER_ID:-33}
+        environment:
+            MAIN_DOMAIN: ${MAIN_DOMAIN:-localhost}
+            SERVER_NAME: ${SERVER_NAME:-localhost, *.localhost}
+            APP_ENV: ${APP_ENV:-prod}
+            APP_SECRET: ${APP_SECRET:-!ChangeMe!}
+        volumes:
+            - caddy_data:/data
+            - caddy_config:/config
+
+volumes:
+    caddy_data:
+    caddy_config:

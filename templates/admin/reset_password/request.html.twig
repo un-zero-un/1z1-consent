@@ -1,0 +1,19 @@
+{% extends 'admin/reset_password/base.html.twig' %}
+
+{% form_theme request_form '@EasyAdmin/symfony-form-themes/bootstrap_5_layout.html.twig' %}
+
+{% block page_title %}Mot de passe oublié{% endblock %}
+
+{% block box_body %}
+    <div class="w-100 alert alert-primary rounded mb-3">
+        Saisissez votre adresse email pour recevoir un lien de réinitialisation de votre mot de passe.
+    </div>
+
+    {{ form_start(request_form) }}
+        {{ form_row(request_form.email) }}
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Envoyer le mail</button>
+        </div>
+    {{ form_end(request_form) }}
+{% endblock %}

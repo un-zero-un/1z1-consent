@@ -1,0 +1,132 @@
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request: ~
+    workflow_dispatch: ~
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+    cancel-in-progress: true
+
+jobs:
+    tests:
+        name: Tests
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+            - name: Build Docker images
+              uses: docker/bake-action@v6
+              env:
+                  EXTERNAL_USER_ID: 1001
+              with:
+                  pull: true
+                  load: true
+                  push: false
+                  files: |
+                      compose.yaml
+                      compose.override.yaml
+                  set: |
+                      *.cache-from=type=gha,scope=${{github.ref}}
+                      *.cache-from=type=gha,scope=refs/heads/main
+                      *.cache-to=type=gha,scope=${{github.ref}},mode=max
+            - name: Install mkcert
+              run: |
+                  sudo apt install libnss3-tools
+                  curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+                  chmod +x mkcert-v*-linux-amd64
+                  sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
+                  mkcert -install
+                  mkdir -p infra/docker/php/tls
+                  mkcert -key-file infra/docker/php/tls/key.pem -cert-file infra/docker/php/tls/cert.pem localhost
+            - name: Set up Docker Compose
+              uses: docker/setup-compose-action@v1
+              with:
+                  version: latest
+            - name: Start services
+              run: docker compose up --wait --no-build
+            - name: Create test database
+              run: docker compose exec -T php bin/console -e test doctrine:database:create
+            - name: Create schema
+              run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
+            - name: Load fixtures
+              run: docker compose exec -T php bin/console -e test doctrine:fixtures:load --no-interaction
+            - name: Run PHPUnit
+              run: docker compose exec -T -eXDEBUG_MODE=coverage php bin/phpunit
+            - name: Doctrine Schema Validator
+              run: docker compose exec -T php bin/console -e test doctrine:schema:validate
+
+    psalm:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            security-events: write
+            actions: write
+        name: Static Analysis
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Psalm
+              uses: docker://ghcr.io/psalm/psalm-github-actions
+              with:
+                  show_info: true
+                  php_version: '8.4'
+                  composer_require_dev: true
+                  composer_ignore_platform_reqs: true
+
+    lint:
+        runs-on: ubuntu-latest
+        name: Lint
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.4'
+
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+
+            - name: Twig Lint
+              run: php bin/console lint:twig --format=github
+
+            - name: Container Lint
+              run: php bin/console lint:container
+
+            - name: YAML Lint
+              run: find config -name "*.yaml" | xargs php bin/console lint:yaml --format=github
+
+            - name: Translations Lint
+              run: php bin/console lint:translations --locale=fr
+
+            - name: Lint Dockerfile
+              uses: hadolint/hadolint-action@v3.1.0
+
+    cs:
+        runs-on: ubuntu-latest
+        name: Code Style
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.4'
+
+            - name: Install dependencies
+              uses: ramsey/composer-install@v3
+
+            - name: PHP CS Fixer
+              run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --ansi
+
+            - name: Twig CS Fixer
+              run: ./vendor/bin/twig-cs-fixer lint --report=github

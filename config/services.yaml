@@ -1,0 +1,27 @@
+parameters:
+    'env(DNT_ENABLED)': 1
+    'env(AUTHORIZED_ADMIN_EMAIL_DOMAINS)': 'example.com'
+    'env(MAIN_DOMAIN)': 'localhost'
+    'env(EMAIL_FROM_ADDRESS)': '1z1 Consent <consent@example.com>'
+    main_domain: '%env(MAIN_DOMAIN)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            bool $dntEnabled: '%env(resolve:DNT_ENABLED)%'
+            string $authorizedAdminEmailDomains: '%env(AUTHORIZED_ADMIN_EMAIL_DOMAINS)%'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    Twig\Extra\Intl\IntlExtension: '@twig.extension.intl'
+
+when@dev:
+    parameters:
+        'env(DNT_ENABLED)': 0

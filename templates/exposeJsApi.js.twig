@@ -1,0 +1,35 @@
+{%- set content -%}
+((d) => {
+    {%- if 'dev' == app.environment -%}
+        {%- for file in encore_entry_js_files('dialog') -%}{{ include(file)|raw }}{%- endfor -%}
+    {%- else -%}
+        {%- for file in encore_entry_js_files('dialog') -%}{% cache file|replace({'/': '_'}) %}{{ include(file)|raw }}{% endcache %}{%- endfor -%}
+    {%- endif -%}
+    /* */
+    const dialogBox = d.createElement('uzu-consent');
+    dialogBox.setAttribute('data-website-id', {{ website.id|json_encode|raw }});
+    dialogBox.setAttribute('data-post-consent-url', {{ url('post_consent')|json_encode|raw }});
+    dialogBox.setAttribute('data-show-open-button', {{ website.showOpenButton|json_encode|raw }});
+    dialogBox.setAttribute('data-custom-css', {{ website.customCss|json_encode|raw }});
+    dialogBox.setAttribute('data-trackers', '{{ website.trackers|map(t => {id: t.id, type: t.type, name: t.name})|json_encode|raw }}');
+    dialogBox.setAttribute('data-dialog-title', '{{ website.dialogTitle }}');
+    dialogBox.setAttribute('data-dialog-text', '{{ website.dialogText }}');
+    dialogBox.snippets = {
+        {% for tracker in website.trackers %}
+        '{{ tracker.id.toRfc4122()|raw }}': () => {
+            const trackerId = '{{ tracker.trackerId }}';
+            {% if tracker.useDefaultSnippet %}
+                {{ include(
+                    'trackerSnippet/' ~ tracker.type.value ~ '.js.twig'
+                        , {tracker: tracker}
+                , true, true) }}
+            {% else %}
+                {{ tracker.customCode|spaceless|trim|raw }}
+            {% endif %}
+        },
+        {% endfor %}
+    };
+    d.body.appendChild(dialogBox);
+})(document);
+{%- endset -%}
+{{ content|spaceless|trim|raw }}

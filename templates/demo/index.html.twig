@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Démo 1z1 Consent</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+
+    <h1>Démo de consentement Cookie</h1>
+
+    <h2 style="margin-top: 2em;">Utilisation</h2>
+
+    <p>
+        Il suffit d'ajouter le script à la page grâce à la balise suivante :
+    </p>
+
+    {% block script_tag ('<script src="//' ~ (app.request.get('suffix') ~ path('expose_js_api')) ~ '" defer></script>')|raw %}
+    <pre>{{ block('script_tag')|e }}</pre>
+
+    <p>C'est tout. Le reste se passe dans le <a href="{{ url('admin') }}">back-office</a>. </p>
+
+    <h2 style="margin-top: 2em;">Bouton / Lien personnalisé</h2>
+
+    <h3 style="margin-top: 2em;">JS</h3>
+    <p>Pour désactiver le bouton par défaut (ou pas) et en utiliser un personnalisé, un événement est disponible :</p>
+
+    <pre style="z-index: 1000; position: relative; background: white">
+{%- block button_code -%}
+document
+    .getElementById('custom-button')
+    .addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('1z1-content:show-dialog'));
+    });
+{%- endblock -%}
+    </pre>
+
+    <p>Exemple : <a href="#" id="custom-button">Afficher la popup</a></p>
+
+    <h3 style="margin-top: 2em;">HTML</h3>
+    <p>Il est également possible d'utiliser l'événement directement dans un "onclick"</p>
+
+    <pre style="z-index: 1000; position: relative; background: white">
+{%- set button_onclick_code -%}
+    <button onclick="document.dispatchEvent(new CustomEvent('1z1-content:show-dialog'));">Afficher la popup</button>
+{%- endset -%}
+        {{ button_onclick_code|e }}
+
+        <p>Exemple : {{ button_onclick_code }}</p>
+    </pre>
+
+<script>{{ block('button_code')|raw }}</script>
+</body>
+</html>

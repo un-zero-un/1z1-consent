@@ -1,0 +1,26 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+#when@dev:
+homepage:
+    path: /
+    host: www.{suffix}
+    requirements:
+        suffix: '.*'
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    'demo/index.html.twig'
+
+when@dev:
+    demo:
+        path: /
+        host: '{prefix}.www.{suffix}'
+        requirements:
+            prefix: '.*'
+            suffix: '.*'
+        defaults:
+            _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+            template:    'demo/index.html.twig'
