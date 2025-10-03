@@ -12,6 +12,13 @@ services:
             SERVER_NAME: ${SERVER_NAME:-localhost, *.localhost}
             APP_ENV: ${APP_ENV:-prod}
             APP_SECRET: ${APP_SECRET:-!ChangeMe!}
+            REDIS_URL: ${REDIS_URL:-redis://redis}
+            MAILER_DSN: ${MAILER_DSN:-smtp://smtp:1025}
+            DATABASE_URL: ${DATABASE_URL:-postgres://${POSTGRES_USER:-1z1-consent}:${POSTGRES_PASSWORD:-1z1-consent}@database:5432/${POSTGRES_DB:-1z1-consent}}
+            AUTHORIZED_ADMIN_EMAIL_DOMAINS: ${AUTHORIZED_ADMIN_EMAIL_DOMAINS:-}
+            EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-}
+            GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+            GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
         volumes:
             - caddy_data:/data
             - caddy_config:/config

@@ -17,7 +17,7 @@ services:
         command: [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
 
     database:
-        image: postgres:15
+        image: postgres:17
         volumes: [ database-data:/var/lib/postgresql/data ]
         environment:
             POSTGRES_USER: ${POSTGRES_USER:-1z1-consent}
@@ -29,7 +29,7 @@ services:
                 protocol: tcp
 
     redis:
-        image: redis:7.0
+        image: redis:8
         ports:
             -   target: 6379
                 published: ${REDIS_PORT:-6379}
