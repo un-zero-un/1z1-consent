@@ -48,7 +48,7 @@ ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 ARG STAGE=dev
 
-RUN ln -s $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
+RUN ln -s "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 COPY infra/docker/php/conf.d/symfony.prod.ini $PHP_INI_DIR/conf.d/symfony.ini
 
 ARG APP_ENV=prod
