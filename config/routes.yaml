@@ -4,7 +4,10 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-#when@dev:
+easyadmin:
+    resource: .
+    type: easyadmin.routes
+
 homepage:
     path: /
     host: www.{suffix}

@@ -6,6 +6,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\AdminUser;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -110,6 +111,7 @@ final class AdminUserCrudController extends AbstractCrudController
             );
     }
 
+    #[AdminRoute(path: '/{entityId}/send-reset-password-link', name: 'send_reset_password_link')]
     public function sendResetPasswordLink(AdminContext $adminContext): Response
     {
         $user = $adminContext->getEntity()->getInstance();

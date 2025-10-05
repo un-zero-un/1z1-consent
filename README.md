@@ -1,11 +1,11 @@
  * [x] Send from address : rendre configurable
  * [x] PHP-CS-Fixer 
- * [ ] Rector
+ * [x] Rector
  * [x] Tests unitaires
  * [ ] Tests fonctionnels
  * [ ] Pretty URLs
- * [ ] Github actions
- * [ ] Psalm
+ * [x] Github actions
+ * [x] Psalm
  * [x] Déploiement
  * [ ] Readme
  * [x] PDF

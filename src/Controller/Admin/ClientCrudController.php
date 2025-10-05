@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Client;
 use Doctrine\ORM\QueryBuilder;
 use Dompdf\Dompdf;
+use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -98,12 +99,14 @@ final class ClientCrudController extends AbstractCrudController
             ->setParameter('agency', $agency);
     }
 
+    #[AdminRoute('/{entityId}/view-register', name: 'viewRegister')]
     #[Template('admin/client/viewRegister.html.twig')]
     public function viewRegister(AdminContext $adminContext): array
     {
         return ['client' => $adminContext->getEntity()->getInstance()];
     }
 
+    #[AdminRoute('/{entityId}/view-pdf-register', name: 'viewPDFRegister')]
     public function viewPDFRegister(AdminContext $adminContext): Response
     {
         $client = $adminContext->getEntity()->getInstance();
