@@ -13,6 +13,4 @@
  * [ ] Pages vues => IP
  * [x] Nom sur site Internet
  * [x] SMTP
- * [ ] Single container build
- * [ ] Cache pool / cache factory
  * [ ] Domain Exceptions

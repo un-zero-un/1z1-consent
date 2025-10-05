@@ -12,15 +12,15 @@
         "doctrine/doctrine-bundle": "^2.16.2",
         "doctrine/doctrine-migrations-bundle": "^3.4.2",
         "doctrine/orm": "^3.5.2",
-        "dompdf/dompdf": "^3.1",
-        "easycorp/easyadmin-bundle": "^4.8.6",
-        "knpuniversity/oauth2-client-bundle": "*",
-        "league/oauth2-google": "*",
+        "dompdf/dompdf": "^3.1.2",
+        "easycorp/easyadmin-bundle": "^4.25.1",
+        "knpuniversity/oauth2-client-bundle": "^2.19.0",
+        "league/oauth2-google": "^4.0.1",
         "runtime/frankenphp-symfony": "^0.2.0",
-        "scienta/doctrine-json-functions": "^5.3.0",
+        "scienta/doctrine-json-functions": "^5.5.0",
         "symfony/console": "7.3.*",
         "symfony/dotenv": "7.3.*",
-        "symfony/flex": "^2.4.1",
+        "symfony/flex": "^2.8.2",
         "symfony/framework-bundle": "7.3.*",
         "symfony/http-client": "7.3.*",
         "symfony/mailer": "7.3.*",
@@ -28,24 +28,23 @@
         "symfony/monolog-bundle": "^3.10.0",
         "symfony/runtime": "7.3.*",
         "symfony/scaleway-mailer": "7.3.*",
-        "symfony/stimulus-bundle": "^2.13.3",
+        "symfony/stimulus-bundle": "^2.30.0",
         "symfony/translation": "7.3.*",
         "symfony/twig-bundle": "7.3.*",
         "symfony/uid": "7.3.*",
         "symfony/ux-chartjs": "^2.30.0",
         "symfony/webpack-encore-bundle": "^2.3.0",
         "symfony/yaml": "7.3.*",
-        "symfonycasts/reset-password-bundle": "^1.19.0",
-        "twig/cache-extra": "^3.8.0",
-        "twig/extra-bundle": "^3.8.0",
-        "twig/intl-extra": "^3.8.0",
-        "twig/twig": "^3.8.0",
+        "symfonycasts/reset-password-bundle": "^1.23.2",
+        "twig/cache-extra": "^3.21.0",
+        "twig/extra-bundle": "^3.21.0",
+        "twig/intl-extra": "^3.21.0",
+        "twig/twig": "^3.21.1",
         "yohang/calendr": "^1.0.6"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.88",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^12.4.0",
         "rector/rector": "^2.1",
         "symfony/browser-kit": "7.3.*",
         "symfony/css-selector": "7.3.*",
@@ -55,7 +54,8 @@
         "symfony/stopwatch": "7.3.*",
         "symfony/web-profiler-bundle": "7.3.*",
         "vimeo/psalm": "^6.13.1",
-        "vincentlanglet/twig-cs-fixer": "^3.10"
+        "vincentlanglet/twig-cs-fixer": "^3.10",
+        "zenstruck/foundry": "^2.7"
     },
     "config": {
         "allow-plugins": {
@@ -103,16 +103,14 @@
             "php bin/console cache:pool:clear app.cache.adapter.redis",
             "php bin/console doctrine:schema:drop --force --full-database",
             "php bin/console doctrine:migrations:migrate --no-interaction",
-            "php bin/console doctrine:fixtures:load --no-interaction",
-            "php bin/console admin:create-user --no-interaction --admin admin@example.com !ChangeMe! 'Un Zéro Un'"
+            "php bin/console foundry:load-fixtures main --no-interaction"
         ],
         "reset-test": [
             "php bin/console -etest cache:pool:clear app.cache.adapter.redis",
             "php bin/console -etest doctrine:database:create --if-not-exists",
             "php bin/console -etest doctrine:schema:drop --force --full-database",
             "php bin/console -etest doctrine:migrations:migrate --no-interaction",
-            "php bin/console -etest doctrine:fixtures:load --no-interaction",
-            "php bin/console -etest admin:create-user --no-interaction --admin admin@example.com !ChangeMe! 'Un Zéro Un'"
+            "php bin/console -etest foundry:load-fixtures main --no-interaction"
         ]
     },
     "conflict": {
