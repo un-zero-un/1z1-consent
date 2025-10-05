@@ -11,10 +11,6 @@ use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -26,8 +22,7 @@ final readonly class CreateAdminUserCommand
         private UserPasswordHasherInterface $passwordHasher,
         private AdminUserRepository $adminUserRepository,
         private AgencyRepository $agencyRepository,
-    )
-    {
+    ) {
     }
 
     public function __invoke(
@@ -39,9 +34,8 @@ final readonly class CreateAdminUserCommand
         #[Argument(description: 'Agency to assign the user to', name: 'agency')]
         ?string $agency = null,
         #[Option(description: 'Create as admin', name: 'admin')]
-        ?bool $asAdmin = false,
-    ): int
-    {
+        bool $asAdmin = false,
+    ): int {
         if (!$email) {
             $email = $io->askQuestion(new Question('Email : '));
         }

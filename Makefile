@@ -1,7 +1,7 @@
 DOCKER_COMPOSE = EXTERNAL_USER_ID=$(shell id -u) docker compose
 HTTPS_PORT ?= 443
 
-.PHONY: ps build up first_run clean logs cli run reset cc deploy down test hadolint
+.PHONY: ps build up first_run clean logs cli run reset cc deploy down test hadolint psalm psalm_strict
 
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
@@ -36,9 +36,11 @@ cli: ## Open a shell in the php container
 
 first_run: php/tls/cert.pem pull build vendor/ up node_modules/ public/build/ reset
 
+reset: env=dev
 reset: ## Reset project fixtures
 	$(DOCKER_COMPOSE) exec -e$(env) php composer reset
 
+cc: env=dev
 cc: ## Clear the Symfony cache
 	@$(DOCKER_COMPOSE) exec -e$(env) php bin/console cache:clear
 

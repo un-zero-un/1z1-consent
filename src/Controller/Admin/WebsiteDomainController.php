@@ -10,7 +10,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class WebsiteDomainController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<WebsiteDomain>
+ */
+final class WebsiteDomainController extends AbstractCrudController
 {
     #[\Override]
     public function configureFields(string $pageName): iterable
@@ -29,6 +32,7 @@ class WebsiteDomainController extends AbstractCrudController
                      ->disable(Action::DELETE);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return WebsiteDomain::class;

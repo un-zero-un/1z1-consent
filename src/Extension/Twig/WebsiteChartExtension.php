@@ -17,7 +17,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\Extra\Intl\IntlExtension;
 use Twig\TwigFunction;
 
-class WebsiteChartExtension extends AbstractExtension
+final class WebsiteChartExtension extends AbstractExtension
 {
     public function __construct(
         private readonly ChartBuilderInterface $chartBuilder,

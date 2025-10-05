@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
-class WebsiteHitRepository extends ServiceEntityRepository
+final class WebsiteHitRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

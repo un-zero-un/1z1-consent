@@ -11,7 +11,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class AgencyCrudController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<Agency>
+ */
+final class AgencyCrudController extends AbstractCrudController
 {
     #[\Override]
     public function configureFields(string $pageName): iterable
@@ -32,6 +35,7 @@ class AgencyCrudController extends AbstractCrudController
             ->setEntityPermission('ROLE_ADMIN');
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Agency::class;

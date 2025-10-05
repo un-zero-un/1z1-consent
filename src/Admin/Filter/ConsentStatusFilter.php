@@ -17,6 +17,7 @@ final class ConsentStatusFilter implements FilterInterface
 {
     use FilterTrait;
 
+    #[\Override]
     public function apply(QueryBuilder $queryBuilder, FilterDataDto $filterDataDto, ?FieldDto $fieldDto, EntityDto $entityDto): void
     {
         $value = $filterDataDto->getValue();

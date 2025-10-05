@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;
 
+/**
+ * @psalm-suppress NoValue Suppressed because of the particular pattern used here
+ */
 final readonly class ApiBypasser
 {
     private const string CACHE_PREFIX = 'api_bypass__';
@@ -36,7 +39,6 @@ final readonly class ApiBypasser
             $request->headers->get('referer') ?: '',
         );
 
-        /* @psalm-suppress NoValue Supppressed because of the particular pattern used here */
         return $this->cache->get(
             self::CACHE_PREFIX.$fingerprint->getHash(),
             fn () => throw new \RuntimeException('This should not happen'),

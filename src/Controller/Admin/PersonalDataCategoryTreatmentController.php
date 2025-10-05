@@ -11,7 +11,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 
-class PersonalDataCategoryTreatmentController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<PersonalDataTreatmentCategory>
+ */
+final class PersonalDataCategoryTreatmentController extends AbstractCrudController
 {
     #[\Override]
     public function configureFields(string $pageName): iterable
@@ -32,6 +35,7 @@ class PersonalDataCategoryTreatmentController extends AbstractCrudController
                      ->disable(Action::DELETE);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return PersonalDataTreatmentCategory::class;

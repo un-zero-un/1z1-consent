@@ -28,6 +28,9 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 
+/**
+ * @api
+ */
 #[Entity(repositoryClass: WebsiteRepository::class)]
 #[Table]
 #[HasLifecycleCallbacks]
@@ -265,9 +268,10 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
         }
 
         if ($this->isAddTrackerToGDPR() && 0 !== count($domains)) {
+            // TODO : fake code, generate from trackers.
             $treatment = new GDPRTreatment();
             $treatment->setName('Pisteur statistique');
-            $treatment->setRef((new AsciiSlugger())->slug($domains[0]->getDomain() ?: '')->ascii()->lower()->toString().'-analytics');
+            $treatment->setRef(new AsciiSlugger()->slug($domains[0]->getDomain() ?: '')->ascii()->lower()->toString().'-analytics');
             $treatment->setClient($this->getClient());
             $treatment->setProcessingPurpose('Collecte des données de fréquentation du site');
             $treatment->setProcessingSubPurpose1('Analyse de la fréquentation du site');
@@ -308,17 +312,19 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
         }
     }
 
+    #[\Override]
     public function getAgency(): ?Agency
     {
         return $this->getClient()?->getAgency();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return implode(
             ', ',
             $this->getDomains()
-                ->map(static fn (WebsiteDomain $domain): string => $domain->getDomain())
+                ->map(static fn (WebsiteDomain $domain): ?string => $domain->getDomain())
                 ->toArray(),
         );
     }

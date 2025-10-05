@@ -22,10 +22,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Range;
 
+/**
+ * @api
+ */
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class Server implements HasTimestamp, HasAgency
+class Server implements HasTimestamp, HasAgency, \Stringable
 {
     use HasTimestampImpl;
 
@@ -64,11 +67,13 @@ class Server implements HasTimestamp, HasAgency
         return $this->id;
     }
 
+    #[\Override]
     public function getAgency(): ?Agency
     {
         return $this->agency;
     }
 
+    #[\Override]
     public function setAgency(?Agency $agency): void
     {
         $this->agency = $agency;
@@ -104,6 +109,7 @@ class Server implements HasTimestamp, HasAgency
         $this->numberOfUnmanagedSites = $numberOfUnmanagedSites;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->name ?: 'A server with no name';

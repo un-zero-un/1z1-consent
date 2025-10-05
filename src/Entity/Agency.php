@@ -22,6 +22,9 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * @api
+ */
 #[Entity(repositoryClass: AgencyRepository::class)]
 #[Table]
 #[HasLifecycleCallbacks]

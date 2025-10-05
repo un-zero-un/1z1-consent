@@ -13,7 +13,7 @@ trait CorsController
     private function appendCorsHeaders(Request $request, Response $response): void
     {
         $referer = $request->headers->get('referer');
-        if (!$referer) {
+        if (null === $referer) {
             throw new BadRequestException('Missing referer header');
         }
 

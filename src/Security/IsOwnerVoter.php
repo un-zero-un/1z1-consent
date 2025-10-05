@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 final class IsOwnerVoter extends Voter
 {
+    #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         if ('IS_OWNER' !== $attribute) {
@@ -26,6 +27,7 @@ final class IsOwnerVoter extends Voter
         return null === $subject || $subject instanceof HasAgency || $subject instanceof IndirectlyHasAgency;
     }
 
+    #[\Override]
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?\Symfony\Component\Security\Core\Authorization\Voter\Vote $vote = null): bool
     {
         if (null === $subject) {

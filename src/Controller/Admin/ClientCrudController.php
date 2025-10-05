@@ -24,16 +24,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * @extends AbstractCrudController<Client>
  */
-class ClientCrudController extends AbstractCrudController
+final class ClientCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
-    public function __construct()
-    {
-    }
-
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Client::class;
@@ -45,9 +42,9 @@ class ClientCrudController extends AbstractCrudController
         $agency = $this->getAgency();
 
         $agencyQueryBuilder = fn (QueryBuilder $queryBuilder): QueryBuilder => $queryBuilder
-                    ->innerJoin('entity.client', 'client')
-                    ->andWhere('client.agency = :agency')
-                    ->setParameter('agency', $agency);
+            ->innerJoin('entity.client', 'client')
+            ->andWhere('client.agency = :agency')
+            ->setParameter('agency', $agency);
 
         return [
             IdField::new('id')->hideOnForm(),
@@ -110,6 +107,9 @@ class ClientCrudController extends AbstractCrudController
     public function viewPDFRegister(AdminContext $adminContext): Response
     {
         $client = $adminContext->getEntity()->getInstance();
+        if (!$client instanceof Client) {
+            throw $this->createNotFoundException('Client not found');
+        }
 
         return new StreamedResponse(
             function () use ($client): void {
@@ -124,7 +124,7 @@ class ClientCrudController extends AbstractCrudController
             201,
             [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="registre_rgpd_'.$client->getName().'.pdf"',
+                'Content-Disposition' => 'attachment; filename="registre_rgpd_'.($client->getName() ?: '').'.pdf"',
             ]
         );
     }

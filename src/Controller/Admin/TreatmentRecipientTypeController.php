@@ -13,7 +13,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
-class TreatmentRecipientTypeController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<TreatmentRecipientType>
+ */
+final class TreatmentRecipientTypeController extends AbstractCrudController
 {
     #[\Override]
     public function configureFields(string $pageName): iterable
@@ -39,6 +42,7 @@ class TreatmentRecipientTypeController extends AbstractCrudController
                      ->disable(Action::DELETE);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return TreatmentRecipientType::class;

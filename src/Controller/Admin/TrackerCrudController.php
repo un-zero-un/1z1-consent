@@ -14,8 +14,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
-class TrackerCrudController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<Tracker>
+ */
+final class TrackerCrudController extends AbstractCrudController
 {
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Tracker::class;

@@ -24,9 +24,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 
 /**
+ * @extends AbstractCrudController<Website>
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
-class WebsiteCrudController extends AbstractCrudController
+final class WebsiteCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
@@ -34,6 +36,7 @@ class WebsiteCrudController extends AbstractCrudController
     {
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Website::class;
@@ -42,7 +45,8 @@ class WebsiteCrudController extends AbstractCrudController
     #[\Override]
     public function configureFields(string $pageName): iterable
     {
-        $defaultVariables = file_get_contents(realpath(__DIR__.'/../../../assets/dialog/variables.scss.txt'));
+        $variableFilePath = realpath(__DIR__.'/../../../assets/dialog/variables.scss.txt');
+        $defaultVariables = $variableFilePath ? file_get_contents($variableFilePath) : '';
         $agency = $this->getAgency();
 
         return [
@@ -70,11 +74,12 @@ class WebsiteCrudController extends AbstractCrudController
             TextField::new('dialogTitle', 'Titre de la boite de dialogue')
                      ->setFormTypeOption('attr', ['placeholder' => 'Hello, on a besoin de votre permission'])
                      ->hideOnIndex(),
+
             TextareaField::new('dialogText', 'Texte de la boite de dialogue')
                          ->setFormTypeOption('attr', ['placeholder' => '<p>On aimerait utiliser des cookies pour améliorer votre expérience sur notre site.</p><p>Vous nous donnez votre autorisation ? Quelle que soit votre réponse, on ne vous embêtera plus avec cette question 🙂.</p>'])
                          ->hideOnIndex(),
 
-            MonacoEditorField::new('customCss', 'CSS personnalisé', ['language' => 'css', 'attrs' => ['placeholder' => $defaultVariables]])
+            MonacoEditorField::new('customCss', 'CSS personnalisé', ['language' => 'css', 'attrs' => ['placeholder' => $defaultVariables ?: '']])
                              ->onlyOnForms()
                              ->hideOnIndex(),
             CollectionField::new('domains', 'Domaines')

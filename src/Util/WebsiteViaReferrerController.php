@@ -22,11 +22,16 @@ trait WebsiteViaReferrerController
     private function getRefererHost(Request $request): string
     {
         $referer = $this->getReferer($request);
-        if (!$referer) {
+        if (null === $referer) {
             throw new BadRequestException('Missing referer header');
         }
 
-        return parse_url((string) $referer, PHP_URL_HOST);
+        $host = parse_url($referer, PHP_URL_HOST);
+        if (!is_string($host)) {
+            throw new BadRequestException('Unable to parse referer host');
+        }
+
+        return $host;
     }
 
     /**

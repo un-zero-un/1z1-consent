@@ -14,7 +14,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CountryField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
-class TreatmentOutOfEUTransferController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<TreatmentOutOfEUTransfer>
+ */
+final class TreatmentOutOfEUTransferController extends AbstractCrudController
 {
     #[\Override]
     public function configureFields(string $pageName): iterable
@@ -41,6 +44,7 @@ class TreatmentOutOfEUTransferController extends AbstractCrudController
                      ->disable(Action::DELETE);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return TreatmentOutOfEUTransfer::class;

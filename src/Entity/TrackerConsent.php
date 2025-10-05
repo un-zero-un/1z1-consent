@@ -20,6 +20,9 @@ use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @api
+ */
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]

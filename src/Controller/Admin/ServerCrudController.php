@@ -16,12 +16,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * @extends AbstractCrudController<Server>
  */
-class ServerCrudController extends AbstractCrudController
+final class ServerCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Server::class;

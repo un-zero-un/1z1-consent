@@ -22,7 +22,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 
-class WebsiteHitCrudController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<WebsiteHit>
+ */
+final class WebsiteHitCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
@@ -80,6 +83,7 @@ class WebsiteHitCrudController extends AbstractCrudController
                      ->setParameter('agency', $agency);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return WebsiteHit::class;

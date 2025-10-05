@@ -24,10 +24,13 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
 
+/**
+ * @api
+ */
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class Client implements HasTimestamp, HasAgency
+class Client implements HasTimestamp, HasAgency, \Stringable
 {
     use HasTimestampImpl;
 
@@ -80,11 +83,13 @@ class Client implements HasTimestamp, HasAgency
         return $this->id;
     }
 
+    #[\Override]
     public function getAgency(): ?Agency
     {
         return $this->agency;
     }
 
+    #[\Override]
     public function setAgency(?Agency $agency): void
     {
         $this->agency = $agency;
@@ -147,6 +152,7 @@ class Client implements HasTimestamp, HasAgency
         return $this->treatments;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->name ?: 'A client with no name';

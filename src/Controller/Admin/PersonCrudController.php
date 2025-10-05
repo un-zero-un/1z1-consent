@@ -12,7 +12,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CountryField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class PersonCrudController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<Person>
+ */
+final class PersonCrudController extends AbstractCrudController
 {
     #[\Override]
     public function configureFields(string $pageName): iterable
@@ -41,6 +44,7 @@ class PersonCrudController extends AbstractCrudController
                      ->disable(Action::DELETE);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Person::class;

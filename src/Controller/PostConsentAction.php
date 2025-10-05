@@ -44,7 +44,7 @@ final readonly class PostConsentAction
         $dnt = '1' === $request->headers->get('dnt');
         $refererHost = $this->getRefererHost($request);
         $websiteId = $this->websiteIdProvider->get($refererHost, $request->getHost());
-        $website = $this->websiteRepository->find($websiteId);
+        $website = $this->websiteRepository->findOneById($websiteId);
         $fingerPrint = Fingerprint::create($request, $refererHost, $websiteId, $dnt);
 
         $this->apiBypasser->remove($fingerPrint);

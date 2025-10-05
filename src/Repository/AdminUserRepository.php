@@ -8,7 +8,7 @@ use App\Entity\AdminUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class AdminUserRepository extends ServiceEntityRepository
+final class AdminUserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {

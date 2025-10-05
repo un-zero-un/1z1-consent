@@ -23,12 +23,15 @@ use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @api
+ */
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
 #[Index(columns: ['website_id', 'user_id'])]
 #[Index(fields: ['website', 'createdAt'])]
-class Consent implements HasTimestamp, IndirectlyHasAgency
+class Consent implements HasTimestamp, IndirectlyHasAgency, \Stringable
 {
     use HasTimestampImpl;
 
@@ -101,11 +104,13 @@ class Consent implements HasTimestamp, IndirectlyHasAgency
         throw new \InvalidArgumentException('Tracker not found. '.$trackerId);
     }
 
+    #[\Override]
     public function getAgency(): ?Agency
     {
         return $this->getWebsite()->getClient()?->getAgency();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->userId;

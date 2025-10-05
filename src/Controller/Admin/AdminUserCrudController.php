@@ -29,6 +29,8 @@ use Symfony\Component\Mime\Address;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 /**
+ * @extends AbstractCrudController<AdminUser>
+ *
  * @psalm-suppress PropertyNotSetInConstructor
  */
 final class AdminUserCrudController extends AbstractCrudController
@@ -111,11 +113,20 @@ final class AdminUserCrudController extends AbstractCrudController
     public function sendResetPasswordLink(AdminContext $adminContext): Response
     {
         $user = $adminContext->getEntity()->getInstance();
+        if (!$user instanceof AdminUser) {
+            throw $this->createNotFoundException('Utilisateur non trouvé');
+        }
+
         $resetToken = $this->resetPasswordHelper->generateResetToken($user);
+
+        $emailAddress = $user->getEmail();
+        if (null === $emailAddress) {
+            throw $this->createNotFoundException('L\'utilisateur n\'a pas d\'adresse email.');
+        }
 
         $email = new TemplatedEmail()
             ->from(Address::create($this->emailFromAddress))
-            ->to($user->getEmail())
+            ->to($emailAddress)
             ->subject('Réinitialisation de votre mot de passe')
             ->htmlTemplate('admin/reset_password/email.html.twig')
             ->context(['reset_token' => $resetToken]);
@@ -134,6 +145,7 @@ final class AdminUserCrudController extends AbstractCrudController
         );
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return AdminUser::class;

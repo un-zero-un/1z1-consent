@@ -26,7 +26,7 @@ use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
  * @psalm-suppress PropertyNotSetInConstructor
  */
 #[Route('/admin/reset-password')]
-class ResetPasswordController extends AbstractController
+final class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 

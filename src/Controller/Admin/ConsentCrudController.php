@@ -23,9 +23,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 /**
- * @psalm-suppress PropertyNotSetInConstructor
+ * @extends AbstractCrudController<Consent>
  */
-class ConsentCrudController extends AbstractCrudController
+final class ConsentCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
@@ -82,6 +82,7 @@ class ConsentCrudController extends AbstractCrudController
             ->setParameter('agency', $agency);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return Consent::class;

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[AsController]
 #[Route(path: '/admin', host: '%main_domain%')]
-class GoogleController extends AbstractController
+final class GoogleController extends AbstractController
 {
     #[Route('/connect/google', name: 'connect_google')]
     public function connectAction(ClientRegistry $clientRegistry): RedirectResponse

@@ -22,10 +22,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * @api
+ */
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUserInterface, HasAgency
+class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUserInterface, HasAgency, \Stringable
 {
     use HasTimestampImpl;
 
@@ -65,16 +68,19 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         return $this->id;
     }
 
+    #[\Override]
     public function getAgency(): ?Agency
     {
         return $this->agency;
     }
 
+    #[\Override]
     public function setAgency(?Agency $agency): void
     {
         $this->agency = $agency;
     }
 
+    #[\Override]
     public function getRoles(): array
     {
         return $this->roles;
@@ -85,10 +91,12 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         $this->roles = $roles;
     }
 
+    #[\Override]
     public function eraseCredentials(): void
     {
     }
 
+    #[\Override]
     public function getUserIdentifier(): string
     {
         if (!$this->email) {
@@ -108,6 +116,7 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         $this->email = $email;
     }
 
+    #[\Override]
     public function getPassword(): ?string
     {
         return $this->password;
@@ -128,6 +137,7 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         $this->googleId = $googleId;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->getUserIdentifier() ?: 'An user with no email';

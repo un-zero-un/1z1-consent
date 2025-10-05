@@ -21,7 +21,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
-class GDPRTreatmentController extends AbstractCrudController
+/**
+ * @extends AbstractCrudController<GDPRTreatment>
+ */
+final class GDPRTreatmentController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
@@ -122,6 +125,7 @@ class GDPRTreatmentController extends AbstractCrudController
             ->setParameter('agency', $agency);
     }
 
+    #[\Override]
     public static function getEntityFqcn(): string
     {
         return GDPRTreatment::class;

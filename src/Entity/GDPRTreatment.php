@@ -23,6 +23,9 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * @api
+ */
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
@@ -312,6 +315,7 @@ class GDPRTreatment implements HasTimestamp, IndirectlyHasAgency
         $this->outOfEUTransfers->removeElement($outOfEUTransfer);
     }
 
+    #[\Override]
     public function getAgency(): ?Agency
     {
         return $this->getClient()?->getAgency();

@@ -7,6 +7,11 @@ use Doctrine\ORM\Mapping as ORM;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordRequestTrait;
 
+/**
+ * @api
+ *
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 #[ORM\Entity(repositoryClass: ResetPasswordRequestRepository::class)]
 class ResetPasswordRequest implements ResetPasswordRequestInterface
 {
@@ -33,6 +38,7 @@ class ResetPasswordRequest implements ResetPasswordRequestInterface
         return $this->id;
     }
 
+    #[\Override]
     public function getUser(): AdminUser
     {
         return $this->user;

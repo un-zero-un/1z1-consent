@@ -8,13 +8,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Contracts\Field\FieldInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FieldTrait;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class MonacoEditorField implements FieldInterface
+final class MonacoEditorField implements FieldInterface
 {
     use FieldTrait;
 
     /**
      * @param array{attrs?: array<string, string>, language?: string} $options
      */
+    #[\Override]
     public static function new(string $propertyName, ?string $label = null, array $options = []): self
     {
         $attrs = [...($options['attrs'] ?? []), 'data-monaco-editor' => ''];
