@@ -8,6 +8,10 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 		ln -sf ${PHP_INI_DIR}/php.ini-production ${PHP_INI_DIR}/php.ini
 	fi
 
+	if [ $APP_ENV = "dev" ]; then
+		composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+	fi
+
 	# Display information about the current project
 	# Or about an error in project initialization
 	php bin/console -V

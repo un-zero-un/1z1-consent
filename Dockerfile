@@ -18,7 +18,8 @@ ARG EXTERNAL_USER_ID
 
 VOLUME /var/cache/apt
 VOLUME /var/www/.cache
-
+VOLUME /config
+VOLUME /data
 
 # persistent / runtime deps
 # hadolint ignore=DL3008

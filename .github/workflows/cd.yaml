@@ -30,9 +30,10 @@ jobs:
                   password: ${{secrets.GITHUB_TOKEN}}
             - name: Build Lateset Docker images
               uses: docker/bake-action@v6
-              if: github.ref == 'refs/heads/main'
+              if: github.event_name == 'release'
               env:
                   EXTERNAL_USER_ID: 1001
+                  IMAGE_TAG: latest
               with:
                   pull: true
                   load: true
