@@ -5,6 +5,7 @@ namespace App\DataFixtures\Story;
 use App\DataFixtures\Factory\AdminUserFactory;
 use App\DataFixtures\Factory\AgencyFactory;
 use App\DataFixtures\Factory\ClientFactory;
+use App\DataFixtures\Factory\PersonFactory;
 use App\DataFixtures\Factory\TrackerFactory;
 use App\DataFixtures\Factory\WebsiteDomainFactory;
 use App\DataFixtures\Factory\WebsiteFactory;
@@ -30,6 +31,19 @@ final class MainAgencyStory extends Story
             'agency' => $unZeroUn,
             'name' => 'Client de test',
         ]);
+
+        $dataResponsible = PersonFactory::createOne([
+            'client' => $testClient,
+            'country' => 'FR',
+        ]);
+
+        $dpo = PersonFactory::createOne([
+            'client' => $testClient,
+            'country' => 'FR',
+        ]);
+
+        $testClient->setDataResponsible($dataResponsible);
+        $testClient->setDpo($dpo);
 
         WebsiteFactory::createOne([
             'client' => $testClient,

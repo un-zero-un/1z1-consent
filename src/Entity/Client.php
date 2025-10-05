@@ -55,17 +55,17 @@ class Client implements HasTimestamp, HasAgency, \Stringable
     #[JoinColumn(nullable: true)]
     private ?Person $dpo = null;
 
-    #[OneToMany(mappedBy: 'client', targetEntity: GDPRTreatment::class)]
+    #[OneToMany(targetEntity: GDPRTreatment::class, mappedBy: 'client')]
     private Collection $treatments;
 
     /**
      * @var Collection<int, Website>
      */
-    #[OneToMany(mappedBy: 'client', targetEntity: Website::class)]
+    #[OneToMany(targetEntity: Website::class, mappedBy: 'client')]
     private Collection $websites;
 
     #[Valid]
-    #[OneToMany(mappedBy: 'client', targetEntity: Person::class, cascade: ['all'], orphanRemoval: true)]
+    #[OneToMany(targetEntity: Person::class, mappedBy: 'client', cascade: ['all'], orphanRemoval: true)]
     private Collection $persons;
 
     public function __construct()
