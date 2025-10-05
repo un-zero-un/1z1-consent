@@ -44,6 +44,7 @@ final class AdminUserCrudController extends AbstractCrudController
     ) {
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
@@ -53,6 +54,7 @@ final class AdminUserCrudController extends AbstractCrudController
         yield DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm();
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         $crud = parent::configureCrud($crud)
@@ -66,6 +68,7 @@ final class AdminUserCrudController extends AbstractCrudController
         return $crud;
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         $sendResetPasswordLink = Action::new('sendResetPasswordLink', 'Envoyer un lien de réinitialisation')
@@ -88,6 +91,7 @@ final class AdminUserCrudController extends AbstractCrudController
             ->add(Crud::PAGE_DETAIL, $sendResetPasswordLink);
     }
 
+    #[\Override]
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $agency = $this->getAgency();

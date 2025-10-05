@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class AgencyCrudController extends AbstractCrudController
 {
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->hideOnForm();
@@ -22,6 +23,7 @@ class AgencyCrudController extends AbstractCrudController
         yield DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm();
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)

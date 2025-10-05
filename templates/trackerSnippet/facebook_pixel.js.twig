@@ -7,4 +7,4 @@ t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script', '{{ tracker.customUrl ?: 'https://connect.facebook.net/en_US/fbevents.js' }}');
 fbq('init', '{{ tracker.trackerId }}');
 fbq('track', 'PageView');
-{{ tracker.customCode|spaceless|trim|raw }}
+{{ tracker.customCode|trim|raw }}

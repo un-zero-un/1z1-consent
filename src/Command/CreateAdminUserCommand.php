@@ -7,10 +7,11 @@ namespace App\Command;
 use App\Entity\AdminUser;
 use App\Repository\AdminUserRepository;
 use App\Repository\AgencyRepository;
+use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,40 +20,43 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand('admin:create-user')]
-final class CreateAdminUserCommand extends Command
+final readonly class CreateAdminUserCommand
 {
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly AdminUserRepository $adminUserRepository,
-        private readonly AgencyRepository $agencyRepository,
-    ) {
-        parent::__construct();
+        private UserPasswordHasherInterface $passwordHasher,
+        private AdminUserRepository $adminUserRepository,
+        private AgencyRepository $agencyRepository,
+    )
+    {
     }
 
-    protected function configure(): void
+    public function __invoke(
+        SymfonyStyle $io,
+        #[Argument(description: 'The user email', name: 'email')]
+        ?string $email = null,
+        #[Argument(description: 'The user password', name: 'password')]
+        ?string $password = null,
+        #[Argument(description: 'Agency to assign the user to', name: 'agency')]
+        ?string $agency = null,
+        #[Option(description: 'Create as admin', name: 'admin')]
+        ?bool $asAdmin = false,
+    ): int
     {
-        $this
-            ->addArgument('email', InputArgument::OPTIONAL, 'The user email')
-            ->addArgument('password', InputArgument::OPTIONAL, 'The user password')
-            ->addArgument('agency', InputArgument::OPTIONAL, 'Agency to assign the user to')
-            ->addOption('admin', null, InputOption::VALUE_NONE, 'Create as admin');
-    }
+        if (!$email) {
+            $email = $io->askQuestion(new Question('Email : '));
+        }
+        if (!$password) {
+            $password = $io->askQuestion(new Question('Password : ')->setHidden(true)->setHiddenFallback(false));
+        }
+        if (!$agency) {
+            $agency = $io->askQuestion(new Question('Agency : '));
+        }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $io = new SymfonyStyle($input, $output);
+        $user = new AdminUser($email);
+        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+        $user->setAgency($this->agencyRepository->findOneByName($agency));
 
-        /** @var QuestionHelper $helper */
-        $helper = $this->getHelper('question');
-
-        $email = new Question('Email : ', $input->getArgument('email'));
-        $password = new Question('Password : ', $input->getArgument('password'));
-
-        $user = new AdminUser($helper->ask($input, $output, $email));
-        $user->setPassword($this->passwordHasher->hashPassword($user, $helper->ask($input, $output, $password)));
-        $user->setAgency($this->agencyRepository->findOneByName($input->getArgument('agency')));
-
-        if ($input->getOption('admin')) {
+        if ($asAdmin) {
             $user->setRoles(['ROLE_ADMIN']);
         }
 
@@ -60,6 +64,6 @@ final class CreateAdminUserCommand extends Command
 
         $io->success('Admin user created');
 
-        return self::SUCCESS;
+        return Command::SUCCESS;
     }
 }

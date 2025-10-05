@@ -27,6 +27,7 @@ class ServerCrudController extends AbstractCrudController
         return Server::class;
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -39,6 +40,7 @@ class ServerCrudController extends AbstractCrudController
         ];
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
@@ -48,6 +50,7 @@ class ServerCrudController extends AbstractCrudController
             ->setEntityPermission('IS_OWNER');
     }
 
+    #[\Override]
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $agency = $this->getAgency();

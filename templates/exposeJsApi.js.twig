@@ -24,7 +24,7 @@
                         , {tracker: tracker}
                 , true, true) }}
             {% else %}
-                {{ tracker.customCode|spaceless|trim|raw }}
+                {{ tracker.customCode|trim|raw }}
             {% endif %}
         },
         {% endfor %}
@@ -32,4 +32,4 @@
     d.body.appendChild(dialogBox);
 })(document);
 {%- endset -%}
-{{ content|spaceless|trim|raw }}
+{{ content|trim|raw }}

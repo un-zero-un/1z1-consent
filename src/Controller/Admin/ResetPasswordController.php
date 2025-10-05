@@ -121,7 +121,7 @@ class ResetPasswordController extends AbstractController
 
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
+        } catch (ResetPasswordExceptionInterface) {
             return $this->redirectToRoute('admin_check_email');
         }
 
@@ -130,7 +130,7 @@ class ResetPasswordController extends AbstractController
             throw new \LogicException('The user does not have an email.');
         }
 
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->from(Address::create($this->emailFromAddress))
             ->to($toEmail)
             ->subject('Réinitialisation de votre mot de passe')

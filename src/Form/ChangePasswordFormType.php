@@ -23,12 +23,8 @@ class ChangePasswordFormType extends AbstractType
                     'options' => ['attr' => ['autocomplete' => 'new-password']],
                     'first_options' => [
                         'constraints' => [
-                            new NotBlank(['message' => 'Please enter a password']),
-                            new Length([
-                                'min' => 6,
-                                'minMessage' => 'Votre mot de passe doit faire au moins {{ limit }} caractères',
-                                'max' => 4096,
-                            ]),
+                            new NotBlank(message: 'Please enter a password'),
+                            new Length(min: 6, minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères', max: 4096),
                         ],
                         'label' => 'Nouveau mot de passe',
                     ],

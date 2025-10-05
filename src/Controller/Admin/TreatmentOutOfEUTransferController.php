@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
 class TreatmentOutOfEUTransferController extends AbstractCrudController
 {
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield TextareaField::new('recipient', 'Destinataire');
@@ -29,6 +30,7 @@ class TreatmentOutOfEUTransferController extends AbstractCrudController
         yield TextareaField::new('documentationLink', 'Liens vers la documentation');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)

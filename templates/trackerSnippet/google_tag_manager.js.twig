@@ -5,5 +5,5 @@
     gtag('js', new Date());
     gtag('config', '{{ tracker.trackerId }}');
     const a = d.createElement(s); a.async = true; a.src = '{{ tracker.customUrl ?: 'https://www.googletagmanager.com/gtag/js' }}?id={{ tracker.trackerId }}'; t.parentNode.insertBefore(a, t);
-    {{ tracker.customCode|spaceless|trim|raw }}
+    {{ tracker.customCode|trim|raw }}
 })(document, 'script');

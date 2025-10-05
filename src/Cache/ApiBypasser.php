@@ -12,7 +12,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 final readonly class ApiBypasser
 {
-    private const CACHE_PREFIX = 'api_bypass__';
+    private const string CACHE_PREFIX = 'api_bypass__';
     private const EXPIRATION = 3_600 * 24;
 
     public function __construct(private CacheInterface $cache, private WebsiteHitRepository $websiteHitRepository)

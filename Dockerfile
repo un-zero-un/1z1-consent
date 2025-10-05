@@ -18,8 +18,6 @@ ARG EXTERNAL_USER_ID
 
 VOLUME /var/cache/apt
 VOLUME /var/www/.cache
-VOLUME /config
-VOLUME /data
 
 # persistent / runtime deps
 # hadolint ignore=DL3008
@@ -41,6 +39,9 @@ RUN set -eux; \
     sed -i -r s/"(www-data:x:)([[:digit:]]+):"/\\1${EXTERNAL_USER_ID}:/g /etc/group; \
     mkdir -p /var/run/php /data/caddy /config/caddy; \
     chown -R www-data:www-data /app /var/www /usr/local/etc/php /var/run/php /data/caddy /config/caddy
+
+VOLUME /config
+VOLUME /data
 
 COPY --chown=www-data:www-data infra/docker/php/Caddyfile /etc/caddy/Caddyfile
 COPY --chown=www-data:www-data infra/docker/php/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

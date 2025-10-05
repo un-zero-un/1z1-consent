@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class PersonCrudController extends AbstractCrudController
 {
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield FormField::addPanel('État civil');
@@ -30,6 +31,7 @@ class PersonCrudController extends AbstractCrudController
         yield TextField::new('phoneNumber', 'Numéro de téléphone');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)

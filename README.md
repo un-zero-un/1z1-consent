@@ -6,7 +6,7 @@
  * [ ] Pretty URLs
  * [ ] Github actions
  * [ ] Psalm
- * [ ] Déploiement
+ * [x] Déploiement
  * [ ] Readme
  * [x] PDF
  * [ ] CO2
@@ -14,3 +14,5 @@
  * [ ] Nom sur site Internet
  * [ ] Pretty URLs
  * [x] SMTP
+ * [ ] Single container build
+ * [ ] Cache pool / cache factory

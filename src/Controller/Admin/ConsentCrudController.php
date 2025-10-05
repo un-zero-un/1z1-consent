@@ -29,6 +29,7 @@ class ConsentCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
@@ -38,6 +39,7 @@ class ConsentCrudController extends AbstractCrudController
             ->setEntityPermission('IS_OWNER');
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id', 'ID');
@@ -52,6 +54,7 @@ class ConsentCrudController extends AbstractCrudController
             ->setTemplatePath('admin/consent/trackerConsents.html.twig');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)
@@ -59,6 +62,7 @@ class ConsentCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
+    #[\Override]
     public function configureFilters(Filters $filters): Filters
     {
         return parent::configureFilters($filters)
@@ -66,6 +70,7 @@ class ConsentCrudController extends AbstractCrudController
             ->add(ConsentStatusFilter::new('status', 'État du consentement'));
     }
 
+    #[\Override]
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $agency = $this->getAgency();

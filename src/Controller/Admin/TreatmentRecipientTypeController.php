@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
 class TreatmentRecipientTypeController extends AbstractCrudController
 {
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield ChoiceField::new('recipientType', 'Type de destinataire')
@@ -27,6 +28,7 @@ class TreatmentRecipientTypeController extends AbstractCrudController
         yield TextareaField::new('details', 'Détails');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)

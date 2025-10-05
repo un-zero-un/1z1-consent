@@ -21,6 +21,7 @@ class TrackerCrudController extends AbstractCrudController
         return Tracker::class;
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -46,6 +47,7 @@ class TrackerCrudController extends AbstractCrudController
         ];
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)

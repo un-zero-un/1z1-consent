@@ -26,6 +26,7 @@ class WebsiteHitCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
@@ -35,6 +36,7 @@ class WebsiteHitCrudController extends AbstractCrudController
             ->setEntityPermission('IS_OWNER');
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id', 'ID');
@@ -44,12 +46,14 @@ class WebsiteHitCrudController extends AbstractCrudController
         yield TextField::new('referer', 'URL référente');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)
             ->disable(Action::DELETE, Action::EDIT, Action::NEW, Action::DETAIL);
     }
 
+    #[\Override]
     public function configureFilters(Filters $filters): Filters
     {
         $agency = $this->getAgency();
@@ -57,15 +61,14 @@ class WebsiteHitCrudController extends AbstractCrudController
         return parent::configureFilters($filters)
             ->add(
                 EntityFilter::new('website')
-                    ->setFormTypeOption('value_type_options.query_builder', function (EntityRepository $er) use ($agency) {
-                        return $er->createQueryBuilder('w')
-                            ->innerJoin('w.client', 'c')
-                            ->andWhere('c.agency = :agency')
-                            ->setParameter('agency', $agency);
-                    })
+                    ->setFormTypeOption('value_type_options.query_builder', fn (EntityRepository $er) => $er->createQueryBuilder('w')
+                        ->innerJoin('w.client', 'c')
+                        ->andWhere('c.agency = :agency')
+                        ->setParameter('agency', $agency))
             );
     }
 
+    #[\Override]
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $agency = $this->getAgency();

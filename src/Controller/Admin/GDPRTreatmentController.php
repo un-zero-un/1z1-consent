@@ -25,6 +25,7 @@ class GDPRTreatmentController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         $agency = $this->getAgency();
@@ -94,6 +95,7 @@ class GDPRTreatmentController extends AbstractCrudController
         yield DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm();
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
@@ -103,12 +105,14 @@ class GDPRTreatmentController extends AbstractCrudController
                      ->setEntityPermission('IS_OWNER');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)
                      ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
+    #[\Override]
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $agency = $this->getAgency();

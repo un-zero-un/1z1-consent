@@ -12,11 +12,13 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class WebsiteDomainController extends AbstractCrudController
 {
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('domain', 'Domaine');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)

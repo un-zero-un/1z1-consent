@@ -27,11 +27,12 @@ class WebsiteChartExtension extends AbstractExtension
     ) {
     }
 
+    #[\Override]
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('website_hit_chart_month', [$this, 'getWebsiteHitChartMonth'], ['needs_environment' => true]),
-            new TwigFunction('website_hit_chart_day', [$this, 'getWebsiteHitChartDay'], ['needs_environment' => true]),
+            new TwigFunction('website_hit_chart_month', $this->getWebsiteHitChartMonth(...), ['needs_environment' => true]),
+            new TwigFunction('website_hit_chart_day', $this->getWebsiteHitChartDay(...), ['needs_environment' => true]),
         ];
     }
 
@@ -43,7 +44,7 @@ class WebsiteChartExtension extends AbstractExtension
         /** @var Month[] $months */
         $months = array_reverse(iterator_to_array(
             (function () {
-                $currentMonth = (new Calendar())->getMonth((int) date('Y'), (int) date('m'));
+                $currentMonth = new Calendar()->getMonth((int) date('Y'), (int) date('m'));
                 for ($i = 0; $i < 12; ++$i) {
                     yield $currentMonth;
 
@@ -62,7 +63,7 @@ class WebsiteChartExtension extends AbstractExtension
                         'data' => array_map(
                             fn (Month $month) => array_values(array_filter(
                                 $hitsByMonth,
-                                fn (array $hit) => str_pad($hit['month'], 2, '0', STR_PAD_LEFT) === $month->format('m') && $hit['year'] === $month->format('Y'),
+                                fn (array $hit) => str_pad((string) $hit['month'], 2, '0', STR_PAD_LEFT) === $month->format('m') && $hit['year'] === $month->format('Y'),
                             ))[0]['count'] ?? 0,
                             $months,
                         ),
@@ -73,7 +74,7 @@ class WebsiteChartExtension extends AbstractExtension
                         'data' => array_map(
                             fn (Month $month) => array_values(array_filter(
                                 $consentsByMonth,
-                                fn (array $consent) => str_pad($consent['month'], 2, '0', STR_PAD_LEFT) === $month->format('m') && $consent['year'] === $month->format('Y'),
+                                fn (array $consent) => str_pad((string) $consent['month'], 2, '0', STR_PAD_LEFT) === $month->format('m') && $consent['year'] === $month->format('Y'),
                             ))[0]['count'] ?? 0,
                             $months,
                         ),
@@ -93,7 +94,7 @@ class WebsiteChartExtension extends AbstractExtension
         /** @var Day[] $days */
         $days = array_reverse(iterator_to_array(
             (function () {
-                $currentDay = (new Calendar())->getDay((int) date('Y'), (int) date('m'), (int) date('d'));
+                $currentDay = new Calendar()->getDay((int) date('Y'), (int) date('m'), (int) date('d'));
                 for ($i = 0; $i < 30; ++$i) {
                     yield $currentDay;
 
@@ -113,8 +114,8 @@ class WebsiteChartExtension extends AbstractExtension
                         'data' => array_map(
                             fn (Day $day) => array_values(array_filter(
                                 $hitsByday,
-                                fn (array $hit) => str_pad($hit['day'], 2, '0', STR_PAD_LEFT) === $day->format('d')
-                                    && str_pad($hit['month'], 2, '0', STR_PAD_LEFT) === $day->format('m')
+                                fn (array $hit) => str_pad((string) $hit['day'], 2, '0', STR_PAD_LEFT) === $day->format('d')
+                                    && str_pad((string) $hit['month'], 2, '0', STR_PAD_LEFT) === $day->format('m')
                                     && $hit['year'] === $day->format('Y'),
                             ))[0]['count'] ?? 0,
                             $days,
@@ -126,8 +127,8 @@ class WebsiteChartExtension extends AbstractExtension
                         'data' => array_map(
                             fn (Day $day) => array_values(array_filter(
                                 $consentsByday,
-                                fn (array $consent) => str_pad($consent['day'], 2, '0', STR_PAD_LEFT) === $day->format('d')
-                                    && str_pad($consent['month'], 2, '0', STR_PAD_LEFT) === $day->format('m')
+                                fn (array $consent) => str_pad((string) $consent['day'], 2, '0', STR_PAD_LEFT) === $day->format('d')
+                                    && str_pad((string) $consent['month'], 2, '0', STR_PAD_LEFT) === $day->format('m')
                                     && $consent['year'] === $day->format('Y'),
                             ))[0]['count'] ?? 0,
                             $days,

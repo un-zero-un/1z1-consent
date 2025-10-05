@@ -26,7 +26,7 @@ trait WebsiteViaReferrerController
             throw new BadRequestException('Missing referer header');
         }
 
-        return parse_url($referer, PHP_URL_HOST);
+        return parse_url((string) $referer, PHP_URL_HOST);
     }
 
     /**

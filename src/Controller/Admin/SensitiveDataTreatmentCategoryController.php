@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 
 class SensitiveDataTreatmentCategoryController extends AbstractCrudController
 {
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         yield AssociationField::new('category', 'Catégorie');
@@ -20,6 +21,7 @@ class SensitiveDataTreatmentCategoryController extends AbstractCrudController
         yield TextareaField::new('duration', 'Durée de conservation');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)

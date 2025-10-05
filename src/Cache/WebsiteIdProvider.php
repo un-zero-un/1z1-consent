@@ -12,7 +12,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 final readonly class WebsiteIdProvider
 {
-    private const CACHE_PREFIX = 'website_id__';
+    private const string CACHE_PREFIX = 'website_id__';
 
     public function __construct(
         private CacheInterface $cache,

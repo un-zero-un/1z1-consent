@@ -39,6 +39,7 @@ class ClientCrudController extends AbstractCrudController
         return Client::class;
     }
 
+    #[\Override]
     public function configureFields(string $pageName): iterable
     {
         $agency = $this->getAgency();
@@ -63,6 +64,7 @@ class ClientCrudController extends AbstractCrudController
         ];
     }
 
+    #[\Override]
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
@@ -72,6 +74,7 @@ class ClientCrudController extends AbstractCrudController
             ->setEntityPermission('IS_OWNER');
     }
 
+    #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         $viewRegister = Action::new('viewRegister', 'Voir le registre RGPD')
@@ -88,6 +91,7 @@ class ClientCrudController extends AbstractCrudController
             ->add(Crud::PAGE_DETAIL, $viewRegisterPDF);
     }
 
+    #[\Override]
     public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
     {
         $agency = $this->getAgency();
@@ -108,7 +112,7 @@ class ClientCrudController extends AbstractCrudController
         $client = $adminContext->getEntity()->getInstance();
 
         return new StreamedResponse(
-            function () use ($client) {
+            function () use ($client): void {
                 $dompdf = new Dompdf();
                 $dompdf->loadHtml($this->renderView('admin/client/viewPDFRegister.html.twig', ['client' => $client]));
                 $dompdf->setPaper('A4');

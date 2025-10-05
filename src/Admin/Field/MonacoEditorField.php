@@ -23,7 +23,7 @@ class MonacoEditorField implements FieldInterface
             $attrs['data-monaco-language'] = $options['language'];
         }
 
-        return (new self())
+        return new self()
             ->setProperty($propertyName)
             ->setLabel($label)
             ->setFormType(TextareaType::class)
