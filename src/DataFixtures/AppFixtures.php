@@ -10,14 +10,23 @@ use App\Entity\WebsiteDomain;
 use App\ValueObject\TrackerType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class AppFixtures extends Fixture
+final class AppFixtures extends Fixture
 {
+    public function __construct(
+        #[Autowire('%main_domain%')]
+        private readonly string $mainDomain,
+    )
+    {
+
+    }
+
     public function load(ObjectManager $manager): void
     {
         $agency = new Agency();
         $agency->setName('Un Zéro Un');
-        $agency->setHost('localhost');
+        $agency->setHost($this->mainDomain);
         $manager->persist($agency);
 
         $testClient = new Client();
@@ -26,7 +35,7 @@ class AppFixtures extends Fixture
         $manager->persist($testClient);
 
         $localhostDomain = new WebsiteDomain();
-        $localhostDomain->setDomain('www.localhost');
+        $localhostDomain->setDomain('www.' . $this->mainDomain);
         $manager->persist($localhostDomain);
 
         $localhost = new Website();

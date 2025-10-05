@@ -3,7 +3,7 @@
  * [x] Rector
  * [x] Tests unitaires
  * [ ] Tests fonctionnels
- * [ ] Pretty URLs
+ * [x] Pretty URLs
  * [x] Github actions
  * [x] Psalm
  * [x] Déploiement
@@ -11,8 +11,7 @@
  * [x] PDF
  * [ ] CO2
  * [ ] Pages vues => IP
- * [ ] Nom sur site Internet
- * [ ] Pretty URLs
+ * [x] Nom sur site Internet
  * [x] SMTP
  * [ ] Single container build
  * [ ] Cache pool / cache factory
