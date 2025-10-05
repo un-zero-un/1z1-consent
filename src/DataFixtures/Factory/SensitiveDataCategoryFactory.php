@@ -10,7 +10,6 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class SensitiveDataCategoryFactory extends PersistentObjectFactory
 {
-
     #[\Override]
     public static function class(): string
     {

@@ -22,9 +22,9 @@ final class MainAgencyStory extends Story
     public function build(): void
     {
         $unZeroUn = AgencyFactory::createOne([
-                'name' => 'Un Zéro Un',
-                'host' => $this->mainDomain,
-            ]);
+            'name' => 'Un Zéro Un',
+            'host' => $this->mainDomain,
+        ]);
 
         $testClient = ClientFactory::createOne([
             'agency' => $unZeroUn,

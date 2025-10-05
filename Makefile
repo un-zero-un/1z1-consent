@@ -79,7 +79,7 @@ hadolint: ## Link Dockerfile
 	@docker run --rm -i hadolint/hadolint hadolint - < Dockerfile
 
 cs: ## Fix code style
-	@docker run --rm -v $(PWD):/app -w /app ghcr.io/php-cs-fixer/php-cs-fixer:3-php8.4 fix .
+	@docker compose exec -T php ./vendor/bin/php-cs-fixer fix
 	@docker compose exec -T php ./vendor/bin/twig-cs-fixer fix templates
 
 psalm: ## Run static analysis

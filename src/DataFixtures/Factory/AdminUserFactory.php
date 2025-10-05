@@ -13,8 +13,7 @@ final class AdminUserFactory extends PersistentObjectFactory
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $userPasswordHasher,
-    )
-    {
+    ) {
     }
 
     #[\Override]
@@ -42,7 +41,7 @@ final class AdminUserFactory extends PersistentObjectFactory
     protected function initialize(): static
     {
         return $this
-            ->afterInstantiate(function(AdminUser $adminUser): void {
+            ->afterInstantiate(function (AdminUser $adminUser): void {
                 $hashedPassword = $this->userPasswordHasher->hashPassword($adminUser, '!ChangeMe!');
                 $adminUser->setPassword($hashedPassword);
             })
