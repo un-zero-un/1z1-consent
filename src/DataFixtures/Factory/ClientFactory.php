@@ -20,7 +20,7 @@ final class ClientFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'agency' => AgencyFactory::new(),
+            'agency' => AgencyFactory::first(),
             'name' => self::faker()->sentence(),
         ];
     }

@@ -67,7 +67,7 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
      * @var Collection<int, WebsiteDomain>
      */
     #[Valid]
-    #[OneToMany(mappedBy: 'website', targetEntity: WebsiteDomain::class, cascade: ['all'], orphanRemoval: true)]
+    #[OneToMany(targetEntity: WebsiteDomain::class, mappedBy: 'website', cascade: ['all'], orphanRemoval: true)]
     private Collection $domains;
 
     #[Column(type: Types::BOOLEAN, options: ['default' => 'FALSE'])]

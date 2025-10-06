@@ -29,7 +29,7 @@ final class PersonFactory extends PersistentObjectFactory
         );
 
         return [
-            'client' => ClientFactory::new(),
+            'client' => ClientFactory::first(),
             'country' => self::faker()->country(),
             'email' => $email,
             'firstName' => $firstName,

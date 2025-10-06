@@ -37,8 +37,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN set -eux; \
     sed -i -r s/"(www-data:x:)([[:digit:]]+):([[:digit:]]+):"/\\1${EXTERNAL_USER_ID}:${EXTERNAL_USER_ID}:/g /etc/passwd; \
     sed -i -r s/"(www-data:x:)([[:digit:]]+):"/\\1${EXTERNAL_USER_ID}:/g /etc/group; \
-    mkdir -p /var/run/php /data/caddy /config/caddy /app/var/cache /app/var/data; \
-    chown -R www-data:www-data /app /var/www /usr/local/etc/php /var/run/php /data/caddy /config/caddy /app/var/cache /app/var/data
+    mkdir -p /var/run/php /data /config /app/var/cache /app/var/data; \
+    chown -R www-data:www-data /app /var/www /usr/local/etc/php /var/run/php /data /config /app/var/cache /app/var/data
 
 VOLUME /config
 VOLUME /data

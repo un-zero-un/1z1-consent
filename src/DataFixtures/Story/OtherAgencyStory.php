@@ -13,8 +13,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Zenstruck\Foundry\Attribute\AsFixture;
 use Zenstruck\Foundry\Story;
 
-#[AsFixture(name: 'main_agency', groups: ['main'])]
-final class MainAgencyStory extends Story
+#[AsFixture(name: 'other_agency', groups: ['main'])]
+final class OtherAgencyStory extends Story
 {
     public function __construct(#[Autowire('%env(MAIN_DOMAIN)%')] private readonly string $mainDomain)
     {
@@ -23,13 +23,13 @@ final class MainAgencyStory extends Story
     public function build(): void
     {
         $unZeroUn = AgencyFactory::createOne([
-            'name' => 'Un Zéro Un',
-            'host' => $this->mainDomain,
+            'name' => 'Un Zéro Deux',
+            'host' => 'other.' . $this->mainDomain,
         ]);
 
         $testClient = ClientFactory::createOne([
             'agency' => $unZeroUn,
-            'name' => 'Client de test',
+            'name' => 'Faux client',
         ]);
 
         $dataResponsible = PersonFactory::createOne([
@@ -45,22 +45,15 @@ final class MainAgencyStory extends Story
         $testClient->setDataResponsible($dataResponsible);
         $testClient->setDpo($dpo);
 
-        $website = WebsiteFactory::createOne(['client' => $testClient,]);
-        WebsiteDomainFactory::createOne(['domain' => 'www.'.$this->mainDomain, 'website' => $website]);
+        $website = WebsiteFactory::createOne(['client' => $testClient]);
+        WebsiteDomainFactory::createOne(['domain' => 'www.other.' . $this->mainDomain, 'website' => $website]);
         TrackerFactory::new()->with(['website' => $website])->googleAnalytics()->create();
         TrackerFactory::new()->with(['website' => $website])->custom()->create();
 
         AdminUserFactory::new()
-            ->admin()
             ->with([
                 'agency' => $unZeroUn,
-                'email' => 'admin@example.com',
-            ])
-            ->create();
-
-        AdminUserFactory::new()
-            ->with([
-                'email' => 'agency@example.com',
+                'email' => 'other@example.com',
             ])
             ->create();
     }

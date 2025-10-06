@@ -21,7 +21,6 @@ final class WebsiteDomainFactory extends PersistentObjectFactory
     {
         return [
             'domain' => self::faker()->domainName(),
-            'website' => WebsiteFactory::new(),
         ];
     }
 }

@@ -20,7 +20,7 @@ final class WebsiteFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'client' => ClientFactory::new(),
+            'client' => ClientFactory::first(),
             'addAccessLogToGDPR' => true,
             'addTrackerToGDPR' => true,
             'respectDoNotTrack' => true,

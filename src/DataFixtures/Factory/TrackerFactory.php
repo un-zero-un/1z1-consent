@@ -25,7 +25,7 @@ final class TrackerFactory extends PersistentObjectFactory
             'trackerId' => self::faker()->text(),
             'type' => self::faker()->randomElement(TrackerType::cases()),
             'useDefaultSnippet' => self::faker()->boolean(),
-            'website' => WebsiteFactory::new(),
+            'website' => WebsiteFactory::first(),
         ];
     }
 

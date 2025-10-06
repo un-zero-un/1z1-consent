@@ -14,6 +14,7 @@ final class AdminUserFactory extends PersistentObjectFactory
     public function __construct(
         private readonly UserPasswordHasherInterface $userPasswordHasher,
     ) {
+        parent::__construct();
     }
 
     #[\Override]
@@ -26,7 +27,7 @@ final class AdminUserFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'agency' => AgencyFactory::new(),
+            'agency' => AgencyFactory::first(),
             'email' => self::faker()->email(),
             'roles' => [],
         ];
