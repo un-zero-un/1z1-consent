@@ -15,3 +15,4 @@
  * [x] Nom sur site Internet
  * [x] SMTP
  * [ ] Domain Exceptions
+ * [ ] Cache pools (bye manual prefix)

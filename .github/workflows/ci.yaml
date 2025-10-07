@@ -86,6 +86,8 @@ jobs:
                         *.cache-from=type=gha,scope=${{github.ref}}
                         *.cache-from=type=gha,scope=refs/heads/main
                         *.cache-to=type=gha,scope=${{github.ref}},mode=max
+            -   name: Install Playwright Browsers
+                run: npx playwright install --with-deps
             -   name: Install mkcert
                 run: |
                     sudo apt-get install --no-install-recommends libnss3-tools
@@ -109,8 +111,6 @@ jobs:
                 run: docker compose up --wait --no-build || (docker compose logs && exit 1)
             -   name: Create test database
                 run: docker compose exec -T php composer reset
-            -   name: Install Playwright Browsers
-                run: npx playwright install --with-deps
             -   name: Run Playwright @ui tests
                 run: npx playwright test --workers 1
             -   uses: actions/upload-artifact@v4
