@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Client;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Dompdf\Dompdf;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
@@ -55,6 +56,8 @@ final class ClientCrudController extends AbstractCrudController
             DateTimeField::new('createdAt', 'Créé le')->hideOnForm(),
             DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm(),
             CollectionField::new('persons', 'Personnes')
+                ->renderExpanded()
+                ->showEntryLabel()
                 ->allowAdd()
                 ->allowDelete()
                 ->setEntryIsComplex()
@@ -76,9 +79,11 @@ final class ClientCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $viewRegister = Action::new('viewRegister', 'Voir le registre RGPD')
+            ->setIcon('fa fa-file')
             ->linkToCrudAction('viewRegister');
 
         $viewRegisterPDF = Action::new('viewPDFRegister', 'Voir le registre RGPD (PDF)')
+            ->setIcon('fa fa-file-pdf')
             ->linkToCrudAction('viewPDFRegister');
 
         return parent::configureActions($actions)
@@ -86,7 +91,8 @@ final class ClientCrudController extends AbstractCrudController
             ->add(Crud::PAGE_INDEX, $viewRegister)
             ->add(Crud::PAGE_DETAIL, $viewRegister)
             ->add(Crud::PAGE_INDEX, $viewRegisterPDF)
-            ->add(Crud::PAGE_DETAIL, $viewRegisterPDF);
+            ->add(Crud::PAGE_DETAIL, $viewRegisterPDF)
+            ->update(Crud::PAGE_INDEX, Action::DETAIL, fn (Action $action): Action => $action->setIcon('fa fa-eye'));
     }
 
     #[\Override]
@@ -97,6 +103,17 @@ final class ClientCrudController extends AbstractCrudController
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
             ->andWhere('entity.agency = :agency')
             ->setParameter('agency', $agency);
+    }
+
+    #[\Override]
+    public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        foreach ($entityInstance->getPersons() as $person) {
+            $entityInstance->removePerson($person);
+            $entityManager->remove($person);
+        }
+
+        parent::deleteEntity($entityManager, $entityInstance);
     }
 
     #[AdminRoute('/{entityId}/view-register', name: 'viewRegister')]

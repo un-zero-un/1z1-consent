@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Behavior\Equatable;
 use App\Behavior\HasTimestamp;
 use App\Behavior\Impl\HasTimestampImpl;
 use Doctrine\DBAL\Types\Types;
@@ -21,11 +22,13 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @api
+ *
+ * @implements Equatable<self>
  */
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class Person implements HasTimestamp
+class Person implements HasTimestamp, Equatable
 {
     use HasTimestampImpl;
 
@@ -167,6 +170,16 @@ class Person implements HasTimestamp
     public function setEmail(?string $email): void
     {
         $this->email = $email;
+    }
+
+    #[\Override]
+    public function isEqualTo(?object $other): bool
+    {
+        if (!$other instanceof self) {
+            return false;
+        }
+
+        return $this->id->equals($other->id);
     }
 
     public function __toString(): string

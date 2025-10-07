@@ -47,12 +47,12 @@ class Client implements HasTimestamp, HasAgency, \Stringable
     #[Column(type: Types::STRING, length: 255, nullable: false)]
     private ?string $name = null;
 
-    #[ManyToOne(targetEntity: Person::class)]
-    #[JoinColumn(nullable: true)]
+    #[ManyToOne(targetEntity: Person::class, cascade: ['remove'])]
+    #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Person $dataResponsible = null;
 
-    #[ManyToOne(targetEntity: Person::class)]
-    #[JoinColumn(nullable: true)]
+    #[ManyToOne(targetEntity: Person::class, cascade: ['remove'])]
+    #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Person $dpo = null;
 
     #[OneToMany(targetEntity: GDPRTreatment::class, mappedBy: 'client')]
@@ -143,6 +143,13 @@ class Client implements HasTimestamp, HasAgency, \Stringable
 
     public function removePerson(Person $person): void
     {
+        if ($person->isEqualTo($this->dpo)) {
+            $this->dpo = null;
+        }
+        if ($person->isEqualTo($this->dataResponsible)) {
+            $this->dataResponsible = null;
+        }
+
         $person->setClient(null);
         $this->persons->removeElement($person);
     }

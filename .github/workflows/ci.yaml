@@ -37,7 +37,7 @@ jobs:
                       *.cache-to=type=gha,scope=${{github.ref}},mode=max
             - name: Install mkcert
               run: |
-                  sudo apt install libnss3-tools
+                  sudo apt-get install --no-install-recommends libnss3-tools
                   curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
                   chmod +x mkcert-v*-linux-amd64
                   sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
