@@ -1349,16 +1349,16 @@
         },
         {
             "name": "easycorp/easyadmin-bundle",
-            "version": "v4.26.0",
+            "version": "v4.26.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EasyCorp/EasyAdminBundle.git",
-                "reference": "4c40e4b912fadf8e8837fff57e7889fa6fc8f386"
+                "reference": "70419eca0a7d4800e0640220ddfb8290fc522d29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/4c40e4b912fadf8e8837fff57e7889fa6fc8f386",
-                "reference": "4c40e4b912fadf8e8837fff57e7889fa6fc8f386",
+                "url": "https://api.github.com/repos/EasyCorp/EasyAdminBundle/zipball/70419eca0a7d4800e0640220ddfb8290fc522d29",
+                "reference": "70419eca0a7d4800e0640220ddfb8290fc522d29",
                 "shasum": ""
             },
             "require": {
@@ -1439,7 +1439,7 @@
             ],
             "support": {
                 "issues": "https://github.com/EasyCorp/EasyAdminBundle/issues",
-                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.26.0"
+                "source": "https://github.com/EasyCorp/EasyAdminBundle/tree/v4.26.2"
             },
             "funding": [
                 {
@@ -1447,7 +1447,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-05T09:14:11+00:00"
+            "time": "2025-10-07T18:27:41+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -11876,21 +11876,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.1.7",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "c34cc07c4698f007a20dc5c99ff820089ae413ce"
+                "reference": "e1aaf3061e9ae9342ed0824865e3a3360defddeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/c34cc07c4698f007a20dc5c99ff820089ae413ce",
-                "reference": "c34cc07c4698f007a20dc5c99ff820089ae413ce",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/e1aaf3061e9ae9342ed0824865e3a3360defddeb",
+                "reference": "e1aaf3061e9ae9342ed0824865e3a3360defddeb",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.18"
+                "phpstan/phpstan": "^2.1.26"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -11924,7 +11924,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.1.7"
+                "source": "https://github.com/rectorphp/rector/tree/2.2.1"
             },
             "funding": [
                 {
@@ -11932,7 +11932,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-10T11:13:58+00:00"
+            "time": "2025-10-06T21:25:14+00:00"
         },
         {
             "name": "revolt/event-loop",

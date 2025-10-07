@@ -6,6 +6,7 @@ use App\DataFixtures\Factory\AdminUserFactory;
 use App\DataFixtures\Factory\AgencyFactory;
 use App\DataFixtures\Factory\ClientFactory;
 use App\DataFixtures\Factory\PersonFactory;
+use App\DataFixtures\Factory\ServerFactory;
 use App\DataFixtures\Factory\TrackerFactory;
 use App\DataFixtures\Factory\WebsiteDomainFactory;
 use App\DataFixtures\Factory\WebsiteFactory;
@@ -45,7 +46,9 @@ final class MainAgencyStory extends Story
         $testClient->setDataResponsible($dataResponsible);
         $testClient->setDpo($dpo);
 
-        $website = WebsiteFactory::createOne(['client' => $testClient]);
+        $server1 = ServerFactory::createOne(['agency' => $unZeroUn, 'name' => 'Serveur 1']);
+
+        $website = WebsiteFactory::createOne(['client' => $testClient, 'server' => $server1]);
         WebsiteDomainFactory::createOne(['domain' => 'www.'.$this->mainDomain, 'website' => $website]);
         TrackerFactory::new()->with(['website' => $website])->googleAnalytics()->create();
         TrackerFactory::new()->with(['website' => $website])->custom()->create();

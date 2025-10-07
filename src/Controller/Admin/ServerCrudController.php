@@ -34,7 +34,7 @@ final class ServerCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name', 'Nom'),
-            IntegerField::new('quantityOfCO2eqPerYear', 'Quantité de CO2eq par an'),
+            IntegerField::new('quantityOfCO2eqPerYear', 'Quantité de CO2eq par an')->setHelp('kgCO2eq/an'),
             IntegerField::new('numberOfUnmanagedSites', 'Nombre de sites non gérés')->hideOnIndex(),
             DateTimeField::new('createdAt', 'Créé le')->hideOnForm(),
             DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm(),
