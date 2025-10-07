@@ -43,6 +43,7 @@
         "yohang/calendr": "^1.0.6"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^8.3",
         "friendsofphp/php-cs-fixer": "^3.88",
         "phpunit/phpunit": "^12.4.0",
         "rector/rector": "^2.1",

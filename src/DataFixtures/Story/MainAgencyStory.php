@@ -45,7 +45,7 @@ final class MainAgencyStory extends Story
         $testClient->setDataResponsible($dataResponsible);
         $testClient->setDpo($dpo);
 
-        $website = WebsiteFactory::createOne(['client' => $testClient,]);
+        $website = WebsiteFactory::createOne(['client' => $testClient]);
         WebsiteDomainFactory::createOne(['domain' => 'www.'.$this->mainDomain, 'website' => $website]);
         TrackerFactory::new()->with(['website' => $website])->googleAnalytics()->create();
         TrackerFactory::new()->with(['website' => $website])->custom()->create();

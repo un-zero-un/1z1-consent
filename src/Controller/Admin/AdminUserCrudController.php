@@ -75,6 +75,7 @@ final class AdminUserCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $sendResetPasswordLink = Action::new('sendResetPasswordLink', 'Envoyer un lien de réinitialisation')
+            ->setIcon('fa fa-key')
             ->linkToCrudAction('sendResetPasswordLink');
 
         $actions = parent::configureActions($actions);
@@ -82,6 +83,7 @@ final class AdminUserCrudController extends AbstractCrudController
         if (!$this->isGranted('IS_IMPERSONATOR')) {
             $impersonateAction =
                 Action::new('impersonate', 'Se connecter en tant que')
+                    ->setIcon('fa fa-user-secret')
                     ->linkToUrl(fn (AdminUser $user) => $this->generateUrl('admin', ['_switch_user' => $user->getEmail()]));
 
             $actions = $actions

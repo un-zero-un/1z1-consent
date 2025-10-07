@@ -1,8 +1,9 @@
  * [x] Send from address : rendre configurable
  * [x] PHP-CS-Fixer 
  * [x] Rector
- * [x] Tests unitaires
- * [ ] Tests fonctionnels
+ * [ ] Tests unitaires
+ * [ ] Tests fonctionnels admin
+ * [ ] Tests e2e front
  * [x] Pretty URLs
  * [x] Github actions
  * [x] Psalm

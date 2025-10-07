@@ -6,6 +6,8 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         server_version: '17'
         charset: 'utf8'
+        use_savepoints: true
+
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true

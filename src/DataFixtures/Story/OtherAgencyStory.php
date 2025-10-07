@@ -24,7 +24,7 @@ final class OtherAgencyStory extends Story
     {
         $unZeroUn = AgencyFactory::createOne([
             'name' => 'Un Zéro Deux',
-            'host' => 'other.' . $this->mainDomain,
+            'host' => 'other.'.$this->mainDomain,
         ]);
 
         $testClient = ClientFactory::createOne([
@@ -46,7 +46,7 @@ final class OtherAgencyStory extends Story
         $testClient->setDpo($dpo);
 
         $website = WebsiteFactory::createOne(['client' => $testClient]);
-        WebsiteDomainFactory::createOne(['domain' => 'www.other.' . $this->mainDomain, 'website' => $website]);
+        WebsiteDomainFactory::createOne(['domain' => 'www.other.'.$this->mainDomain, 'website' => $website]);
         TrackerFactory::new()->with(['website' => $website])->googleAnalytics()->create();
         TrackerFactory::new()->with(['website' => $website])->custom()->create();
 
