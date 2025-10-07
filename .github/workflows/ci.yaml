@@ -117,7 +117,7 @@ jobs:
                 if: failure()
                 with:
                     name: playwright-screenshot-ui
-                    path: e2e/tests/e2e/report
+                    path: tests/e2e/report
 
     psalm:
         runs-on: ubuntu-latest
