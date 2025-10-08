@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Cache;
 
+use App\Exception\HostMismatchException;
+use App\Exception\WebsiteNotFoundException;
 use App\Repository\WebsiteRepository;
 use Doctrine\ORM\NoResultException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Cache\CacheInterface;
 
 final readonly class WebsiteIdProvider
@@ -26,11 +26,11 @@ final readonly class WebsiteIdProvider
                 try {
                     $website = $this->websiteRepository->findOneByHostname($refererHostname);
                 } catch (NoResultException) {
-                    throw new NotFoundHttpException('Website not found');
+                    throw new WebsiteNotFoundException(['referer' => $refererHostname, 'host' => $hostname]);
                 }
 
                 if ($website->getClient()?->getAgency()?->getHost() !== $hostname) {
-                    throw new BadRequestException('Host mismatch');
+                    throw new HostMismatchException($website->getClient()?->getAgency()?->getHost(), $hostname);
                 }
 
                 return $website->getId()->toRfc4122();

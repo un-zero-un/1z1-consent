@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Util;
 
 use App\Entity\Website;
+use App\Exception\HostMismatchException;
+use App\Exception\MalformedHostHeaderException;
+use App\Exception\MissingRefererException;
+use App\Exception\WebsiteNotFoundException;
 use App\Repository\WebsiteRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait WebsiteViaReferrerController
 {
@@ -23,12 +25,12 @@ trait WebsiteViaReferrerController
     {
         $referer = $this->getReferer($request);
         if (null === $referer) {
-            throw new BadRequestException('Missing referer header');
+            throw new MissingRefererException();
         }
 
         $host = parse_url($referer, PHP_URL_HOST);
         if (!is_string($host)) {
-            throw new BadRequestException('Unable to parse referer host');
+            throw new MalformedHostHeaderException();
         }
 
         return $host;
@@ -42,12 +44,12 @@ trait WebsiteViaReferrerController
         try {
             $website = $websiteRepository->findOneByHostname($hostname);
             if ($website->getClient()?->getAgency()?->getHost() !== $request->getHost()) {
-                throw new BadRequestException('Host mismatch');
+                throw new HostMismatchException($website->getClient()?->getAgency()?->getHost(), $request->getHost());
             }
 
             return $website;
         } catch (NoResultException) {
-            throw new NotFoundHttpException('Unknown website');
+            throw new WebsiteNotFoundException(['website_hostname' => $hostname]);
         }
     }
 

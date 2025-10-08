@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Behavior\HasAgency;
 use App\Behavior\HasTimestamp;
 use App\Behavior\Impl\HasTimestampImpl;
+use App\Exception\MissingEmailException;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -100,7 +101,7 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
     public function getUserIdentifier(): string
     {
         if (!$this->email) {
-            throw new \RuntimeException('User has no email');
+            throw new MissingEmailException($this);
         }
 
         return $this->email;

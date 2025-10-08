@@ -20,8 +20,7 @@ final readonly class ApiBypasser
     public function __construct(
         private CacheInterface $apiBypasserCache,
         private WebsiteHitRepository $websiteHitRepository,
-    )
-    {
+    ) {
     }
 
     public function canBypass(Fingerprint $fingerprint): bool

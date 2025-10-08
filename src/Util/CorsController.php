@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Util;
 
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use App\Exception\MissingRefererException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,7 +14,7 @@ trait CorsController
     {
         $referer = $request->headers->get('referer');
         if (null === $referer) {
-            throw new BadRequestException('Missing referer header');
+            throw new MissingRefererException();
         }
 
         $parsedReferer = parse_url($referer);

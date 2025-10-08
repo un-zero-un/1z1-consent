@@ -51,7 +51,7 @@ final class WebsiteHitRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    public function saveFromRawData(string $websiteId, string $ipAddress, string $referer): void
+    public function saveFromRawData(string $websiteId, ?string $ipAddress, string $referer): void
     {
         $this->getEntityManager()->getConnection()->executeStatement(
             'INSERT INTO website_hit (id, website_id, ip_address, referer, created_at) VALUES (:id, :websiteId, :ipAddress, :referer, NOW())',

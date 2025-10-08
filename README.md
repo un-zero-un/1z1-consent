@@ -15,4 +15,12 @@
  * [x] Nom sur site Internet
  * [x] SMTP
  * [ ] Domain Exceptions
- * [ ] Cache pools (bye manual prefix)
+ * [x] Cache pools (bye manual prefix)
+ * [ ] Form pour le PostConsent
+ * [ ] Consent duration (currently 2 year)
+ * [ ] Customize template
+ * [ ] I18N
+ * [ ] RDMS compatibility (MySQL, Postgres, SQLite)
+ * [ ] Cache compatibility (Redis, Memcached, APCU)
+ * [ ] Mono container build
+ * [ ] Check UUID version (v6 or v7)

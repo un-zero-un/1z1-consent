@@ -39,8 +39,8 @@ class WebsiteHit implements IndirectlyHasAgency
     #[Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
     private \DateTimeImmutable $createdAt;
 
-    #[Column(type: Types::STRING, nullable: false)]
-    private string $ipAddress;
+    #[Column(type: Types::STRING, nullable: true)]
+    private ?string $ipAddress;
 
     #[Column(type: Types::STRING, nullable: false)]
     private string $referer;
@@ -69,7 +69,7 @@ class WebsiteHit implements IndirectlyHasAgency
         return $this->createdAt;
     }
 
-    public function getIpAddress(): string
+    public function getIpAddress(): ?string
     {
         return $this->ipAddress;
     }

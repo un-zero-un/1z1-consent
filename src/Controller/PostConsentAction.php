@@ -8,6 +8,7 @@ use App\Cache\ApiBypasser;
 use App\Cache\Fingerprint;
 use App\Cache\WebsiteIdProvider;
 use App\Entity\Consent;
+use App\Exception\MissingUserIdException;
 use App\Repository\ConsentRepository;
 use App\Repository\WebsiteRepository;
 use App\Util\CorsController;
@@ -15,7 +16,6 @@ use App\Util\WebsiteViaReferrerController;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -55,7 +55,7 @@ final readonly class PostConsentAction
         /** @var string|null $userId */
         $userId = $request->request->get('user_id');
         if (!$userId) {
-            throw new BadRequestException('Missing user_id');
+            throw new MissingUserIdException();
         }
 
         try {

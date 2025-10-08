@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Cache\ApiBypasser;
 use App\Cache\Fingerprint;
 use App\Cache\WebsiteIdProvider;
+use App\Exception\MissingRefererException;
 use App\Repository\WebsiteHitRepository;
 use App\Repository\WebsiteRepository;
 use App\Util\WebsiteViaReferrerController;
@@ -74,15 +75,14 @@ final readonly class ExposeJsApiAction
 
         $referer = $this->getReferer($request);
         if (null === $referer) {
-            throw new \RuntimeException('Referer is required');
+            throw new MissingRefererException();
         }
 
-        $ip = $request->getClientIp();
-        if (null === $ip) {
-            throw new \RuntimeException('Client IP is required');
-        }
-
-        $this->websiteHitRepository->saveFromRawData($website->getId()->toRfc4122(), $ip, $referer);
+        $this->websiteHitRepository->saveFromRawData(
+            $website->getId()->toRfc4122(),
+            $request->getClientIp(),
+            $referer,
+        );
         $this->apiBypasser->save($fingerPrint, $response);
 
         return $response;

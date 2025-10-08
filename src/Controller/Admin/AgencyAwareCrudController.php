@@ -6,6 +6,8 @@ namespace App\Controller\Admin;
 
 use App\Entity\AdminUser;
 use App\Entity\Agency;
+use App\Exception\InvalidUserException;
+use App\Exception\UserHasNoAgencyException;
 
 trait AgencyAwareCrudController
 {
@@ -16,12 +18,12 @@ trait AgencyAwareCrudController
     {
         $user = $this->getUser();
         if (!$user instanceof AdminUser) {
-            throw new \RuntimeException('No user, or user isn\'t an admin user');
+            throw new InvalidUserException($user);
         }
 
         $agency = $user->getAgency();
         if (!$agency) {
-            throw new \RuntimeException('No agency found');
+            throw new UserHasNoAgencyException();
         }
 
         return $agency;

@@ -1,7 +1,7 @@
 DOCKER_COMPOSE = EXTERNAL_USER_ID=$(shell id -u) docker compose
 HTTPS_PORT ?= 443
 
-.PHONY: ps build up first_run clean logs cli run reset cc deploy down test hadolint psalm psalm_strict
+.PHONY: ps build up first_run clean logs cli run reset cc deploy down test test_e2e hadolint psalm psalm_strict
 
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
