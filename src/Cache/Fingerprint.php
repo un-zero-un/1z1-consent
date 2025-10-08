@@ -6,7 +6,10 @@ namespace App\Cache;
 
 use Symfony\Component\HttpFoundation\Request;
 
-final readonly class Fingerprint
+/**
+ * @api
+ */
+readonly class Fingerprint
 {
     private function __construct(
         private Request $request,
