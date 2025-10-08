@@ -12,18 +12,16 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 final readonly class WebsiteIdProvider
 {
-    private const string CACHE_PREFIX = 'website_id__';
-
     public function __construct(
-        private CacheInterface $cache,
+        private CacheInterface $websiteIdProviderCache,
         private WebsiteRepository $websiteRepository,
     ) {
     }
 
     public function get(string $refererHostname, string $hostname): string
     {
-        return $this->cache->get(
-            self::CACHE_PREFIX.$refererHostname,
+        return $this->websiteIdProviderCache->get(
+            $refererHostname,
             function () use ($refererHostname, $hostname) {
                 try {
                     $website = $this->websiteRepository->findOneByHostname($refererHostname);

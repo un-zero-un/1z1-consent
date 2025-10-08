@@ -18,8 +18,11 @@ framework:
         # app: cache.adapter.apcu
 
         # Namespaced pools use the above "app" backend by default
-        #pools:
-            #my.dedicated.cache: null
+        pools:
+            api_bypasser.cache:
+                adapter: app.cache.adapter.redis
+            website_id_provider.cache:
+                adapter: app.cache.adapter.redis
 
 services:
     app.cache.adapter.redis:
