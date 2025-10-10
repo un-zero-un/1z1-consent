@@ -47,7 +47,7 @@ class WebsiteHit implements IndirectlyHasAgency
 
     public function __construct(Website $website, string $ipAddress, string $referer)
     {
-        $this->id = Uuid::v6();
+        $this->id = Uuid::v7();
         $this->website = $website;
         $this->ipAddress = $ipAddress;
         $this->referer = $referer;

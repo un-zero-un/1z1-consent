@@ -57,7 +57,7 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
 
     public function __construct(?string $email = null, ?string $googleId = null)
     {
-        $this->id = Uuid::v6();
+        $this->id = Uuid::v7();
         $this->email = $email;
         $this->googleId = $googleId;
 

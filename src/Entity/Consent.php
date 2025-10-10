@@ -50,12 +50,12 @@ class Consent implements HasTimestamp, IndirectlyHasAgency, \Stringable
     /**
      * @var Collection<int, TrackerConsent>
      */
-    #[OneToMany(mappedBy: 'consent', targetEntity: TrackerConsent::class, cascade: ['all'])]
+    #[OneToMany(targetEntity: TrackerConsent::class, mappedBy: 'consent', cascade: ['all'])]
     private Collection $trackerConsents;
 
     public function __construct(Website $website, string $userId)
     {
-        $this->id = Uuid::v4();
+        $this->id = Uuid::v7();
         $this->website = $website;
         $this->userId = $userId;
         $this->trackerConsents = new ArrayCollection();

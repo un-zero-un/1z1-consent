@@ -72,7 +72,7 @@ class Person implements HasTimestamp, Equatable
 
     public function __construct()
     {
-        $this->id = Uuid::v6();
+        $this->id = Uuid::v7();
 
         $this->initialize();
     }

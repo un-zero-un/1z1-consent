@@ -89,7 +89,7 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
 
     public function __construct()
     {
-        $this->id = Uuid::v6();
+        $this->id = Uuid::v7();
         $this->trackers = new ArrayCollection();
         $this->domains = new ArrayCollection();
 

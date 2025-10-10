@@ -1,9 +1,9 @@
  * [x] Send from address : rendre configurable
  * [x] PHP-CS-Fixer 
  * [x] Rector
- * [ ] Tests unitaires
+ * [x] Tests unitaires
  * [ ] Tests fonctionnels admin
- * [ ] Tests e2e front
+ * [x] Tests e2e front
  * [x] Pretty URLs
  * [x] Github actions
  * [x] Psalm
@@ -14,9 +14,8 @@
  * [ ] Pages vues => IP
  * [x] Nom sur site Internet
  * [x] SMTP
- * [ ] Domain Exceptions
+ * [x] Domain Exceptions
  * [x] Cache pools (bye manual prefix)
- * [ ] Form pour le PostConsent
  * [ ] Consent duration (currently 2 year)
  * [ ] Customize template
  * [ ] I18N

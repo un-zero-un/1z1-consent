@@ -59,7 +59,7 @@ class WebsiteHitRepository extends ServiceEntityRepository
         $this->getEntityManager()->getConnection()->executeStatement(
             'INSERT INTO website_hit (id, website_id, ip_address, referer, created_at) VALUES (:id, :websiteId, :ipAddress, :referer, NOW())',
             [
-                'id' => Uuid::v6()->toRfc4122(),
+                'id' => Uuid::v7()->toRfc4122(),
                 'websiteId' => $websiteId,
                 'ipAddress' => $ipAddress,
                 'referer' => $referer,

@@ -107,7 +107,7 @@ class GDPRTreatment implements HasTimestamp, IndirectlyHasAgency
 
     public function __construct()
     {
-        $this->id = Uuid::v6();
+        $this->id = Uuid::v7();
         $this->personalDataCategoryTreatments = new ArrayCollection();
         $this->sensitiveDataCategoryTreatments = new ArrayCollection();
         $this->concernedPersonCategories = new ArrayCollection();

@@ -70,7 +70,7 @@ class Client implements HasTimestamp, HasAgency, \Stringable
 
     public function __construct()
     {
-        $this->id = Uuid::v6();
+        $this->id = Uuid::v7();
         $this->websites = new ArrayCollection();
         $this->persons = new ArrayCollection();
         $this->treatments = new ArrayCollection();
