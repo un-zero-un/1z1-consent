@@ -26,7 +26,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update; \
     apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates; \
     php -v; \
-    install-php-extensions zip pdo_pgsql pcntl opcache intl apcu redis; \
+    install-php-extensions zip pdo_pgsql pcntl opcache intl apcu redis pcov; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     mkdir -p /app; \

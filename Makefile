@@ -49,7 +49,7 @@ logs: ## Show logs, use "c=" to specify a container, default is php
 	@$(eval tail ?= 100)
 	@$(DOCKER_COMPOSE) logs $(c) --tail=$(tail) --follow
 
-vendor/:
+vendor/: composer.lock composer.json symfony.lock
 	@$(DOCKER_COMPOSE) run --rm php composer install
 
 node_modules/: package.json yarn.lock

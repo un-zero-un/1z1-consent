@@ -1,35 +1,83 @@
-import { test, expect, describe } from '@playwright/test';
+import { test, describe } from '@playwright/test';
+import { ConsentDialog } from './model/ConsentDialog';
+import { SymfonyToolbar } from './model/SymfonyToolbar';
+import {PreferenceButton} from "./model/PreferenceButton";
+import {DemoPage} from "./model/DemoPage";
 
 describe('Consent dialog box', () => {
-    test('It displays consent dialog box', async ({page}) => {
-        await page.goto('/');
-        await page.evaluate(() => document.querySelector('.sf-toolbar').style.display = 'none');
+    let consentDialog: ConsentDialog;
+    let symfonyToolbar: SymfonyToolbar;
+    let preferenceButton: PreferenceButton;
+    let demoPage: DemoPage;
 
-        await expect(page.locator('#consent-dialog')).toHaveScreenshot({maxDiffPixelRatio: 0.03});
+    test.beforeEach(async ({ page }) => {
+        consentDialog = new ConsentDialog(page);
+        symfonyToolbar = new SymfonyToolbar(page);
+        preferenceButton = new PreferenceButton(page);
+        demoPage = new DemoPage(page);
     });
 
-    test('It checks trackers manually', async ({page}) => {
+    test('It displays consent dialog box', async ({ page }) => {
         await page.goto('/');
-        await page.evaluate(() => document.querySelector('.sf-toolbar').style.display = 'none');
+        await symfonyToolbar.hide();
 
-        await page.locator('.Dialog__tracker:nth-child(1) label').click();
-        await page.locator('.Dialog__tracker:nth-child(2) label').click();
-
-        await expect(page.locator('#consent-dialog')).toHaveScreenshot({maxDiffPixelRatio: 0.03});
+        await consentDialog.expectDialogToMatchScreenshot();
     });
 
-    test('It checks trackers when accepting all', async ({page}) => {
+    test('It checks trackers manually', async ({ page }) => {
         await page.goto('/');
-        await page.evaluate(() => document.querySelector('.sf-toolbar').style.display = 'none');
+        await symfonyToolbar.hide();
 
-        await page.locator('#accept-all').click();
-        await page.waitForLoadState('networkidle');
-        await expect(page.locator('#show-consent-dialog')).toHaveScreenshot({maxDiffPixelRatio: 0.03});
+        await consentDialog.checkTracker(1);
+        await consentDialog.checkTracker(2);
+        await consentDialog.expectDialogToMatchScreenshot();
+    });
 
-        await page.reload({waitUntil: 'networkidle'});
-        await page.evaluate(() => document.querySelector('.sf-toolbar').style.display = 'none');
+    test('It checks trackers when accepting all', async ({ page }) => {
+        await page.goto('/');
+        await symfonyToolbar.hide();
 
-        await page.locator('#show-consent-dialog').click();
-        await expect(page.locator('#consent-dialog')).toHaveScreenshot({maxDiffPixelRatio: 0.03});
+        await consentDialog.acceptAll();
+        await preferenceButton.expectShowDialogButtonToMatchScreenshot();
+
+        await page.reload({ waitUntil: 'networkidle' });
+        await symfonyToolbar.hide();
+
+        await preferenceButton.show();
+        await consentDialog.expectDialogToMatchScreenshot();
+    });
+
+    test('It uncheck trackers when declining all', async ({ page }) => {
+        await page.goto('/');
+        await symfonyToolbar.hide();
+
+        await consentDialog.declineAll();
+        await preferenceButton.expectShowDialogButtonToMatchScreenshot();
+
+        await page.reload({ waitUntil: 'networkidle' });
+        await symfonyToolbar.hide();
+
+        await preferenceButton.show();
+        await consentDialog.expectDialogToMatchScreenshot();
+    });
+
+    test('It has hover test on cookie button', async ({ page }) => {
+        await page.goto('/');
+        await symfonyToolbar.hide();
+
+        await consentDialog.acceptSelection();
+
+        await preferenceButton.hover();
+        await preferenceButton.expectShowDialogButtonToMatchScreenshot();
+    });
+
+    test('It opens with custom button', async ({ page }) => {
+        await page.goto('/');
+        await symfonyToolbar.hide();
+
+        await consentDialog.acceptSelection();
+
+        await demoPage.showDialog();
+        await demoPage.expectPageToMatchScreenshot();
     });
 });

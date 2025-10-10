@@ -382,31 +382,31 @@ templateNode.innerHTML = `
         
         <div class="Dialog__actions">
             <button class="Dialog__action" type="submit" id="decline-all">Refuser Tout</button>
-            <button class="Dialog__action Dialog__action--middle" type="submit">Accepter ma sélection</button>
+            <button class="Dialog__action Dialog__action--middle" type="submit" id="accept-selection">Accepter ma sélection</button>
             <button class="Dialog__action Dialog__action--strong" type="submit" id="accept-all">Accepter Tout</button>
         </div>
     </form>
 </dialog>
 
 <button class="PreferenceButton" id="show-consent-dialog">
-<svg xmlns="http://www.w3.org/2000/svg" width="57" height="58" viewBox="0 0 57 58">
-  <g transform="translate(-0.494 0.333)" class="svgContainer">
-    <ellipse cx="28.5" cy="29" rx="28.5" ry="29" transform="translate(0.494 -0.333)" fill="var(--buttonBackground, black)"/>
-    <path d="M20.8,41.6A20.8,20.8,0,0,1,6.092,6.092,20.816,20.816,0,0,1,30.28,2.281a4.463,4.463,0,0,0,.03,4.4,4.458,4.458,0,0,0,1.01,5.653,4.46,4.46,0,0,0,4.338,5.489c.076,0,.158,0,.251-.007A4.461,4.461,0,0,0,41.6,20.547c0,.062,0,.124,0,.185V20.8A20.8,20.8,0,0,1,20.8,41.6Zm0-31.2A10.4,10.4,0,1,0,31.2,20.8,10.412,10.412,0,0,0,20.8,10.4Z" transform="translate(12.752 4.349) rotate(11)" fill="var(--buttonShapeColor, #ffdb77)"/>
-  </g>
-  <g class="crumb1">
-    <path d="M2.419,0,4.837,4.837H0Z" transform="matrix(0.934, 0.358, -0.358, 0.934, 47.732, 17.499)" fill="var(--buttonShapeColor, #ffdb77)"/>
-  </g>
-  <g class="crumb2">
-    <path d="M1.966,0,3.932,3.466H0Z" transform="matrix(0.934, 0.358, -0.358, 0.934, 53.117, 23.485)" fill="var(--buttonShapeColor, #ffdb77)"/>
-  </g>
-  <g class="crumb3">
-    <path d="M1.534,0,3.069,4.846H0Z" transform="matrix(-0.53, 0.848, -0.848, -0.53, 53.228, 29.34)" fill="var(--buttonShapeColor, #ffdb77)"/>
-  </g>
-</svg>
-<span>
-    Changer mes préférences cookie
-</span>
+    <svg xmlns="http://www.w3.org/2000/svg" width="57" height="58" viewBox="0 0 57 58">
+      <g transform="translate(-0.494 0.333)" class="svgContainer">
+        <ellipse cx="28.5" cy="29" rx="28.5" ry="29" transform="translate(0.494 -0.333)" fill="var(--buttonBackground, black)"/>
+        <path d="M20.8,41.6A20.8,20.8,0,0,1,6.092,6.092,20.816,20.816,0,0,1,30.28,2.281a4.463,4.463,0,0,0,.03,4.4,4.458,4.458,0,0,0,1.01,5.653,4.46,4.46,0,0,0,4.338,5.489c.076,0,.158,0,.251-.007A4.461,4.461,0,0,0,41.6,20.547c0,.062,0,.124,0,.185V20.8A20.8,20.8,0,0,1,20.8,41.6Zm0-31.2A10.4,10.4,0,1,0,31.2,20.8,10.412,10.412,0,0,0,20.8,10.4Z" transform="translate(12.752 4.349) rotate(11)" fill="var(--buttonShapeColor, #ffdb77)"/>
+      </g>
+      <g class="crumb1">
+        <path d="M2.419,0,4.837,4.837H0Z" transform="matrix(0.934, 0.358, -0.358, 0.934, 47.732, 17.499)" fill="var(--buttonShapeColor, #ffdb77)"/>
+      </g>
+      <g class="crumb2">
+        <path d="M1.966,0,3.932,3.466H0Z" transform="matrix(0.934, 0.358, -0.358, 0.934, 53.117, 23.485)" fill="var(--buttonShapeColor, #ffdb77)"/>
+      </g>
+      <g class="crumb3">
+        <path d="M1.534,0,3.069,4.846H0Z" transform="matrix(-0.53, 0.848, -0.848, -0.53, 53.228, 29.34)" fill="var(--buttonShapeColor, #ffdb77)"/>
+      </g>
+    </svg>
+    <span>
+        Changer mes préférences cookie
+    </span>
 </button>
 `;
 

@@ -22,6 +22,12 @@
         </testsuite>
     </testsuites>
 
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
     <extensions>
         <bootstrap class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
         <bootstrap class="Zenstruck\Foundry\PHPUnit\FoundryExtension" />
