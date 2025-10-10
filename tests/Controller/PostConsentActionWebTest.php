@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Tracker;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Uid\Uuid;
 
 class PostConsentActionWebTest extends WebTestCase
 {
@@ -19,7 +18,7 @@ class PostConsentActionWebTest extends WebTestCase
         $trackerRepository = $this->getContainer()->get(EntityManagerInterface::class)->getRepository(Tracker::class);
         $trackers = $trackerRepository->findAll();
 
-        $this->trackerIds = array_map(fn(Tracker$t): string => $t->getId()->toRfc4122(), $trackers);
+        $this->trackerIds = array_map(fn (Tracker $t): string => $t->getId()->toRfc4122(), $trackers);
     }
 
     public function testNormalConsentCreatesAndSetsCookie(): void
