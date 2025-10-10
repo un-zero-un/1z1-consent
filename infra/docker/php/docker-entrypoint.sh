@@ -9,7 +9,7 @@ if [ "$1" = 'frankenphp' ] || [ "$1" = 'php' ] || [ "$1" = 'bin/console' ]; then
 	fi
 
 	if [ $APP_ENV = "dev" ]; then
-		composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+		composer install --prefer-dist --no-progress --optimize-autoloader
 	fi
 
 	# Display information about the current project

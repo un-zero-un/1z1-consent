@@ -14,6 +14,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends AbstractCrudController<Server>
@@ -57,7 +58,8 @@ final class ServerCrudController extends AbstractCrudController
         $agency = $this->getAgency();
 
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
-            ->andWhere('entity.agency = :agency')
-            ->setParameter('agency', $agency);
+            ->innerJoin('entity.agency', 'agency')
+            ->andWhere('agency.id = :agency_id')
+            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
     }
 }

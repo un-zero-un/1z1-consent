@@ -24,9 +24,9 @@ VOLUME /var/www/.cache
 RUN --mount=type=cache,target=/var/cache/apt \
     set -eux; \
     apt-get update; \
-    apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates; \
+    apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates sqlite3; \
     php -v; \
-    install-php-extensions zip pdo_pgsql pcntl opcache intl apcu redis pcov; \
+    install-php-extensions zip pdo_pgsql pdo_mysql pcntl opcache intl apcu redis pcov; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     mkdir -p /app; \
@@ -37,8 +37,8 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN set -eux; \
     sed -i -r s/"(www-data:x:)([[:digit:]]+):([[:digit:]]+):"/\\1${EXTERNAL_USER_ID}:${EXTERNAL_USER_ID}:/g /etc/passwd; \
     sed -i -r s/"(www-data:x:)([[:digit:]]+):"/\\1${EXTERNAL_USER_ID}:/g /etc/group; \
-    mkdir -p /var/run/php /data /config /app/var/cache /app/var/log; \
-    chown -R www-data:www-data /app /var/www /usr/local/etc/php /var/run/php /data /config /app/var/cache /app/var/log
+    mkdir -p /var/run/php /data /config /app/var/cache /app/var/log /app/var/data; \
+    chown -R www-data:www-data /app /var/www /usr/local/etc/php /var/run/php /data /config /app/var/cache /app/var/log /app/var/data
 
 VOLUME /config
 VOLUME /data

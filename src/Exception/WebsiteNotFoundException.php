@@ -8,10 +8,13 @@ final class WebsiteNotFoundException extends NotFoundHttpException implements Ex
 {
     public function __construct(array $context = [])
     {
+        $serializedContext = json_encode($context);
+        assert(false !== $serializedContext);
+
         parent::__construct(
             sprintf(
                 'Website not found (Context: %s)',
-                json_encode($context),
+                $serializedContext,
             ),
         );
     }

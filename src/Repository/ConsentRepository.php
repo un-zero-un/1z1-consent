@@ -10,6 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 final class ConsentRepository extends ServiceEntityRepository
 {
@@ -26,10 +27,11 @@ final class ConsentRepository extends ServiceEntityRepository
     {
         return $this
             ->createQueryBuilder('consent')
-            ->where('consent.website = :website')
-            ->andWhere('consent.userId = :userId')
-            ->setParameter('website', $website)
-            ->setParameter('userId', $userId)
+            ->innerJoin('consent.website', 'website')
+            ->where('website.id = :website_id')
+            ->andWhere('consent.userId = :user_id')
+            ->setParameter('website_id', $website->getId(), UuidType::NAME)
+            ->setParameter('user_id', $userId)
             ->getQuery()
             ->getSingleResult();
     }
@@ -37,12 +39,13 @@ final class ConsentRepository extends ServiceEntityRepository
     public function getCountByWebsiteGroupedByMonthOnAYear(Website $website): array
     {
         return $this->createQueryBuilder('consent')
-                    ->select('COUNT(consent.id) AS count, MONTH(consent.createdAt) AS month, YEAR(consent.createdAt) AS year')
+                    ->innerJoin('consent.website', 'website')
+                    ->select('COUNT(consent.id) AS count, SUBSTRING(consent.createdAt, 5, 2) AS month, SUBSTRING(consent.createdAt, 0, 4) AS year')
                     ->groupBy('month, year')
                     ->orderBy('year, month', 'ASC')
-                    ->where('consent.website = :website')
+                    ->where('website.id = :website_id')
                     ->andWhere('consent.createdAt > :date')
-                    ->setParameter('website', $website)
+                    ->setParameter('website_id', $website->getId(), UuidType::NAME)
                     ->setParameter('date', new \DateTimeImmutable('-1 year 1 month'))
                     ->getQuery()
                     ->getArrayResult();
@@ -51,12 +54,13 @@ final class ConsentRepository extends ServiceEntityRepository
     public function getCountByWebsiteGroupedByDayOnAMonth(Website $website): array
     {
         return $this->createQueryBuilder('consent')
-                    ->select('COUNT(consent.id) AS count, DAY(consent.createdAt) AS day, MONTH(consent.createdAt) AS month, YEAR(consent.createdAt) AS year')
+                    ->innerJoin('consent.website', 'website')
+                    ->select('COUNT(consent.id) AS count, SUBSTRING(consent.createdAt, 8, 2) AS day, SUBSTRING(consent.createdAt, 5, 2) AS month, SUBSTRING(consent.createdAt, 0, 4) AS year')
                     ->groupBy('day, month, year')
                     ->orderBy('year, month, day', 'ASC')
-                    ->where('consent.website = :website')
+                    ->where('website.id = :website_id')
                     ->andWhere('consent.createdAt > :date')
-                    ->setParameter('website', $website)
+                    ->setParameter('website_id', $website->getId(), UuidType::NAME)
                     ->setParameter('date', new \DateTimeImmutable('-31 days'))
                     ->getQuery()
                     ->getArrayResult();

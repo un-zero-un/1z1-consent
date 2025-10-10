@@ -43,8 +43,11 @@ trait WebsiteViaReferrerController
     {
         try {
             $website = $websiteRepository->findOneByHostname($hostname);
-            if ($website->getClient()?->getAgency()?->getHost() !== $request->getHost()) {
-                throw new HostMismatchException($website->getClient()?->getAgency()?->getHost(), $request->getHost());
+            $expectedHost = $website->getClient()?->getAgency()?->getHost();
+
+            assert(null !== $expectedHost);
+            if ($expectedHost !== $request->getHost()) {
+                throw new HostMismatchException($expectedHost, $request->getHost());
             }
 
             return $website;

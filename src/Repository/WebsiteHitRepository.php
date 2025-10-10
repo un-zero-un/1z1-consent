@@ -7,7 +7,9 @@ namespace App\Repository;
 use App\Entity\Website;
 use App\Entity\WebsiteHit;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -23,12 +25,13 @@ class WebsiteHitRepository extends ServiceEntityRepository
     public function getCountByWebsiteGroupedByMonthOnAYear(Website $website): array
     {
         return $this->createQueryBuilder('h')
-                    ->select('COUNT(h.id) as count, MONTH(h.createdAt) as month, YEAR(h.createdAt) as year')
+                    ->select('COUNT(h.id) AS count, SUBSTRING(h.createdAt, 5, 2) AS month, SUBSTRING(h.createdAt, 0, 4) AS year')
+                    ->innerJoin('h.website', 'website')
                     ->groupBy('month, year')
                     ->orderBy('year, month', 'ASC')
-                    ->where('h.website = :website')
+                    ->where('website.id = :website_id')
                     ->andWhere('h.createdAt > :date')
-                    ->setParameter('website', $website)
+                    ->setParameter('website_id', $website->getId(), UuidType::NAME)
                     ->setParameter('date', new \DateTimeImmutable('-1 year 1 month'))
                     ->getQuery()
                     ->getArrayResult();
@@ -37,15 +40,16 @@ class WebsiteHitRepository extends ServiceEntityRepository
     public function getCountByWebsiteGroupedByDayOnAMonth(Website $website): array
     {
         return $this->createQueryBuilder('h')
-                    ->select('COUNT(h.id) as count, DAY(h.createdAt) as day, MONTH(h.createdAt) as month, YEAR(h.createdAt) as year')
-                    ->groupBy('day, month, year')
-                    ->orderBy('year, month, day', 'ASC')
-                    ->where('h.website = :website')
-                    ->andWhere('h.createdAt > :date')
-                    ->setParameter('website', $website)
-                    ->setParameter('date', new \DateTimeImmutable('-31 days'))
-                    ->getQuery()
-                    ->getArrayResult();
+                        ->select('COUNT(h.id) AS count, SUBSTRING(h.createdAt, 8, 2) AS day, SUBSTRING(h.createdAt, 5, 2) AS month, SUBSTRING(h.createdAt, 0, 4) AS year')
+                        ->innerJoin('h.website', 'website')
+                        ->groupBy('day, month, year')
+                        ->orderBy('year, month, day', 'ASC')
+                        ->where('website.id = :website_id')
+                        ->andWhere('h.createdAt > :date')
+                        ->setParameter('website_id', $website->getId(), UuidType::NAME)
+                        ->setParameter('date', new \DateTimeImmutable('-31 days'))
+                        ->getQuery()
+                        ->getArrayResult();
     }
 
     public function save(WebsiteHit $websiteHit): void
@@ -57,13 +61,21 @@ class WebsiteHitRepository extends ServiceEntityRepository
     public function saveFromRawData(string $websiteId, ?string $ipAddress, string $referer): void
     {
         $this->getEntityManager()->getConnection()->executeStatement(
-            'INSERT INTO website_hit (id, website_id, ip_address, referer, created_at) VALUES (:id, :websiteId, :ipAddress, :referer, NOW())',
+            'INSERT INTO website_hit (id, website_id, ip_address, referer, created_at) VALUES (:id, :websiteId, :ipAddress, :referer, :now)',
             [
                 'id' => Uuid::v7()->toRfc4122(),
                 'websiteId' => $websiteId,
                 'ipAddress' => $ipAddress,
                 'referer' => $referer,
+                'now' => new \DateTimeImmutable(),
             ],
+            [
+                'id' => UuidType::NAME,
+                'websiteId' => UuidType::NAME,
+                'ipAddress' => Types::STRING,
+                'referer' => Types::STRING,
+                'now' => Types::DATETIME_IMMUTABLE,
+            ]
         );
     }
 }

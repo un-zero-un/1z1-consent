@@ -4,7 +4,7 @@ namespace App\Exception;
 
 use App\Entity\AdminUser;
 
-class InvalidUserException extends \RuntimeException implements Exception
+final class InvalidUserException extends \RuntimeException implements Exception
 {
     public function __construct(mixed $userOrNull)
     {

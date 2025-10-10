@@ -22,6 +22,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends AbstractCrudController<Website>
@@ -53,18 +54,20 @@ final class WebsiteCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm(),
 
             AssociationField::new('client', 'Client')
-                            ->setQueryBuilder(
-                                fn (QueryBuilder $queryBuilder) => $queryBuilder
-                                    ->andWhere('entity.agency = :agency')
-                                    ->setParameter('agency', $agency)
-                            ),
+                ->setQueryBuilder(
+                    fn (QueryBuilder $queryBuilder) => $queryBuilder
+                        ->innerJoin('entity.agency', 'agency')
+                        ->andWhere('agency.id = :agency_id')
+                        ->setParameter('agency_id', $agency->getId(), UuidType::NAME),
+                ),
 
             AssociationField::new('server', 'Serveur')
-                            ->setQueryBuilder(
-                                fn (QueryBuilder $queryBuilder) => $queryBuilder
-                                    ->andWhere('entity.agency = :agency')
-                                    ->setParameter('agency', $agency)
-                            ),
+                ->setQueryBuilder(
+                    fn (QueryBuilder $queryBuilder) => $queryBuilder
+                        ->innerJoin('entity.agency', 'agency')
+                        ->andWhere('agency.id = :agency_id')
+                        ->setParameter('agency_id', $agency->getId(), UuidType::NAME),
+                ),
 
             BooleanField::new('respectDoNotTrack', 'Respecter le "Do Not Track"')->hideOnIndex(),
             BooleanField::new('showOpenButton', 'Afficher le bouton d\'ouverture de la popup')->hideOnIndex(),
@@ -72,29 +75,29 @@ final class WebsiteCrudController extends AbstractCrudController
             BooleanField::new('addTrackerToGDPR', 'Ajouter les trackers au registre')->hideOnIndex(),
 
             TextField::new('dialogTitle', 'Titre de la boite de dialogue')
-                     ->setFormTypeOption('attr', ['placeholder' => 'Hello, on a besoin de votre permission'])
-                     ->hideOnIndex(),
+                ->setFormTypeOption('attr', ['placeholder' => 'Hello, on a besoin de votre permission'])
+                ->hideOnIndex(),
 
             TextareaField::new('dialogText', 'Texte de la boite de dialogue')
-                         ->setFormTypeOption('attr', ['placeholder' => '<p>On aimerait utiliser des cookies pour améliorer votre expérience sur notre site.</p><p>Vous nous donnez votre autorisation ? Quelle que soit votre réponse, on ne vous embêtera plus avec cette question 🙂.</p>'])
-                         ->hideOnIndex(),
+                ->setFormTypeOption('attr', ['placeholder' => '<p>On aimerait utiliser des cookies pour améliorer votre expérience sur notre site.</p><p>Vous nous donnez votre autorisation ? Quelle que soit votre réponse, on ne vous embêtera plus avec cette question 🙂.</p>'])
+                ->hideOnIndex(),
 
             MonacoEditorField::new('customCss', 'CSS personnalisé', ['language' => 'css', 'attrs' => ['placeholder' => $defaultVariables ?: '']])
-                             ->onlyOnForms()
-                             ->hideOnIndex(),
+                ->onlyOnForms()
+                ->hideOnIndex(),
             CollectionField::new('domains', 'Domaines')
-                           ->allowAdd()
-                           ->allowDelete()
-                           ->renderExpanded()
-                           ->useEntryCrudForm()
-                           ->setTemplatePath('admin/fields/domains.html.twig'),
+                ->allowAdd()
+                ->allowDelete()
+                ->renderExpanded()
+                ->useEntryCrudForm()
+                ->setTemplatePath('admin/fields/domains.html.twig'),
             CollectionField::new('trackers')
-                           ->allowAdd()
-                           ->allowDelete()
-                           ->setEntryIsComplex()
-                           ->useEntryCrudForm()
-                           ->renderExpanded()
-                           ->setColumns('col-md-9'),
+                ->allowAdd()
+                ->allowDelete()
+                ->setEntryIsComplex()
+                ->useEntryCrudForm()
+                ->renderExpanded()
+                ->setColumns('col-md-9'),
             DateTimeField::new('createdAt', 'Créé le')->hideOnForm(),
             DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm(),
             CollectionField::new('analytics', 'Statistiques')->setTemplatePath('admin/website/_analytics.html.twig')->onlyOnDetail(),
@@ -105,36 +108,36 @@ final class WebsiteCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return parent::configureCrud($crud)
-                     ->setEntityLabelInSingular('Site')
-                     ->setEntityLabelInPlural('Sites')
-                     ->setDefaultSort(['client.name' => 'ASC'])
-                     ->setEntityPermission('IS_OWNER');
+            ->setEntityLabelInSingular('Site')
+            ->setEntityLabelInPlural('Sites')
+            ->setDefaultSort(['client.name' => 'ASC'])
+            ->setEntityPermission('IS_OWNER');
     }
 
     #[\Override]
     public function configureAssets(Assets $assets): Assets
     {
         return parent::configureAssets($assets)
-                     ->addWebpackEncoreEntry('admin_editor')
-                     ->addWebpackEncoreEntry('stimulus');
+            ->addWebpackEncoreEntry('admin_editor')
+            ->addWebpackEncoreEntry('stimulus');
     }
 
     #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         $showConsents = Action::new('showConsents', 'Consentements')
-                              ->linkToUrl(
-                                  fn (Website $website) => $this->adminUrlGenerator
-                                      ->setController(ConsentCrudController::class)
-                                      ->setAction(Action::INDEX)
-                                      ->set('filters[website][comparison]', '=')
-                                      ->set('filters[website][value]', $website->getId())
-                                      ->generateUrl(),
-                              );
+            ->linkToUrl(
+                fn (Website $website) => $this->adminUrlGenerator
+                    ->setController(ConsentCrudController::class)
+                    ->setAction(Action::INDEX)
+                    ->set('filters[website][comparison]', '=')
+                    ->set('filters[website][value]', $website->getId())
+                    ->generateUrl(),
+            );
 
         return parent::configureActions($actions)
-                     ->add(Action::INDEX, $showConsents)
-                     ->add(Action::INDEX, Action::DETAIL);
+            ->add(Action::INDEX, $showConsents)
+            ->add(Action::INDEX, Action::DETAIL);
     }
 
     #[\Override]
@@ -143,7 +146,8 @@ final class WebsiteCrudController extends AbstractCrudController
         $agency = $this->getAgency();
 
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
-                     ->andWhere('client.agency = :agency')
-                     ->setParameter('agency', $agency);
+            ->innerJoin('client.agency', 'agency')
+            ->andWhere('agency.id = :agency_id')
+            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
     }
 }

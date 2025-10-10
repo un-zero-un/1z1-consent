@@ -20,6 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends AbstractCrudController<GDPRTreatment>
@@ -35,8 +36,9 @@ final class GDPRTreatmentController extends AbstractCrudController
 
         yield AssociationField::new('client', 'Client')->setQueryBuilder(
             fn (QueryBuilder $queryBuilder): QueryBuilder => $queryBuilder
-                    ->andWhere('entity.agency = :agency')
-                    ->setParameter('agency', $agency)
+                    ->innerJoin('entity.agency', 'agency')
+                    ->andWhere('agency.id = :agency_id')
+                    ->setParameter('agency_id', $agency->getId(), UuidType::NAME),
         );
 
         yield IntegerField::new('ref', 'N° / RÉF');
@@ -121,8 +123,9 @@ final class GDPRTreatmentController extends AbstractCrudController
         $agency = $this->getAgency();
 
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
-            ->andWhere('client.agency = :agency')
-            ->setParameter('agency', $agency);
+            ->innerJoin('client.agency', 'agency')
+            ->andWhere('agency.id = :agency_id')
+            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
     }
 
     #[\Override]

@@ -21,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends AbstractCrudController<WebsiteHit>
@@ -66,8 +67,9 @@ final class WebsiteHitCrudController extends AbstractCrudController
                 EntityFilter::new('website')
                     ->setFormTypeOption('value_type_options.query_builder', fn (EntityRepository $er) => $er->createQueryBuilder('w')
                         ->innerJoin('w.client', 'c')
-                        ->andWhere('c.agency = :agency')
-                        ->setParameter('agency', $agency))
+                        ->innerJoin('c.agency', 'agency')
+                        ->andWhere('agency.id = :agency_id')
+                        ->setParameter('agency_id', $agency->getId(), UuidType::NAME)),
             );
     }
 
@@ -77,10 +79,11 @@ final class WebsiteHitCrudController extends AbstractCrudController
         $agency = $this->getAgency();
 
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
-                     ->innerJoin('entity.website', 'website')
-                     ->innerJoin('website.client', 'client')
-                     ->andWhere('client.agency = :agency')
-                     ->setParameter('agency', $agency);
+            ->innerJoin('entity.website', 'website')
+            ->innerJoin('website.client', 'client')
+            ->innerJoin('client.agency', 'agency')
+            ->andWhere('agency.id = :agency_id')
+            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
     }
 
     #[\Override]

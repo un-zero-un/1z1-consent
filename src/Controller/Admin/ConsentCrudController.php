@@ -21,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends AbstractCrudController<Consent>
@@ -78,8 +79,9 @@ final class ConsentCrudController extends AbstractCrudController
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
             ->innerJoin('entity.website', 'website')
             ->innerJoin('website.client', 'client')
-            ->andWhere('client.agency = :agency')
-            ->setParameter('agency', $agency);
+            ->innerJoin('client.agency', 'agency')
+            ->andWhere('agency.id = :agency_id')
+            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
     }
 
     #[\Override]

@@ -21,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -45,8 +46,9 @@ final class ClientCrudController extends AbstractCrudController
 
         $agencyQueryBuilder = fn (QueryBuilder $queryBuilder): QueryBuilder => $queryBuilder
             ->innerJoin('entity.client', 'client')
-            ->andWhere('client.agency = :agency')
-            ->setParameter('agency', $agency);
+            ->innerJoin('client.agency', 'agency')
+            ->andWhere('agency.id = :agency_id')
+            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
 
         return [
             IdField::new('id')->hideOnForm(),
@@ -101,8 +103,9 @@ final class ClientCrudController extends AbstractCrudController
         $agency = $this->getAgency();
 
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
-            ->andWhere('entity.agency = :agency')
-            ->setParameter('agency', $agency);
+            ->innerJoin('entity.agency', 'agency')
+            ->andWhere('agency.id = :agency_id')
+            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
     }
 
     #[\Override]

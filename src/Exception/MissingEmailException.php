@@ -2,7 +2,7 @@
 
 namespace App\Exception;
 
-class MissingEmailException extends \RuntimeException implements Exception
+final class MissingEmailException extends \RuntimeException implements Exception
 {
     public function __construct(object $object)
     {

@@ -9,6 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 final class WebsiteRepository extends ServiceEntityRepository
 {
@@ -25,7 +26,7 @@ final class WebsiteRepository extends ServiceEntityRepository
         return $this
             ->createQueryBuilder('website')
             ->where('website.id = :id')
-            ->setParameter('id', $id)
+            ->setParameter('id', $id, UuidType::NAME)
             ->setMaxResults(1)
             ->getQuery()
             ->enableResultCache(60)

@@ -29,8 +29,10 @@ final readonly class WebsiteIdProvider
                     throw new WebsiteNotFoundException(['referer' => $refererHostname, 'host' => $hostname]);
                 }
 
-                if ($website->getClient()?->getAgency()?->getHost() !== $hostname) {
-                    throw new HostMismatchException($website->getClient()?->getAgency()?->getHost(), $hostname);
+                $expected = $website->getClient()?->getAgency()?->getHost();
+                assert(null !== $expected);
+                if ($expected !== $hostname) {
+                    throw new HostMismatchException($expected, $hostname);
                 }
 
                 return $website->getId()->toRfc4122();

@@ -14,7 +14,7 @@ services:
             APP_SECRET: ${APP_SECRET:-!ChangeMe!}
             REDIS_URL: ${REDIS_URL:-redis://redis}
             MAILER_DSN: ${MAILER_DSN:-smtp://smtp:1025}
-            DATABASE_URL: ${DATABASE_URL:-postgres://${POSTGRES_USER:-1z1-consent}:${POSTGRES_PASSWORD:-1z1-consent}@database:5432/${POSTGRES_DB:-1z1-consent}}
+            DATABASE_URL: ${DATABASE_URL:-postgres://${POSTGRES_USER:-1z1-consent}:${POSTGRES_PASSWORD:-1z1-consent}@database:5432/${POSTGRES_DB:-1z1-consent}?serverVersion=17&charset=utf8}
             AUTHORIZED_ADMIN_EMAIL_DOMAINS: ${AUTHORIZED_ADMIN_EMAIL_DOMAINS:-}
             EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-}
             GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}

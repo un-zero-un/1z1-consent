@@ -101,6 +101,11 @@ final class AgencyCrudControllerTest extends AbstractCrudTestCase
 
     public function testDeleteFails(): void
     {
+        $platformName = $this->getContainer()->get('doctrine')->getConnection()->getDatabasePlatform()->getName();
+        if ('sqlite' === $platformName) {
+            $this->markTestSkipped('SQLite in-memory does not support foreign keys.');
+        }
+
         $this->login('admin@example.com', '!ChangeMe!');
         $crawler = $this->client->request('GET', $this->generateIndexUrl());
         $this->assertIndexFullEntityCount(2);
@@ -111,7 +116,7 @@ final class AgencyCrudControllerTest extends AbstractCrudTestCase
             $crawler->filter($this->getIndexEntityActionSelector('delete', $agency->getId()))->attr('href'),
             [
                 'token' => $crawler->filter('#delete-form [name="token"]')->attr('value'),
-            ]
+            ],
         );
 
         $this->assertResponseStatusCodeSame(409);
