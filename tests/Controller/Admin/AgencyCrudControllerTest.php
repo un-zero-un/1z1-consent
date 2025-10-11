@@ -7,6 +7,7 @@ use App\Controller\Admin\DashboardController;
 use App\Entity\Agency;
 use App\Tests\Controller\AdminLogin;
 use App\Tests\Controller\Repositories;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use EasyCorp\Bundle\EasyAdminBundle\Test\AbstractCrudTestCase;
 
 final class AgencyCrudControllerTest extends AbstractCrudTestCase
@@ -101,8 +102,8 @@ final class AgencyCrudControllerTest extends AbstractCrudTestCase
 
     public function testDeleteFails(): void
     {
-        $platformName = $this->getContainer()->get('doctrine')->getConnection()->getDatabasePlatform()->getName();
-        if ('sqlite' === $platformName) {
+        $platform = $this->getContainer()->get('doctrine')->getConnection()->getDatabasePlatform();
+        if ($platform instanceof SQLitePlatform) {
             $this->markTestSkipped('SQLite in-memory does not support foreign keys.');
         }
 
