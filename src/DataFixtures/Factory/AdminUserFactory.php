@@ -44,7 +44,7 @@ final class AdminUserFactory extends PersistentObjectFactory
         return $this
             ->afterInstantiate(function (AdminUser $adminUser): void {
                 $hashedPassword = $this->userPasswordHasher->hashPassword($adminUser, '!ChangeMe!');
-                $adminUser->setPassword($hashedPassword);
+                $adminUser->password = $hashedPassword;
             })
         ;
     }

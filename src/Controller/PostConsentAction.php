@@ -66,8 +66,8 @@ final readonly class PostConsentAction
         }
 
         $acceptedTrackers = $request->request->all('tracker');
-        foreach ($website->getTrackers() as $tracker) {
-            $consent->setTrackerConsent($tracker->getId()->toRfc4122(), '1' === ($acceptedTrackers[$tracker->getId()->toRfc4122()] ?? false));
+        foreach ($website->trackers as $tracker) {
+            $consent->setTrackerConsent($tracker->id->toRfc4122(), '1' === ($acceptedTrackers[$tracker->id->toRfc4122()] ?? false));
         }
 
         $consent->touch();
@@ -75,7 +75,7 @@ final readonly class PostConsentAction
 
         $response->headers->setCookie(
             Cookie::create(
-                $website->getId()->toRfc4122(),
+                $website->id->toRfc4122(),
                 $userId,
                 expire: new \DateTimeImmutable('+2 years'),
                 secure: true,

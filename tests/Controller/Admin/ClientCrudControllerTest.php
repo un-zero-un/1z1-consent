@@ -96,7 +96,7 @@ final class ClientCrudControllerTest extends AbstractCrudTestCase
 
         $client = $this->getRepository(Client::class)->findOneBy(['name' => 'Client de test']);
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('edit', $client->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('edit', $client->id))->link(),
         );
 
         $this->client->submitForm('Sauvegarder les modifications', [
@@ -134,7 +134,7 @@ final class ClientCrudControllerTest extends AbstractCrudTestCase
         $client = $this->getRepository(Client::class)->findOneBy(['name' => 'Client de test']);
         $this->client->request(
             'POST',
-            $crawler->filter($this->getIndexEntityActionSelector('delete', $client->getId()))->attr('href'),
+            $crawler->filter($this->getIndexEntityActionSelector('delete', $client->id))->attr('href'),
             [
                 'token' => $crawler->filter('#delete-form [name="token"]')->attr('value'),
             ]
@@ -153,7 +153,7 @@ final class ClientCrudControllerTest extends AbstractCrudTestCase
 
         $client = $this->getRepository(Client::class)->findOneBy(['name' => 'Client de test']);
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('detail', $client->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('detail', $client->id))->link(),
         );
 
         $this->assertResponseIsSuccessful();
@@ -166,7 +166,7 @@ final class ClientCrudControllerTest extends AbstractCrudTestCase
 
         $client = $this->getRepository(Client::class)->findOneBy(['name' => 'Client de test']);
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('viewRegister', $client->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('viewRegister', $client->id))->link(),
         );
 
         $this->assertResponseIsSuccessful();
@@ -179,7 +179,7 @@ final class ClientCrudControllerTest extends AbstractCrudTestCase
 
         $client = $this->getRepository(Client::class)->findOneBy(['name' => 'Client de test']);
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('viewPDFRegister', $client->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('viewPDFRegister', $client->id))->link(),
         );
 
         $this->assertResponseIsSuccessful();

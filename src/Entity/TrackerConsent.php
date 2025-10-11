@@ -33,18 +33,18 @@ class TrackerConsent implements HasTimestamp
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Consent::class, inversedBy: 'trackerConsents')]
     #[JoinColumn(nullable: false)]
-    private Consent $consent;
+    public private(set) Consent $consent;
 
     #[ManyToOne(targetEntity: Tracker::class)]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private Tracker $tracker;
+    public private(set) Tracker $tracker;
 
     #[Column(type: Types::BOOLEAN, nullable: false)]
-    private bool $accepted;
+    public bool $accepted;
 
     public function __construct(Consent $consent, Tracker $tracker, bool $accepted)
     {
@@ -56,35 +56,10 @@ class TrackerConsent implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getConsent(): Consent
-    {
-        return $this->consent;
-    }
-
-    public function getTracker(): Tracker
-    {
-        return $this->tracker;
-    }
-
-    public function isAccepted(): bool
-    {
-        return $this->accepted;
-    }
-
-    public function setAccepted(bool $accepted): void
-    {
-        $this->accepted = $accepted;
-    }
-
     #[PrePersist]
     #[PreUpdate]
     public function preUpdate(): void
     {
-        $this->getConsent()->touch();
+        $this->consent->touch();
     }
 }

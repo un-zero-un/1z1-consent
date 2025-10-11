@@ -23,18 +23,18 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class PersonalDataCategory implements HasTimestamp
+class PersonalDataCategory implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $name = null;
+    public ?string $name = null;
 
     public function __construct()
     {
@@ -43,21 +43,7 @@ class PersonalDataCategory implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
+    #[\Override]
     public function __toString(): string
     {
         return $this->name ?? 'A category with no name';

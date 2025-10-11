@@ -56,7 +56,7 @@ final class AdminUserCrudControllerTest extends AbstractCrudTestCase
 
         $this->client->submitForm('Créer', [
             'AdminUser[email]' => 'test@example.com',
-            'AdminUser[agency]' => $this->getRepository(Agency::class)->findOneByName('Un Zéro Un')->getId(),
+            'AdminUser[agency]' => $this->getRepository(Agency::class)->findOneByName('Un Zéro Un')->id,
             'ea[newForm][btn]' => 'saveAndReturn',
         ]);
 
@@ -77,12 +77,12 @@ final class AdminUserCrudControllerTest extends AbstractCrudTestCase
         $createdUser = $this->getRepository(AdminUser::class)->findOneByEmail('agency@example.com');
 
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('edit', $createdUser->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('edit', $createdUser->id))->link(),
         );
 
         $this->client->submitForm('Sauvegarder les modifications', [
             'AdminUser[email]' => 'agency@example.com',
-            'AdminUser[agency]' => $this->getRepository(Agency::class)->findOneByName('Un Zéro Deux')->getId(),
+            'AdminUser[agency]' => $this->getRepository(Agency::class)->findOneByName('Un Zéro Deux')->id,
         ]);
 
         $this->assertResponseRedirects($this->generateIndexUrl());
@@ -102,7 +102,7 @@ final class AdminUserCrudControllerTest extends AbstractCrudTestCase
 
         $this->client->request(
             'POST',
-            $crawler->filter($this->getIndexEntityActionSelector('delete', $agencyUser->getId()))->attr('href'),
+            $crawler->filter($this->getIndexEntityActionSelector('delete', $agencyUser->id))->attr('href'),
             [
                 'token' => $crawler->filter('#delete-form [name="token"]')->attr('value'),
             ]
@@ -123,7 +123,7 @@ final class AdminUserCrudControllerTest extends AbstractCrudTestCase
 
         $otherUser = $this->getRepository(AdminUser::class)->findOneByEmail('other@example.com');
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('impersonate', $otherUser->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('impersonate', $otherUser->id))->link(),
         );
         $this->assertResponseRedirects();
         $this->client->followRedirect();
@@ -140,7 +140,7 @@ final class AdminUserCrudControllerTest extends AbstractCrudTestCase
 
         $otherUser = $this->getRepository(AdminUser::class)->findOneByEmail('other@example.com');
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('sendResetPasswordLink', $otherUser->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('sendResetPasswordLink', $otherUser->id))->link(),
         );
 
         $this->assertEmailCount(1);

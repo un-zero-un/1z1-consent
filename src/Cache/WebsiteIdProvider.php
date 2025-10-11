@@ -29,13 +29,13 @@ final readonly class WebsiteIdProvider
                     throw new WebsiteNotFoundException(['referer' => $refererHostname, 'host' => $hostname]);
                 }
 
-                $expected = $website->getClient()?->getAgency()?->getHost();
+                $expected = $website->client?->getAgency()?->host;
                 assert(null !== $expected);
                 if ($expected !== $hostname) {
                     throw new HostMismatchException($expected, $hostname);
                 }
 
-                return $website->getId()->toRfc4122();
+                return $website->id->toRfc4122();
             },
         );
     }

@@ -82,7 +82,7 @@ final class AgencyCrudControllerTest extends AbstractCrudTestCase
 
         $agency = $this->getRepository(Agency::class)->findOneBy(['name' => 'Un Zéro Un']);
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('edit', $agency->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('edit', $agency->id))->link(),
         );
 
         $this->client->submitForm('Sauvegarder les modifications', [
@@ -113,7 +113,7 @@ final class AgencyCrudControllerTest extends AbstractCrudTestCase
         $agency = $this->getRepository(Agency::class)->findOneBy(['name' => 'Un Zéro Un']);
         $this->client->request(
             'POST',
-            $crawler->filter($this->getIndexEntityActionSelector('delete', $agency->getId()))->attr('href'),
+            $crawler->filter($this->getIndexEntityActionSelector('delete', $agency->id))->attr('href'),
             [
                 'token' => $crawler->filter('#delete-form [name="token"]')->attr('value'),
             ],

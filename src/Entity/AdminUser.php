@@ -36,7 +36,7 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME, unique: true)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Agency::class, inversedBy: 'users')]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -44,19 +44,19 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
 
     #[NotBlank]
     #[Column(type: Types::STRING, length: 180, unique: true, nullable: false)]
-    private ?string $email;
+    public ?string $email;
 
     /**
      * @var list<string>
      */
     #[Column(type: Types::JSON)]
-    private array $roles = [];
+    public array $roles = [];
 
     #[Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $googleId;
+    public ?string $googleId;
 
     #[Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $password = null;
+    public ?string $password = null;
 
     public function __construct(?string $email = null, ?string $googleId = null)
     {
@@ -65,11 +65,6 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         $this->googleId = $googleId;
 
         $this->initialize();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
     }
 
     #[\Override]
@@ -90,14 +85,6 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         return $this->roles;
     }
 
-    /**
-     * @param list<string> $roles
-     */
-    public function setRoles(array $roles): void
-    {
-        $this->roles = $roles;
-    }
-
     #[\Override]
     public function eraseCredentials(): void
     {
@@ -113,35 +100,10 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         return $this->email;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): void
-    {
-        $this->email = $email;
-    }
-
     #[\Override]
     public function getPassword(): ?string
     {
         return $this->password;
-    }
-
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
-    }
-
-    public function getGoogleId(): ?string
-    {
-        return $this->googleId;
-    }
-
-    public function setGoogleId(?string $googleId): void
-    {
-        $this->googleId = $googleId;
     }
 
     #[\Override]

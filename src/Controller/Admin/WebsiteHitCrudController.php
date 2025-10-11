@@ -69,7 +69,7 @@ final class WebsiteHitCrudController extends AbstractCrudController
                         ->innerJoin('w.client', 'c')
                         ->innerJoin('c.agency', 'agency')
                         ->andWhere('agency.id = :agency_id')
-                        ->setParameter('agency_id', $agency->getId(), UuidType::NAME)),
+                        ->setParameter('agency_id', $agency->id, UuidType::NAME)),
             );
     }
 
@@ -83,7 +83,7 @@ final class WebsiteHitCrudController extends AbstractCrudController
             ->innerJoin('website.client', 'client')
             ->innerJoin('client.agency', 'agency')
             ->andWhere('agency.id = :agency_id')
-            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
+            ->setParameter('agency_id', $agency->id, UuidType::NAME);
     }
 
     #[\Override]

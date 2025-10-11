@@ -28,148 +28,53 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class Person implements HasTimestamp, Equatable
+class Person implements HasTimestamp, Equatable, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[Column(type: UuidType::NAME)]
     #[GeneratedValue(strategy: 'NONE')]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Client::class, inversedBy: 'persons')]
     #[JoinColumn(nullable: false)]
-    private ?Client $client = null;
+    public ?Client $client = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $firstName = null;
+    public ?string $firstName = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $lastName = null;
+    public ?string $lastName = null;
 
     #[Column(type: Types::STRING, nullable: true)]
-    private ?string $address = null;
+    public ?string $address = null;
 
     #[Column(type: Types::STRING, length: 7, nullable: true)]
-    private ?string $postCode = null;
+    public ?string $postCode = null;
 
     #[Column(type: Types::STRING, nullable: true)]
-    private ?string $city = null;
+    public ?string $city = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $country = 'FR';
+    public ?string $country = 'FR';
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $phoneNumber = null;
+    public ?string $phoneNumber = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $email = null;
+    public ?string $email = null;
 
     public function __construct()
     {
         $this->id = Uuid::v7();
 
         $this->initialize();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getClient(): ?Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(?Client $client): void
-    {
-        $this->client = $client;
-    }
-
-    public function getFirstName(): ?string
-    {
-        return $this->firstName;
-    }
-
-    public function setFirstName(?string $firstName): void
-    {
-        $this->firstName = $firstName;
-    }
-
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(?string $lastName): void
-    {
-        $this->lastName = $lastName;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(?string $address): void
-    {
-        $this->address = $address;
-    }
-
-    public function getPostCode(): ?string
-    {
-        return $this->postCode;
-    }
-
-    public function setPostCode(?string $postCode): void
-    {
-        $this->postCode = $postCode;
-    }
-
-    public function getCity(): ?string
-    {
-        return $this->city;
-    }
-
-    public function setCity(?string $city): void
-    {
-        $this->city = $city;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(?string $country): void
-    {
-        $this->country = $country;
-    }
-
-    public function getPhoneNumber(): ?string
-    {
-        return $this->phoneNumber;
-    }
-
-    public function setPhoneNumber(?string $phoneNumber): void
-    {
-        $this->phoneNumber = $phoneNumber;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(?string $email): void
-    {
-        $this->email = $email;
     }
 
     #[\Override]
@@ -182,6 +87,7 @@ class Person implements HasTimestamp, Equatable
         return $this->id->equals($other->id);
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return sprintf('(%s) %s %s', (string) $this->client ?: '-', $this->lastName ?: 'A person', $this->firstName ?: 'with no name');

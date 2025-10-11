@@ -28,36 +28,36 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity(repositoryClass: AgencyRepository::class)]
 #[Table]
 #[HasLifecycleCallbacks]
-class Agency implements HasTimestamp
+class Agency implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[Column(type: UuidType::NAME)]
     #[GeneratedValue(strategy: 'NONE')]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $host = null;
+    public ?string $host = null;
 
     /**
      * @var Collection<int, Client>
      */
-    #[OneToMany(mappedBy: 'agency', targetEntity: Client::class)]
+    #[OneToMany(targetEntity: Client::class, mappedBy: 'agency')]
     #[OrderBy(['name' => 'ASC'])]
-    private Collection $clients;
+    public private(set) Collection $clients;
 
     /**
      * @var Collection<int, AdminUser>
      */
-    #[OneToMany(mappedBy: 'agency', targetEntity: AdminUser::class)]
+    #[OneToMany(targetEntity: AdminUser::class, mappedBy: 'agency')]
     #[OrderBy(['email' => 'ASC'])]
-    private Collection $users;
+    public private(set) Collection $users;
 
     public function __construct()
     {
@@ -68,43 +68,9 @@ class Agency implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getHost(): ?string
-    {
-        return $this->host;
-    }
-
-    public function setHost(?string $host): void
-    {
-        $this->host = $host;
-    }
-
-    public function getClients(): Collection
-    {
-        return $this->clients;
-    }
-
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
+    #[\Override]
     public function __toString(): string
     {
-        return $this->getName() ?: 'An agency with no name';
+        return $this->name ?: 'An agency with no name';
     }
 }

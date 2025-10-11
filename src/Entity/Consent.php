@@ -38,20 +38,20 @@ class Consent implements HasTimestamp, IndirectlyHasAgency, \Stringable
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Website::class)]
     #[JoinColumn(nullable: false)]
-    private Website $website;
+    public private(set) Website $website;
 
     #[Column(type: Types::STRING, unique: true, nullable: false)]
-    private string $userId;
+    public private(set) string $userId;
 
     /**
      * @var Collection<int, TrackerConsent>
      */
     #[OneToMany(targetEntity: TrackerConsent::class, mappedBy: 'consent', cascade: ['all'])]
-    private Collection $trackerConsents;
+    public private(set) Collection $trackerConsents;
 
     public function __construct(Website $website, string $userId)
     {
@@ -63,38 +63,18 @@ class Consent implements HasTimestamp, IndirectlyHasAgency, \Stringable
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getWebsite(): Website
-    {
-        return $this->website;
-    }
-
-    public function getUserId(): string
-    {
-        return $this->userId;
-    }
-
-    public function getTrackerConsents(): Collection
-    {
-        return $this->trackerConsents;
-    }
-
     public function setTrackerConsent(string $trackerId, bool $accepted): void
     {
         foreach ($this->trackerConsents as $trackerConsent) {
-            if ($trackerConsent->getTracker()->getId()->toRfc4122() === $trackerId) {
-                $trackerConsent->setAccepted($accepted);
+            if ($trackerConsent->tracker->id->toRfc4122() === $trackerId) {
+                $trackerConsent->accepted = $accepted;
 
                 return;
             }
         }
 
-        foreach ($this->getWebsite()->getTrackers() as $tracker) {
-            if ($tracker->getId()->toRfc4122() === $trackerId) {
+        foreach ($this->website->trackers as $tracker) {
+            if ($tracker->id->toRfc4122() === $trackerId) {
                 $this->trackerConsents->add(new TrackerConsent($this, $tracker, $accepted));
 
                 return;
@@ -107,7 +87,7 @@ class Consent implements HasTimestamp, IndirectlyHasAgency, \Stringable
     #[\Override]
     public function getAgency(): ?Agency
     {
-        return $this->getWebsite()->getClient()?->getAgency();
+        return $this->website->client?->getAgency();
     }
 
     #[\Override]

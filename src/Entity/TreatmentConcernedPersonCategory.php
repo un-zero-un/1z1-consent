@@ -26,24 +26,24 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class TreatmentConcernedPersonCategory implements HasTimestamp
+class TreatmentConcernedPersonCategory implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: GDPRTreatment::class, inversedBy: 'concernedPersonCategories')]
-    private ?GDPRTreatment $treatment = null;
+    public ?GDPRTreatment $treatment = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false, enumType: PersonCategory::class)]
-    private ?PersonCategory $personCategory = null;
+    public ?PersonCategory $personCategory = null;
 
     #[Column(type: Types::STRING, nullable: true)]
-    private ?string $details = null;
+    public ?string $details = null;
 
     public function __construct()
     {
@@ -52,47 +52,13 @@ class TreatmentConcernedPersonCategory implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getTreatment(): ?GDPRTreatment
-    {
-        return $this->treatment;
-    }
-
-    public function setTreatment(?GDPRTreatment $treatment): void
-    {
-        $this->treatment = $treatment;
-    }
-
-    public function getPersonCategory(): ?PersonCategory
-    {
-        return $this->personCategory;
-    }
-
-    public function setPersonCategory(?PersonCategory $personCategory): void
-    {
-        $this->personCategory = $personCategory;
-    }
-
-    public function getDetails(): ?string
-    {
-        return $this->details;
-    }
-
-    public function setDetails(?string $details): void
-    {
-        $this->details = $details;
-    }
-
     #[PreUpdate]
     public function preUpdate(): void
     {
         $this->treatment?->touch();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->personCategory?->value ?: 'A person category with non name';

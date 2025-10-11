@@ -38,7 +38,7 @@ final class GDPRTreatmentController extends AbstractCrudController
             fn (QueryBuilder $queryBuilder): QueryBuilder => $queryBuilder
                     ->innerJoin('entity.agency', 'agency')
                     ->andWhere('agency.id = :agency_id')
-                    ->setParameter('agency_id', $agency->getId(), UuidType::NAME),
+                    ->setParameter('agency_id', $agency->id, UuidType::NAME),
         );
 
         yield IntegerField::new('ref', 'N° / RÉF');
@@ -125,7 +125,7 @@ final class GDPRTreatmentController extends AbstractCrudController
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
             ->innerJoin('client.agency', 'agency')
             ->andWhere('agency.id = :agency_id')
-            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
+            ->setParameter('agency_id', $agency->id, UuidType::NAME);
     }
 
     #[\Override]

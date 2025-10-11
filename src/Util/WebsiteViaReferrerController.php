@@ -43,7 +43,7 @@ trait WebsiteViaReferrerController
     {
         try {
             $website = $websiteRepository->findOneByHostname($hostname);
-            $expectedHost = $website->getClient()?->getAgency()?->getHost();
+            $expectedHost = $website->client?->getAgency()?->host;
 
             assert(null !== $expectedHost);
             if ($expectedHost !== $request->getHost()) {

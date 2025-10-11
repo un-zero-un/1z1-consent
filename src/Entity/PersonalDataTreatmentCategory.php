@@ -26,31 +26,31 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class PersonalDataTreatmentCategory implements HasTimestamp
+class PersonalDataTreatmentCategory implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[NotBlank]
     #[ManyToOne(targetEntity: PersonalDataCategory::class)]
     #[JoinColumn(nullable: false)]
-    private ?PersonalDataCategory $category = null;
+    public ?PersonalDataCategory $category = null;
 
     #[ManyToOne(targetEntity: GDPRTreatment::class, inversedBy: 'personalDataCategoryTreatments')]
     #[JoinColumn(nullable: false)]
-    private ?GDPRTreatment $treatment = null;
+    public ?GDPRTreatment $treatment = null;
 
     #[NotBlank]
     #[Column(type: Types::TEXT)]
-    private ?string $description = null;
+    public ?string $description = null;
 
     #[NotBlank]
     #[Column(type: Types::TEXT)]
-    private ?string $duration = null;
+    public ?string $duration = null;
 
     public function __construct()
     {
@@ -59,59 +59,15 @@ class PersonalDataTreatmentCategory implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getCategory(): ?PersonalDataCategory
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?PersonalDataCategory $category): void
-    {
-        $this->category = $category;
-    }
-
-    public function getTreatment(): ?GDPRTreatment
-    {
-        return $this->treatment;
-    }
-
-    public function setTreatment(?GDPRTreatment $treatment): void
-    {
-        $this->treatment = $treatment;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
-    }
-
-    public function getDuration(): ?string
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(?string $duration): void
-    {
-        $this->duration = $duration;
-    }
-
     #[PreUpdate]
     public function preUpdate(): void
     {
         $this->treatment?->touch();
     }
 
+    #[\Override]
     public function __toString(): string
     {
-        return $this->category?->getName() ?: 'A personal data treatment with non name';
+        return $this->category?->name ?: 'A personal data treatment with non name';
     }
 }

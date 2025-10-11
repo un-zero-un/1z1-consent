@@ -26,32 +26,32 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class TreatmentOutOfEUTransfer implements HasTimestamp
+class TreatmentOutOfEUTransfer implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: GDPRTreatment::class, inversedBy: 'outOfEUTransfers')]
-    private ?GDPRTreatment $treatment = null;
+    public ?GDPRTreatment $treatment = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $recipient = null;
+    public ?string $recipient = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $country = null;
+    public ?string $country = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false, enumType: WarrantyType::class)]
-    private ?WarrantyType $warrantyType = null;
+    public ?WarrantyType $warrantyType = null;
 
     #[Column(type: Types::STRING, nullable: true)]
-    private ?string $documentationLink = null;
+    public ?string $documentationLink = null;
 
     public function __construct()
     {
@@ -60,67 +60,13 @@ class TreatmentOutOfEUTransfer implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getTreatment(): ?GDPRTreatment
-    {
-        return $this->treatment;
-    }
-
-    public function setTreatment(?GDPRTreatment $treatment): void
-    {
-        $this->treatment = $treatment;
-    }
-
-    public function getWarrantyType(): ?WarrantyType
-    {
-        return $this->warrantyType;
-    }
-
-    public function setWarrantyType(?WarrantyType $warrantyType): void
-    {
-        $this->warrantyType = $warrantyType;
-    }
-
-    public function getRecipient(): ?string
-    {
-        return $this->recipient;
-    }
-
-    public function setRecipient(?string $recipient): void
-    {
-        $this->recipient = $recipient;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(?string $country): void
-    {
-        $this->country = $country;
-    }
-
-    public function getDocumentationLink(): ?string
-    {
-        return $this->documentationLink;
-    }
-
-    public function setDocumentationLink(?string $documentationLink): void
-    {
-        $this->documentationLink = $documentationLink;
-    }
-
     #[PreUpdate]
     public function preUpdate(): void
     {
         $this->treatment?->touch();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->country ?: 'A country with non name';

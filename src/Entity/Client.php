@@ -37,7 +37,7 @@ class Client implements HasTimestamp, HasAgency, \Stringable
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME, unique: true)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Agency::class, inversedBy: 'clients')]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -45,28 +45,28 @@ class Client implements HasTimestamp, HasAgency, \Stringable
 
     #[NotBlank]
     #[Column(type: Types::STRING, length: 255, nullable: false)]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[ManyToOne(targetEntity: Person::class, cascade: ['remove'])]
     #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    private ?Person $dataResponsible = null;
+    public ?Person $dataResponsible = null;
 
     #[ManyToOne(targetEntity: Person::class, cascade: ['remove'])]
     #[JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    private ?Person $dpo = null;
+    public ?Person $dpo = null;
 
     #[OneToMany(targetEntity: GDPRTreatment::class, mappedBy: 'client')]
-    private Collection $treatments;
+    public private(set) Collection $treatments;
 
     /**
      * @var Collection<int, Website>
      */
     #[OneToMany(targetEntity: Website::class, mappedBy: 'client')]
-    private Collection $websites;
+    public private(set) Collection $websites;
 
     #[Valid]
     #[OneToMany(targetEntity: Person::class, mappedBy: 'client', cascade: ['all'], orphanRemoval: true)]
-    private Collection $persons;
+    public private(set) Collection $persons;
 
     public function __construct()
     {
@@ -76,11 +76,6 @@ class Client implements HasTimestamp, HasAgency, \Stringable
         $this->treatments = new ArrayCollection();
 
         $this->initialize();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
     }
 
     #[\Override]
@@ -95,49 +90,9 @@ class Client implements HasTimestamp, HasAgency, \Stringable
         $this->agency = $agency;
     }
 
-    public function getDataResponsible(): ?Person
-    {
-        return $this->dataResponsible;
-    }
-
-    public function setDataResponsible(?Person $dataResponsible): void
-    {
-        $this->dataResponsible = $dataResponsible;
-    }
-
-    public function getDpo(): ?Person
-    {
-        return $this->dpo;
-    }
-
-    public function setDpo(?Person $dpo): void
-    {
-        $this->dpo = $dpo;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getWebsites(): Collection
-    {
-        return $this->websites;
-    }
-
-    public function getPersons(): Collection
-    {
-        return $this->persons;
-    }
-
     public function addPerson(Person $person): void
     {
-        $person->setClient($this);
+        $person->client = $this;
         $this->persons->add($person);
     }
 
@@ -150,13 +105,8 @@ class Client implements HasTimestamp, HasAgency, \Stringable
             $this->dataResponsible = null;
         }
 
-        $person->setClient(null);
+        $person->client = null;
         $this->persons->removeElement($person);
-    }
-
-    public function getTreatments(): Collection
-    {
-        return $this->treatments;
     }
 
     #[\Override]

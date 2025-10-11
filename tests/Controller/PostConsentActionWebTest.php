@@ -18,7 +18,7 @@ class PostConsentActionWebTest extends WebTestCase
         $trackerRepository = $this->getContainer()->get(EntityManagerInterface::class)->getRepository(Tracker::class);
         $trackers = $trackerRepository->findAll();
 
-        $this->trackerIds = array_map(fn (Tracker $t): string => $t->getId()->toRfc4122(), $trackers);
+        $this->trackerIds = array_map(fn (Tracker $t): string => $t->id->toRfc4122(), $trackers);
     }
 
     public function testNormalConsentCreatesAndSetsCookie(): void

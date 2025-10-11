@@ -58,7 +58,7 @@ final readonly class ExposeJsApiAction
         if (
             $dnt
             && $this->dntEnabled
-            && $website->isRespectDoNotTrack()
+            && $website->respectDoNotTrack
         ) {
             return new Response(
                 'console.log("Votre navigateur nous indique que vous souhaitez ne pas être pisté. Nous comprenons et respectons ce choix, donc nous ne chargerons même pas notre script 🙂");',
@@ -79,7 +79,7 @@ final readonly class ExposeJsApiAction
         }
 
         $this->websiteHitRepository->saveFromRawData(
-            $website->getId()->toRfc4122(),
+            $website->id->toRfc4122(),
             $request->getClientIp(),
             $referer,
         );

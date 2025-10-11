@@ -84,7 +84,7 @@ final class AdminUserCrudController extends AbstractCrudController
             $impersonateAction =
                 Action::new('impersonate', 'Se connecter en tant que')
                     ->setIcon('fa fa-user-secret')
-                    ->linkToUrl(fn (AdminUser $user) => $this->generateUrl('admin', ['_switch_user' => $user->getEmail()]));
+                    ->linkToUrl(fn (AdminUser $user) => $this->generateUrl('admin', ['_switch_user' => $user->email]));
 
             $actions = $actions
                 ->add(Crud::PAGE_DETAIL, $impersonateAction)
@@ -123,7 +123,7 @@ final class AdminUserCrudController extends AbstractCrudController
 
         $resetToken = $this->resetPasswordHelper->generateResetToken($user);
 
-        $emailAddress = $user->getEmail();
+        $emailAddress = $user->email;
         if (null === $emailAddress) {
             throw $this->createNotFoundException('L\'utilisateur n\'a pas d\'adresse email.');
         }

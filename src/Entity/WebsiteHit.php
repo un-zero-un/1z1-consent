@@ -30,20 +30,20 @@ class WebsiteHit implements IndirectlyHasAgency
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Website::class)]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private Website $website;
+    public private(set) Website $website;
 
     #[Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
-    private \DateTimeImmutable $createdAt;
+    public private(set) \DateTimeImmutable $createdAt;
 
     #[Column(type: Types::STRING, nullable: true)]
-    private ?string $ipAddress;
+    public private(set) ?string $ipAddress;
 
     #[Column(type: Types::STRING, nullable: false)]
-    private string $referer;
+    public private(set) string $referer;
 
     public function __construct(Website $website, string $ipAddress, string $referer)
     {
@@ -54,34 +54,9 @@ class WebsiteHit implements IndirectlyHasAgency
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getWebsite(): Website
-    {
-        return $this->website;
-    }
-
-    public function getCreatedAt(): \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function getIpAddress(): ?string
-    {
-        return $this->ipAddress;
-    }
-
-    public function getReferer(): string
-    {
-        return $this->referer;
-    }
-
     #[\Override]
     public function getAgency(): ?Agency
     {
-        return $this->getWebsite()->getClient()?->getAgency();
+        return $this->website->client?->getAgency();
     }
 }

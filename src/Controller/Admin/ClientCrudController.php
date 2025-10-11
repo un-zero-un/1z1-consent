@@ -50,7 +50,7 @@ final class ClientCrudController extends AbstractCrudController
             ->innerJoin('entity.client', 'client')
             ->innerJoin('client.agency', 'agency')
             ->andWhere('agency.id = :agency_id')
-            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
+            ->setParameter('agency_id', $agency->id, UuidType::NAME);
 
         return [
             IdField::new('id')->hideOnForm(),
@@ -107,14 +107,14 @@ final class ClientCrudController extends AbstractCrudController
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
             ->innerJoin('entity.agency', 'agency')
             ->andWhere('agency.id = :agency_id')
-            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
+            ->setParameter('agency_id', $agency->id, UuidType::NAME);
     }
 
     #[\Override]
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         /** @var Collection<int, Person> $persons */
-        $persons = $entityInstance->getPersons();
+        $persons = $entityInstance->persons;
         foreach ($persons as $person) {
             $entityInstance->removePerson($person);
             $entityManager->remove($person);
@@ -151,7 +151,7 @@ final class ClientCrudController extends AbstractCrudController
             201,
             [
                 'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="registre_rgpd_'.($client->getName() ?: '').'.pdf"',
+                'Content-Disposition' => 'attachment; filename="registre_rgpd_'.($client->name ?: '').'.pdf"',
             ]
         );
     }
