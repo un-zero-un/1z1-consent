@@ -26,40 +26,40 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class Tracker implements HasTimestamp
+class Tracker implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME, unique: true)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[NotBlank]
     #[ManyToOne(targetEntity: Website::class, inversedBy: 'trackers')]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?Website $website = null;
+    public ?Website $website = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false, enumType: TrackerType::class)]
-    private ?TrackerType $type = null;
+    public ?TrackerType $type = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $name = null;
+    public ?string $name = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $trackerId = null;
+    public ?string $trackerId = null;
 
     #[Column(type: Types::TEXT, nullable: true)]
-    private ?string $customCode = null;
+    public ?string $customCode = null;
 
     #[Column(type: Types::STRING, length: 1024, nullable: true)]
-    private ?string $customUrl = null;
+    public ?string $customUrl = null;
 
     #[Column(type: Types::BOOLEAN, nullable: false, options: ['default' => true])]
-    private bool $useDefaultSnippet = true;
+    public bool $useDefaultSnippet = true;
 
     public function __construct()
     {
@@ -68,83 +68,9 @@ class Tracker implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getWebsite(): ?Website
-    {
-        return $this->website;
-    }
-
-    public function setWebsite(?Website $website): void
-    {
-        $this->website = $website;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(?string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getType(): ?TrackerType
-    {
-        return $this->type;
-    }
-
-    public function setType(?TrackerType $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function getTrackerId(): ?string
-    {
-        return $this->trackerId;
-    }
-
-    public function setTrackerId(?string $trackerId): void
-    {
-        $this->trackerId = $trackerId;
-    }
-
-    public function getCustomCode(): ?string
-    {
-        return $this->customCode;
-    }
-
-    public function setCustomCode(?string $customCode): void
-    {
-        $this->customCode = $customCode;
-    }
-
-    public function getCustomUrl(): ?string
-    {
-        return $this->customUrl;
-    }
-
-    public function setCustomUrl(?string $customUrl): void
-    {
-        $this->customUrl = $customUrl;
-    }
-
-    public function isUseDefaultSnippet(): bool
-    {
-        return $this->useDefaultSnippet;
-    }
-
-    public function setUseDefaultSnippet(bool $useDefaultSnippet): void
-    {
-        $this->useDefaultSnippet = $useDefaultSnippet;
-    }
-
+    #[\Override]
     public function __toString(): string
     {
-        return $this->getName() ?? 'A tracker with no name';
+        return $this->name ?? 'A tracker with no name';
     }
 }

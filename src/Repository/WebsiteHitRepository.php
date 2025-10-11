@@ -31,7 +31,7 @@ class WebsiteHitRepository extends ServiceEntityRepository
                     ->orderBy('year, month', 'ASC')
                     ->where('website.id = :website_id')
                     ->andWhere('h.createdAt > :date')
-                    ->setParameter('website_id', $website->getId(), UuidType::NAME)
+                    ->setParameter('website_id', $website->id, UuidType::NAME)
                     ->setParameter('date', new \DateTimeImmutable('-1 year 1 month'))
                     ->getQuery()
                     ->getArrayResult();
@@ -46,7 +46,7 @@ class WebsiteHitRepository extends ServiceEntityRepository
                         ->orderBy('year, month, day', 'ASC')
                         ->where('website.id = :website_id')
                         ->andWhere('h.createdAt > :date')
-                        ->setParameter('website_id', $website->getId(), UuidType::NAME)
+                        ->setParameter('website_id', $website->id, UuidType::NAME)
                         ->setParameter('date', new \DateTimeImmutable('-31 days'))
                         ->getQuery()
                         ->getArrayResult();

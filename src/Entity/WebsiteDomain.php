@@ -27,23 +27,23 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Index(fields: ['domain'])]
 #[Table]
 #[HasLifecycleCallbacks]
-class WebsiteDomain implements HasTimestamp
+class WebsiteDomain implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME, nullable: false)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[NotBlank]
     #[ManyToOne(targetEntity: Website::class, inversedBy: 'domains')]
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private ?Website $website = null;
+    public ?Website $website = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false)]
-    private ?string $domain = null;
+    public ?string $domain = null;
 
     public function __construct()
     {
@@ -52,31 +52,7 @@ class WebsiteDomain implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getWebsite(): ?Website
-    {
-        return $this->website;
-    }
-
-    public function setWebsite(?Website $website): void
-    {
-        $this->website = $website;
-    }
-
-    public function getDomain(): ?string
-    {
-        return $this->domain;
-    }
-
-    public function setDomain(?string $domain): void
-    {
-        $this->domain = $domain;
-    }
-
+    #[\Override]
     public function __toString(): string
     {
         return $this->domain ?? 'A domain with no name';

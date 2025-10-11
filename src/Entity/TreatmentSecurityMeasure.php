@@ -33,17 +33,17 @@ class TreatmentSecurityMeasure implements HasTimestamp
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: GDPRTreatment::class, inversedBy: 'securityMeasures')]
-    private ?GDPRTreatment $treatment = null;
+    public ?GDPRTreatment $treatment = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false, enumType: SecurityMeasure::class)]
-    private ?SecurityMeasure $securityMeasure = null;
+    public ?SecurityMeasure $securityMeasure = null;
 
     #[Column(type: Types::STRING, nullable: true)]
-    private ?string $details = null;
+    public ?string $details = null;
 
     public function __construct()
     {
@@ -52,47 +52,13 @@ class TreatmentSecurityMeasure implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getTreatment(): ?GDPRTreatment
-    {
-        return $this->treatment;
-    }
-
-    public function setTreatment(?GDPRTreatment $treatment): void
-    {
-        $this->treatment = $treatment;
-    }
-
-    public function getSecurityMeasure(): ?SecurityMeasure
-    {
-        return $this->securityMeasure;
-    }
-
-    public function setSecurityMeasure(?SecurityMeasure $securityMeasure): void
-    {
-        $this->securityMeasure = $securityMeasure;
-    }
-
-    public function getDetails(): ?string
-    {
-        return $this->details;
-    }
-
-    public function setDetails(?string $details): void
-    {
-        $this->details = $details;
-    }
-
     #[PreUpdate]
     public function preUpdate(): void
     {
         $this->treatment?->touch();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->securityMeasure?->value ?: 'A security measure with non name';

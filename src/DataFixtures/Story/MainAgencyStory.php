@@ -43,8 +43,8 @@ final class MainAgencyStory extends Story
             'country' => 'FR',
         ]);
 
-        $testClient->setDataResponsible($dataResponsible);
-        $testClient->setDpo($dpo);
+        $testClient->dataResponsible = $dataResponsible;
+        $testClient->dpo = $dpo;
 
         $server1 = ServerFactory::createOne(['agency' => $unZeroUn, 'name' => 'Serveur 1']);
 

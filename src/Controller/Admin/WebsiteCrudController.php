@@ -58,7 +58,7 @@ final class WebsiteCrudController extends AbstractCrudController
                     fn (QueryBuilder $queryBuilder) => $queryBuilder
                         ->innerJoin('entity.agency', 'agency')
                         ->andWhere('agency.id = :agency_id')
-                        ->setParameter('agency_id', $agency->getId(), UuidType::NAME),
+                        ->setParameter('agency_id', $agency->id, UuidType::NAME),
                 ),
 
             AssociationField::new('server', 'Serveur')
@@ -66,7 +66,7 @@ final class WebsiteCrudController extends AbstractCrudController
                     fn (QueryBuilder $queryBuilder) => $queryBuilder
                         ->innerJoin('entity.agency', 'agency')
                         ->andWhere('agency.id = :agency_id')
-                        ->setParameter('agency_id', $agency->getId(), UuidType::NAME),
+                        ->setParameter('agency_id', $agency->id, UuidType::NAME),
                 ),
 
             BooleanField::new('respectDoNotTrack', 'Respecter le "Do Not Track"')->hideOnIndex(),
@@ -131,7 +131,7 @@ final class WebsiteCrudController extends AbstractCrudController
                     ->setController(ConsentCrudController::class)
                     ->setAction(Action::INDEX)
                     ->set('filters[website][comparison]', '=')
-                    ->set('filters[website][value]', $website->getId())
+                    ->set('filters[website][value]', $website->id)
                     ->generateUrl(),
             );
 
@@ -148,6 +148,6 @@ final class WebsiteCrudController extends AbstractCrudController
         return parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters)
             ->innerJoin('client.agency', 'agency')
             ->andWhere('agency.id = :agency_id')
-            ->setParameter('agency_id', $agency->getId(), UuidType::NAME);
+            ->setParameter('agency_id', $agency->id, UuidType::NAME);
     }
 }

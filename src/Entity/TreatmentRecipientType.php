@@ -26,24 +26,24 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Entity]
 #[Table]
 #[HasLifecycleCallbacks]
-class TreatmentRecipientType implements HasTimestamp
+class TreatmentRecipientType implements HasTimestamp, \Stringable
 {
     use HasTimestampImpl;
 
     #[Id]
     #[GeneratedValue(strategy: 'NONE')]
     #[Column(type: UuidType::NAME)]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: GDPRTreatment::class, inversedBy: 'recipientTypes')]
-    private ?GDPRTreatment $treatment = null;
+    public ?GDPRTreatment $treatment = null;
 
     #[NotBlank]
     #[Column(type: Types::STRING, nullable: false, enumType: RecipientType::class)]
-    private ?RecipientType $recipientType = null;
+    public ?RecipientType $recipientType = null;
 
     #[Column(type: Types::STRING, nullable: true)]
-    private ?string $details = null;
+    public ?string $details = null;
 
     public function __construct()
     {
@@ -52,47 +52,13 @@ class TreatmentRecipientType implements HasTimestamp
         $this->initialize();
     }
 
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getTreatment(): ?GDPRTreatment
-    {
-        return $this->treatment;
-    }
-
-    public function setTreatment(?GDPRTreatment $treatment): void
-    {
-        $this->treatment = $treatment;
-    }
-
-    public function getRecipientType(): ?RecipientType
-    {
-        return $this->recipientType;
-    }
-
-    public function setRecipientType(?RecipientType $recipientType): void
-    {
-        $this->recipientType = $recipientType;
-    }
-
-    public function getDetails(): ?string
-    {
-        return $this->details;
-    }
-
-    public function setDetails(?string $details): void
-    {
-        $this->details = $details;
-    }
-
     #[PreUpdate]
     public function preUpdate(): void
     {
         $this->treatment?->touch();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->recipientType?->value ?: 'A recipient with non name';

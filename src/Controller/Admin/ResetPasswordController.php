@@ -106,8 +106,8 @@ final class ResetPasswordController extends AbstractController
             assert(is_string($plainPassword));
 
             $encodedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+            $user->password = $encodedPassword;
 
-            $user->setPassword($encodedPassword);
             $this->entityManager->flush();
 
             $this->cleanSessionAfterReset();
@@ -131,7 +131,7 @@ final class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('admin_check_email');
         }
 
-        $toEmail = $user->getEmail();
+        $toEmail = $user->email;
         if (!$toEmail) {
             throw new \LogicException('The user does not have an email.');
         }

@@ -60,11 +60,11 @@ final readonly class CreateAdminUserCommand
         }
 
         $user = new AdminUser($email);
-        $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+        $user->password = $this->passwordHasher->hashPassword($user, $password);
         $user->setAgency($agencyEntity);
 
         if ($asAdmin) {
-            $user->setRoles(['ROLE_ADMIN']);
+            $user->roles = ['ROLE_ADMIN'];
         }
         $this->adminUserRepository->save($user);
 

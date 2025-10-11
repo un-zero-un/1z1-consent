@@ -42,8 +42,8 @@ final class OtherAgencyStory extends Story
             'country' => 'FR',
         ]);
 
-        $testClient->setDataResponsible($dataResponsible);
-        $testClient->setDpo($dpo);
+        $testClient->dataResponsible = $dataResponsible;
+        $testClient->dpo = $dpo;
 
         $website = WebsiteFactory::createOne(['client' => $testClient]);
         WebsiteDomainFactory::createOne(['domain' => 'www.other.'.$this->mainDomain, 'website' => $website]);

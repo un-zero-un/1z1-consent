@@ -81,7 +81,7 @@ final class ServerCrudControllerTest extends AbstractCrudTestCase
 
         $server = $this->getRepository(Server::class)->findOneBy(['name' => 'Serveur 1']);
         $this->client->click(
-            $crawler->filter($this->getIndexEntityActionSelector('edit', $server->getId()))->link(),
+            $crawler->filter($this->getIndexEntityActionSelector('edit', $server->id))->link(),
         );
 
         $this->client->submitForm('Sauvegarder les modifications', [
@@ -107,7 +107,7 @@ final class ServerCrudControllerTest extends AbstractCrudTestCase
         $server = $this->getRepository(Server::class)->findOneBy(['name' => 'Serveur 1']);
         $this->client->request(
             'POST',
-            $crawler->filter($this->getIndexEntityActionSelector('delete', $server->getId()))->attr('href'),
+            $crawler->filter($this->getIndexEntityActionSelector('delete', $server->id))->attr('href'),
             [
                 'token' => $crawler->filter('#delete-form [name="token"]')->attr('value'),
             ]
