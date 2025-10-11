@@ -23,6 +23,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @extends AbstractCrudController<Website>
@@ -33,7 +34,10 @@ final class WebsiteCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
 
-    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator)
+    public function __construct(
+        private readonly AdminUrlGenerator $adminUrlGenerator,
+        #[Autowire('%kernel.project_dir%')] private readonly string $kernelProjectDir,
+    )
     {
     }
 
@@ -46,7 +50,7 @@ final class WebsiteCrudController extends AbstractCrudController
     #[\Override]
     public function configureFields(string $pageName): iterable
     {
-        $variableFilePath = realpath(__DIR__.'/../../../assets/dialog/variables.scss.txt');
+        $variableFilePath = realpath($this->kernelProjectDir.'/assets/dialog/variables.scss.txt');
         $defaultVariables = $variableFilePath ? file_get_contents($variableFilePath) : '';
         $agency = $this->getAgency();
 

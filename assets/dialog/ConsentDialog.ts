@@ -144,7 +144,7 @@ class ConsentDialog extends HTMLElement {
             this.trackerConsent = {
                 done: true,
                 userId: this.trackerConsent?.userId || this.getUid(),
-                trackers: trackers.reduce((acc, entry) => ({...acc, [entry[0] as string]: entry[1]}), {})
+                trackers: trackers.reduce((acc, entry) => ({...acc, [entry[0] as string]: !!entry[1]}), {})
             };
 
             localStorage.setItem(LOCAL_STORAGE_PREFIX + this.dataset.websiteId, JSON.stringify(this.trackerConsent));
@@ -172,11 +172,7 @@ class ConsentDialog extends HTMLElement {
             return this.consentUserId;
         }
 
-        return this.consentUserId = (
-            [].map.call(window.navigator.userAgent, (char: string) => char.charCodeAt(0)).reduce((a: number, b) => a + (b as number), 0) *
-            Math.floor(Math.random() * Date.now() * 10000000) *
-            Math.floor(Math.random() * Math.random() * 10000000)
-        ).toString(36);
+        return this.consentUserId = crypto.randomUUID();
     }
 }
 
