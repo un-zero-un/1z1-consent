@@ -6,6 +6,7 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         charset: 'utf8'
         use_savepoints: true
+        idle_connection_ttl: 60
 
     orm:
         auto_generate_proxy_classes: true
