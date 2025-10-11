@@ -2,6 +2,7 @@
     @media print {
         @page {
             size: A4 portrait;
+            margin: .8cm;
         }
 
         body {
@@ -103,312 +104,316 @@
 {% set treatments = treatments|merge(website_treatments) %}
 
 <main class="GDPRRegister">
-    <section class="Cover">
-        <h1>Registre des traitements</h1>
-        <h2>{{ client.name }}</h2>
+  <section class="Cover">
+    <h1>Registre des traitements</h1>
+    <h2>{{ client.name }}</h2>
 
-        <div class="Cover__detail">
-            <h3>Concerne les sites :</h3>
-            <ul>
-                {% for website in client.websites %}
-                    <li>{{ website.domains|join(',') }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-    </section>
-
-    <section class="Summary">
-        {% set texts = {
-            responsible: '<strong>Coordonnées du responsable de l’organisme</strong>(responsable de traitement ou son représentant si le responsable est situé en dehors de l’UE)',
-            dpo: 'Coordonnées du délégué à la protection des données (DPO)',
-        } %}
-        {% for type, person in {responsible: client.dataResponsible, dpo: client.dpo} %}
-            <table>
-                <tbody>
-                    <tr>
-                        <th rowspan="2">
-                            {{ texts[type]|raw }}
-                        </th>
-                        <th>Nom&nbsp;: </th>
-                        <td>{{ person ? person.lastName }}</td>
-                        <th>Prénom&nbsp;: </th>
-                        <td>{{ person ? person.firstName }}</td>
-                        <th>Adresse&nbsp;: </th>
-                        <td>{{ person ? person.address }}</td>
-                        <th>Adresse mél&nbsp;: </th>
-                        <td>{{ person ? person.email }}</td>
-                    </tr>
-                    <tr>
-                        <th>Code postal&nbsp;: </th>
-                        <td>{{ person ? person.postCode }}</td>
-                        <th>Ville&nbsp;: </th>
-                        <td>{{ person ? person.city }}</td>
-                        <th>Téléphone&nbsp;: </th>
-                        <td colspan="3">{{ person ? person.phoneNumber }}</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="Cover__detail">
+      <h3>Concerne les sites :</h3>
+      <ul>
+        {% for website in client.websites %}
+          <li>{{ website.domains|join(',') }}</li>
         {% endfor %}
+      </ul>
+    </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="4">Identification du traitement</th>
-                    <th rowspan="2">Finalité du traitement</th>
-                    <th>Données sensibles ?</th>
-                </tr>
-                <tr class="Summary_subThead">
-                    <th>Nom du traitement</th>
-                    <th>N° / RÉF</th>
-                    <th>Date de création de la fiche</th>
-                    <th>Dernière mise à jour de la fiche</th>
-                    <th>Oui/non</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for treatment in treatments %}
-                    <tr>
-                        <td>{{ treatment.name }}</td>
-                        <td>{{ treatment.ref }}</td>
-                        <td>{{ treatment.createdAt.format('d/m/Y H:i') }}</td>
-                        <td>{{ treatment.updatedAt.format('d/m/Y H:i') }}</td>
-                        <td>{{ treatment.processingPurpose }}</td>
-                        <td>{{ treatment.sensitiveDataCategoryTreatments|length > 0 ? 'Oui' : 'Non' }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </section>
+  </section>
 
-    {% for treatment in treatments %}
-        <section class="Treatment">
-
-            <table>
-                <thead>
-                <tr>
-                    <th colspan="2">Description du traitement</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th>Nom du traitement</th>
-                    <td>{{ treatment.name }}</td>
-                </tr>
-                <tr>
-                    <th>N° / RÉF</th>
-                    <td>{{ treatment.ref }}</td>
-                </tr>
-                <tr>
-                    <th>Date de création du traitement</th>
-                    <td>{{ treatment.createdAt.format('d/m/Y H:i') }}</td>
-                </tr>
-                <tr>
-                    <th>Mise à jour du traitement</th>
-                    <td>{{ treatment.updatedAt.format('d/m/Y H:i') }}</td>
-                </tr>
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Acteurs</th>
-                    <th>Nom</th>
-                    <th>Adresse</th>
-                    <th>Code Postal</th>
-                    <th>Ville</th>
-                    <th>Pays</th>
-                    <th>Téléphone</th>
-                    <th>Adresse mél</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for type, person in {'Responsable du traitement': client.dataResponsible, 'Délégué à la protection des données': client.dpo}|filter(v => v) %}
-                    <tr>
-                        <th>{{ type }}</th>
-                        <td>{{ person.firstName }} {{ person.lastName }}</td>
-                        <td>{{ person.address }}</td>
-                        <td>{{ person.postCode }}</td>
-                        <td>{{ person.city }}</td>
-                        <td>{{ person.country|country_name }}</td>
-                        <td>{{ person.phoneNumber }}</td>
-                        <td>{{ person.email }}</td>
-                    </tr>
-                {% endfor %}
-                {% if client.dpo and client.dpo.client != client %}
-                    <tr>
-                        <th>Société du DPO (si celui-ci est externe)</th>
-                        <td>{{ person.dpo.client.name }}</td>
-                    </tr>
-                {% endif %}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th colspan="2">Finalité(s) du traitement effectué</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for type, purpose in {
-                    'Finalité principale': treatment.processingPurpose,
-                    'Sous-finalité 1': treatment.processingSubPurpose1,
-                    'Sous-finalité 2': treatment.processingSubPurpose2,
-                    'Sous-finalité 3': treatment.processingSubPurpose3,
-                    'Sous-finalité 4': treatment.processingSubPurpose4,
-                    'Sous-finalité 5': treatment.processingSubPurpose5,
-                }|filter(v => v) %}
-                    <tr>
-                        <th>{{ type }}</th>
-                        <td>{{ purpose }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Catégories de données personnelles concernées</th>
-                    <th>Description</th>
-                    <th>Durée de conservation</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for dataCategory in treatment.personalDataCategoryTreatments %}
-                    <tr>
-                        <th>{{ dataCategory.category }}</th>
-                        <td>{{ dataCategory.description }}</td>
-                        <td>{{ dataCategory.duration }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3">Néant</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Données sensibles</th>
-                    <th>Description</th>
-                    <th>Durée de conservation</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for dataCategory in treatment.sensitiveDataCategoryTreatments %}
-                    <tr>
-                        <th>{{ dataCategory.category }}</th>
-                        <td>{{ dataCategory.description }}</td>
-                        <td>{{ dataCategory.duration }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3">Néant</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Destinataires</th>
-                    <th>Type de destinataire</th>
-                    <th>Précisions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i, concernedPersonCategory in treatment.concernedPersonCategories %}
-                    <tr>
-                        <th>Catégorie de personnes {{ i + 1 }}</th>
-                        <td>{{ concernedPersonCategory.personCategory.value }}</td>
-                        <td>{{ concernedPersonCategory.details }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3">Néant</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Destinataires</th>
-                    <th>Type de destinataires</th>
-                    <th>Précisions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i, recipient in treatment.recipientTypes %}
-                    <tr>
-                        <th>Destinataire {{ i + 1 }}</th>
-                        <td>{{ recipient.recipientType.value }}</td>
-                        <td>{{ recipient.details }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3">Néant</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Mesures de sécurité</th>
-                    <th>Type de mesures de sécurité</th>
-                    <th>Précisions</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i, securityMeasure in treatment.securityMeasures %}
-                    <tr>
-                        <th>Mesures de sécurité {{ i + 1 }}</th>
-                        <td>{{ securityMeasure.securityMeasure.value }}</td>
-                        <td>{{ securityMeasure.details }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="3">Néant</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                <tr>
-                    <th>Transferts hors UE</th>
-                    <th>Destinataire</th>
-                    <th>Pays</th>
-                    <th>Type de Garanties</th>
-                    <th>Liens vers la documentation</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for i, outOfEUTransfer in treatment.outOfEUTransfers %}
-                    <tr>
-                        <th>Organisme destinataire {{ i + 1 }}</th>
-                        <td>{{ outOfEUTransfer.recipient }}</td>
-                        <td>{{ outOfEUTransfer.country|country_name }}</td>
-                        <td>{{ outOfEUTransfer.warrantyType.value }}</td>
-                        <td>{{ outOfEUTransfer.documentationLink }}</td>
-                    </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="5">Néant</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </section>
+  <section class="Summary">
+    {% set texts = {
+      responsible: '<strong>Coordonnées du responsable de l’organisme</strong>(responsable de traitement ou son représentant si le responsable est situé en dehors de l’UE)',
+      dpo: 'Coordonnées du délégué à la protection des données (DPO)',
+    } %}
+    {% for type, person in {responsible: client.dataResponsible, dpo: client.dpo} %}
+      <table>
+        <thead>
+        <tr>
+          <th colspan="8">
+            {{ texts[type]|raw }}
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>Nom&nbsp;:</th>
+          <td>{{ person ? person.lastName }}</td>
+          <th>Prénom&nbsp;:</th>
+          <td>{{ person ? person.firstName }}</td>
+          <th>Adresse&nbsp;:</th>
+          <td>{{ person ? person.address }}</td>
+          <th>Adresse mél&nbsp;:</th>
+          <td>{{ person ? person.email }}</td>
+        </tr>
+        <tr>
+          <th>Code postal&nbsp;:</th>
+          <td>{{ person ? person.postCode }}</td>
+          <th>Ville&nbsp;:</th>
+          <td>{{ person ? person.city }}</td>
+          <th>Téléphone&nbsp;:</th>
+          <td colspan="3">{{ person ? person.phoneNumber }}</td>
+        </tr>
+        </tbody>
+      </table>
     {% endfor %}
+
+    <table>
+      <thead>
+      <tr>
+        <th colspan="4">Identification du traitement</th>
+        <th rowspan="2">Finalité du traitement</th>
+        <th>Données sensibles ?</th>
+      </tr>
+      <tr class="Summary_subThead">
+        <th>Nom du traitement</th>
+        <th>N° / RÉF</th>
+        <th>Date de création de la fiche</th>
+        <th>Dernière mise à jour de la fiche</th>
+        <th>Oui/non</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for treatment in treatments %}
+        <tr>
+          <td>{{ treatment.name }}</td>
+          <td>{{ treatment.ref }}</td>
+          <td>{{ treatment.createdAt.format('d/m/Y H:i') }}</td>
+          <td>{{ treatment.updatedAt.format('d/m/Y H:i') }}</td>
+          <td>{{ treatment.processingPurpose }}</td>
+          <td>{{ treatment.sensitiveDataCategoryTreatments|length > 0 ? 'Oui' : 'Non' }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  {% for treatment in treatments %}
+    <section class="Treatment">
+
+      <table>
+        <thead>
+        <tr>
+          <th colspan="2">Description du traitement</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th>Nom du traitement</th>
+          <td>{{ treatment.name }}</td>
+        </tr>
+        <tr>
+          <th>N° / RÉF</th>
+          <td>{{ treatment.ref }}</td>
+        </tr>
+        <tr>
+          <th>Date de création du traitement</th>
+          <td>{{ treatment.createdAt.format('d/m/Y H:i') }}</td>
+        </tr>
+        <tr>
+          <th>Mise à jour du traitement</th>
+          <td>{{ treatment.updatedAt.format('d/m/Y H:i') }}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Acteurs</th>
+          <th>Nom</th>
+          <th>Adresse</th>
+          <th>Code Postal</th>
+          <th>Ville</th>
+          <th>Pays</th>
+          <th>Téléphone</th>
+          <th>Adresse mél</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for type, person in {'Responsable du traitement': client.dataResponsible, 'Délégué à la protection des données': client.dpo}|filter(v => v) %}
+          <tr>
+            <th>{{ type }}</th>
+            <td>{{ person.firstName }} {{ person.lastName }}</td>
+            <td>{{ person.address }}</td>
+            <td>{{ person.postCode }}</td>
+            <td>{{ person.city }}</td>
+            <td>{{ person.country|country_name }}</td>
+            <td>{{ person.phoneNumber }}</td>
+            <td>{{ person.email }}</td>
+          </tr>
+        {% endfor %}
+        {% if client.dpo and client.dpo.client != client %}
+          <tr>
+            <th>Société du DPO (si celui-ci est externe)</th>
+            <td>{{ person.dpo.client.name }}</td>
+          </tr>
+        {% endif %}
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th colspan="2">Finalité(s) du traitement effectué</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for type, purpose in {
+          'Finalité principale': treatment.processingPurpose,
+          'Sous-finalité 1': treatment.processingSubPurpose1,
+          'Sous-finalité 2': treatment.processingSubPurpose2,
+          'Sous-finalité 3': treatment.processingSubPurpose3,
+          'Sous-finalité 4': treatment.processingSubPurpose4,
+          'Sous-finalité 5': treatment.processingSubPurpose5,
+        }|filter(v => v) %}
+          <tr>
+            <th>{{ type }}</th>
+            <td>{{ purpose }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Catégories de données personnelles concernées</th>
+          <th>Description</th>
+          <th>Durée de conservation</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for dataCategory in treatment.personalDataCategoryTreatments %}
+          <tr>
+            <th>{{ dataCategory.category }}</th>
+            <td>{{ dataCategory.description }}</td>
+            <td>{{ dataCategory.duration }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="3">Néant</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Données sensibles</th>
+          <th>Description</th>
+          <th>Durée de conservation</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for dataCategory in treatment.sensitiveDataCategoryTreatments %}
+          <tr>
+            <th>{{ dataCategory.category }}</th>
+            <td>{{ dataCategory.description }}</td>
+            <td>{{ dataCategory.duration }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="3">Néant</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Destinataires</th>
+          <th>Type de destinataire</th>
+          <th>Précisions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i, concernedPersonCategory in treatment.concernedPersonCategories %}
+          <tr>
+            <th>Catégorie de personnes {{ i + 1 }}</th>
+            <td>{{ concernedPersonCategory.personCategory.value }}</td>
+            <td>{{ concernedPersonCategory.details }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="3">Néant</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Destinataires</th>
+          <th>Type de destinataires</th>
+          <th>Précisions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i, recipient in treatment.recipientTypes %}
+          <tr>
+            <th>Destinataire {{ i + 1 }}</th>
+            <td>{{ recipient.recipientType.value }}</td>
+            <td>{{ recipient.details }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="3">Néant</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Mesures de sécurité</th>
+          <th>Type de mesures de sécurité</th>
+          <th>Précisions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i, securityMeasure in treatment.securityMeasures %}
+          <tr>
+            <th>Mesures de sécurité {{ i + 1 }}</th>
+            <td>{{ securityMeasure.securityMeasure.value }}</td>
+            <td>{{ securityMeasure.details }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="3">Néant</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Transferts hors UE</th>
+          <th>Destinataire</th>
+          <th>Pays</th>
+          <th>Type de Garanties</th>
+          <th>Liens vers la documentation</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i, outOfEUTransfer in treatment.outOfEUTransfers %}
+          <tr>
+            <th>Organisme destinataire {{ i + 1 }}</th>
+            <td>{{ outOfEUTransfer.recipient }}</td>
+            <td>{{ outOfEUTransfer.country|country_name }}</td>
+            <td>{{ outOfEUTransfer.warrantyType.value }}</td>
+            <td>{{ outOfEUTransfer.documentationLink }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="5">Néant</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  {% endfor %}
 </main>

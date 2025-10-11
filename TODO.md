@@ -11,4 +11,4 @@ Planned features / improvements
  * [ ] I18N (Only FR for now)
  * [ ] Adds confidentiality configuration for page views (IP anonymization)
  * [x] Fix GDPR registry auto-generation should be base on tracker type
- * [ ] Use better PDF Generator
+ * [x] Use better PDF Generator
