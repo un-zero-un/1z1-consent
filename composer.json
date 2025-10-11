@@ -113,7 +113,7 @@
         "reset-test": [
             "php bin/console -etest cache:pool:clear cache.adapter.auto",
             "php bin/console -etest doctrine:database:drop -f || true",
-            "php bin/console -etest doctrine:database:create",
+            "php bin/console -etest doctrine:database:create || true",
             "php bin/console -etest doctrine:schema:create",
             "php bin/console -etest foundry:load-fixtures main --no-interaction"
         ]
