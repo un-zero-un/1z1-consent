@@ -37,8 +37,7 @@ final class WebsiteCrudController extends AbstractCrudController
     public function __construct(
         private readonly AdminUrlGenerator $adminUrlGenerator,
         #[Autowire('%kernel.project_dir%')] private readonly string $kernelProjectDir,
-    )
-    {
+    ) {
     }
 
     #[\Override]

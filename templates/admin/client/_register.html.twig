@@ -100,10 +100,7 @@
 </style>
 
 {% set treatments = [] %}
-{% for website in client.websites %}
-    {% set treatments = treatments|merge(website.GDPRTreatments) %}
-{% endfor %}
-{% set treatments = treatments|merge(client.treatments) %}
+{% set treatments = treatments|merge(website_treatments) %}
 
 <main class="GDPRRegister">
     <section class="Cover">

@@ -2,7 +2,7 @@ var _paq = window._paq = window._paq || [];
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (function() {
-    var u="{{ tracker.customUrl ?: '//mesure.un-zero-un.net/' }}";
+    var u="{{ tracker.customUrl }}";
     _paq.push(['setTrackerUrl', u+'matomo.php']);
     _paq.push(['setSiteId', '{{ tracker.trackerId }}']);
     var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];

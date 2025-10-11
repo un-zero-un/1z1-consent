@@ -5,6 +5,6 @@
     <title>Registre RGPD</title>
 </head>
 <body>
-    {{ include('admin/client/_register.html.twig', {client: client}, with_context: false) }}
+    {{ include('admin/client/_register.html.twig', {client: client, website_treatments: website_treatments}, with_context: false) }}
 </body>
 </html>
