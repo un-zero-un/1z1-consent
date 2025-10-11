@@ -17,6 +17,7 @@ services:
             GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
             GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
             APP_ENV: ${APP_ENV:-prod}
+            DNT_ENABLED: ${DNT_ENABLED:-1}
         volumes:
             - caddy_data:/data
             - caddy_config:/config

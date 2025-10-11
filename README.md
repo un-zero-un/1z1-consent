@@ -81,3 +81,4 @@ The application is configured via environment variables. Available variables are
 | GOOGLE_CLIENT_ID               | Google OAuth Client ID for admin login                  |                                                 |
 | GOOGLE_CLIENT_SECRET           | Google OAuth Client Secret for admin login              |                                                 |
 | EMAIL_FROM_ADDRESS             | The email address used as the sender                    | no-reply@localhost                              |
+| DNT_ENABLED                    | Enable Do Not Track support                             | 1                                               |
