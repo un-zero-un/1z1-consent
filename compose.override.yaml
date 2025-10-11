@@ -8,6 +8,7 @@ services:
             CADDY_SERVER_EXTRA_DIRECTIVES: tls /app/infra/docker/php/tls/cert.pem /app/infra/docker/php/tls/key.pem
             FRANKENPHP_WORKER_CONFIG: watch
             APP_ENV: ${APP_ENV:-dev}
+            DNT_ENABLED: !reset ${DNT_ENABLED:-}
         extra_hosts:
             - host.docker.internal:host-gateway
         tty: true
