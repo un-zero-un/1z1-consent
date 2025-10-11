@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Client;
+use App\Entity\Person;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Dompdf\Dompdf;
@@ -111,7 +113,9 @@ final class ClientCrudController extends AbstractCrudController
     #[\Override]
     public function deleteEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        foreach ($entityInstance->getPersons() as $person) {
+        /** @var Collection<int, Person> $persons */
+        $persons = $entityInstance->getPersons();
+        foreach ($persons as $person) {
             $entityInstance->removePerson($person);
             $entityManager->remove($person);
         }

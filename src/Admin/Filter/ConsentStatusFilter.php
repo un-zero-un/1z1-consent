@@ -20,6 +20,7 @@ final class ConsentStatusFilter implements FilterInterface
     #[\Override]
     public function apply(QueryBuilder $queryBuilder, FilterDataDto $filterDataDto, ?FieldDto $fieldDto, EntityDto $entityDto): void
     {
+        /** @var string|null $value */
         $value = $filterDataDto->getValue();
         if (!$value) {
             return;

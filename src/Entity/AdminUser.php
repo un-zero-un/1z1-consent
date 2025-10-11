@@ -46,6 +46,9 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
     #[Column(type: Types::STRING, length: 180, unique: true, nullable: false)]
     private ?string $email;
 
+    /**
+     * @var list<string>
+     */
     #[Column(type: Types::JSON)]
     private array $roles = [];
 
@@ -87,6 +90,9 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         return $this->roles;
     }
 
+    /**
+     * @param list<string> $roles
+     */
     public function setRoles(array $roles): void
     {
         $this->roles = $roles;

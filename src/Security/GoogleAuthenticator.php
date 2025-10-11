@@ -58,11 +58,14 @@ final class GoogleAuthenticator extends OAuth2Authenticator
                 }
 
                 $existingUser = $this->adminUserRepository->findOneByEmail($email);
+                $googleId = $googleUser->getId();
+                assert(is_string($googleId));
+
                 if (null === $existingUser) {
-                    $existingUser = new AdminUser($email, $googleUser->getId());
+                    $existingUser = new AdminUser($email, $googleId);
                     $this->entityManager->persist($existingUser);
                 } else {
-                    $existingUser->setGoogleId($googleUser->getId());
+                    $existingUser->setGoogleId($googleId);
                 }
 
                 foreach (explode(',', $this->authorizedAdminEmailDomains) as $domain) {

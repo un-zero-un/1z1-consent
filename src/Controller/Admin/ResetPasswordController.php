@@ -46,7 +46,10 @@ final class ResetPasswordController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->processSendingPasswordResetEmail($form->get('email')->getData(), $mailer);
+            $email = $form->get('email')->getData();
+            assert(is_string($email));
+
+            return $this->processSendingPasswordResetEmail($email, $mailer);
         }
 
         return ['request_form' => $form->createView()];
@@ -99,7 +102,10 @@ final class ResetPasswordController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->resetPasswordHelper->removeResetRequest($token);
 
-            $encodedPassword = $passwordHasher->hashPassword($user, $form->get('plainPassword')->getData());
+            $plainPassword = $form->get('plainPassword')->getData();
+            assert(is_string($plainPassword));
+
+            $encodedPassword = $passwordHasher->hashPassword($user, $plainPassword);
 
             $user->setPassword($encodedPassword);
             $this->entityManager->flush();

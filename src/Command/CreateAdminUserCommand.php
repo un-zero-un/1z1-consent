@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Command;
 
 use App\Entity\AdminUser;
+use App\Entity\Agency;
 use App\Repository\AdminUserRepository;
 use App\Repository\AgencyRepository;
 use Symfony\Component\Console\Attribute\Argument;
@@ -36,24 +37,35 @@ final readonly class CreateAdminUserCommand
         #[Option(description: 'Create as admin', name: 'admin')]
         bool $asAdmin = false,
     ): int {
-        if (!$email) {
+        while (!is_string($email)) {
+            /** @var string|null $email */
             $email = $io->askQuestion(new Question('Email : '));
         }
-        if (!$password) {
+
+        while (!is_string($password)) {
+            /** @var string|null $password */
             $password = $io->askQuestion(new Question('Password : ')->setHidden(true)->setHiddenFallback(false));
         }
-        if (!$agency) {
+
+        while (!is_string($agency)) {
+            /** @var string|null $agency */
             $agency = $io->askQuestion(new Question('Agency : '));
+        }
+
+        $agencyEntity = $this->agencyRepository->findOneByName($agency);
+        if (!$agencyEntity instanceof Agency) {
+            $io->error(sprintf('Agency "%s" not found', $agency));
+
+            return Command::FAILURE;
         }
 
         $user = new AdminUser($email);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
-        $user->setAgency($this->agencyRepository->findOneByName($agency));
+        $user->setAgency($agencyEntity);
 
         if ($asAdmin) {
             $user->setRoles(['ROLE_ADMIN']);
         }
-
         $this->adminUserRepository->save($user);
 
         $io->success('Admin user created');
