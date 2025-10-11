@@ -48,10 +48,10 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
     #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Client $client = null;
 
-    #[Column(type: Types::BOOLEAN, options: ['default' => true])]
+    #[Column(type: Types::BOOLEAN)]
     private bool $respectDoNotTrack = true;
 
-    #[Column(type: Types::BOOLEAN, options: ['default' => true])]
+    #[Column(type: Types::BOOLEAN)]
     private bool $showOpenButton = true;
 
     #[Column(type: Types::STRING, nullable: true)]
@@ -70,10 +70,10 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
     #[OneToMany(targetEntity: WebsiteDomain::class, mappedBy: 'website', cascade: ['all'], orphanRemoval: true)]
     private Collection $domains;
 
-    #[Column(type: Types::BOOLEAN, options: ['default' => 'FALSE'])]
+    #[Column(type: Types::BOOLEAN)]
     private bool $addAccessLogToGDPR = false;
 
-    #[Column(type: Types::BOOLEAN, options: ['default' => 'FALSE'])]
+    #[Column(type: Types::BOOLEAN)]
     private bool $addTrackerToGDPR = false;
 
     /**

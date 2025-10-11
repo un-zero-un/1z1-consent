@@ -1,7 +1,7 @@
 DOCKER_COMPOSE = EXTERNAL_USER_ID=$(shell id -u) docker compose
 HTTPS_PORT ?= 443
 
-.PHONY: ps build up first_run clean logs cli run reset reset-test cc deploy down test test_e2e hadolint psalm psalm_strict
+.PHONY: ps build up first_run clean logs cli run reset reset-test cc deploy down test test_e2e hadolint psalm psalm_strict run_single_container_build run_mariadb
 
 help: ## Outputs this help screen
 	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
@@ -85,9 +85,17 @@ psalm_strict: ## Run static analysis (strict mode)
 	@$(DOCKER_COMPOSE) exec php ./vendor/bin/psalm --show-info=true --no-diff
 
 run_single_container_build:
-	docker compose build
-	docker run -it --rm -p 80:80 -p 443:443 --name 1z1-consent \
+	@docker compose build
+	@docker run -it --rm -p 80:80 -p 443:443 --name 1z1-consent \
 		-e SERVER_NAME="localhost, www.localhost" \
 		-e MAIN_DOMAIN="localhost" \
 		-e APP_SECRET="$(shell openssl rand -hex 32)" \
 		ghcr.io/un-zero-un/1z1-consent:latest
+
+run_mariadb:
+	 docker run -it -p 3306:3306 --name mariadb \
+		-eMARIADB_ROOT_PASSWORD=1z1-consent \
+		-eMARIADB_USER=1z1-consent \
+		-eMARIADB_PASSWORD=1z1-consent \
+		-eMARIADB_DATABASE=1z1-consent \
+		mariadb:12.0.2-noble

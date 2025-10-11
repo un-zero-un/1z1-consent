@@ -81,8 +81,8 @@ jobs:
                 run: |
                     case "${{ matrix.rdbms }}" in
                         mysql)
-                            docker run -d -p 3306:3306 -eMARIADB_ROOT_PASSWORD=1z1-consent -eMARIADB_USER=1z1-consent -eMARIADB_PASSWORD=1z1-consent -eMARIADB_DATABASE=1z1-consent mariadb:12-noble
-                            echo "DATABASE_URL=mysql://root:1z1-consent@host.docker.internal:3306/1z1-consent?serverVersion=12-MariaDN&charset=utf8mb4" >> $GITHUB_ENV
+                            docker run -d -p 3306:3306 -eMARIADB_ROOT_PASSWORD=1z1-consent -eMARIADB_USER=1z1-consent -eMARIADB_PASSWORD=1z1-consent -eMARIADB_DATABASE=1z1-consent mariadb:12.0.2-noble
+                            echo "DATABASE_URL=mysql://root:1z1-consent@host.docker.internal:3306/1z1-consent?serverVersion=12.0.2-MariaDB&charset=utf8mb4" >> $GITHUB_ENV
                             ;;
                         sqlite)
                             echo "DATABASE_URL=sqlite:///%kernel.project_dir%/var/data/data.db" >> $GITHUB_ENV

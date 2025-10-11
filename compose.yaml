@@ -16,6 +16,7 @@ services:
             EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-"1z1 Consent <consent@un-zero-un.net>"}
             GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
             GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+            APP_ENV: ${APP_ENV:-prod}
         volumes:
             - caddy_data:/data
             - caddy_config:/config
