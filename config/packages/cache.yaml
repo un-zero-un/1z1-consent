@@ -1,31 +1,35 @@
 parameters:
-    env(REDIS_URL): 'redis://redis'
+    env(CACHE_DSN): 'apcu://default'
 
 framework:
     cache:
         # Unique name of your app: used to compute stable namespaces for cache keys.
-        #prefix_seed: your_vendor_name/app_name
+        prefix_seed: un-zero-un/1z1-consent
 
-        # The "app" cache stores to the filesystem by default.
-        # The data in this cache should persist between deploys.
-        # Other options include:
-
-        # Redis
-        app: app.cache.adapter.redis
-        default_redis_provider: '%env(REDIS_URL)%'
-
-        # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
-        # app: cache.adapter.apcu
+        app: cache.adapter.apcu
 
         # Namespaced pools use the above "app" backend by default
         pools:
             api_bypasser.cache:
-                adapter: app.cache.adapter.redis
+                adapter: cache.adapter.auto
             website_id_provider.cache:
-                adapter: app.cache.adapter.redis
+                adapter: cache.adapter.auto
 
 services:
-    app.cache.adapter.redis:
-        parent: cache.adapter.redis
-        tags:
-            - { name: 'cache.pool', namespace: '1z1_%kernel.environment%_' }
+    cache.adapter.auto:
+        class: App\Cache\AutoCacheAdapter
+        public: true
+        arguments:
+            - ''
+            - 0
+            - '@cache.default_marshaller'
+            - '%env(CACHE_DSN)%'
+
+when@test:
+    framework:
+        cache:
+            pools:
+                api_bypasser.cache:
+                    adapter: cache.adapter.array
+                website_id_provider.cache:
+                    adapter: cache.adapter.array

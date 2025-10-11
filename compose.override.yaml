@@ -3,11 +3,8 @@ services:
         volumes:
             - '.:/app:rw'
             - './infra/docker/php/conf.d/symfony.dev.ini:/usr/local/etc/php/conf.d/symfony.ini:ro'
-        depends_on: [ database, redis, smtp ]
+        depends_on: [ database, smtp ]
         environment:
-            MAILER_DSN: smtp://smtp:1025
-            REDIS_URL: redis://redis
-            EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-"1z1 Consent <consent@un-zero-un.net>"}
             CADDY_SERVER_EXTRA_DIRECTIVES: tls /app/infra/docker/php/tls/cert.pem /app/infra/docker/php/tls/key.pem
             FRANKENPHP_WORKER_CONFIG: watch
             APP_ENV: ${APP_ENV:-dev}
@@ -26,13 +23,6 @@ services:
         ports:
             -   target: 5432
                 published: ${DATABASE_PORT:-5432}
-                protocol: tcp
-
-    redis:
-        image: redis:8
-        ports:
-            -   target: 6379
-                published: ${REDIS_PORT:-6379}
                 protocol: tcp
 
     smtp:

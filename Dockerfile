@@ -26,7 +26,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update; \
     apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates sqlite3; \
     php -v; \
-    install-php-extensions zip pdo_pgsql pdo_mysql pcntl opcache intl apcu redis pcov; \
+    install-php-extensions zip pdo_pgsql pdo_mysql pcntl opcache intl apcu memcached redis; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/*; \
     mkdir -p /app; \
@@ -138,5 +138,7 @@ RUN set -eux; \
     sync
 
 HEALTHCHECK CMD curl -f http://localhost:2019/metrics || exit 1
+
+CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile" ]
 
 EXPOSE 80
