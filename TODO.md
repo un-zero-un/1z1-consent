@@ -10,3 +10,4 @@ Planned features / improvements
  * [ ] Allow template customization (only CSS ATM)
  * [ ] I18N (Only FR for now)
  * [ ] Adds confidentiality configuration for page views (IP anonymization)
+ * [ ] Fix GDPR registry auto-generation should be base on tracker type

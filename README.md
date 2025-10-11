@@ -20,6 +20,7 @@ Features
  * Page view tracking
  * Multiple RDBMS support (PostgreSQL, MariaDB and SQLite tested, MySQL, Oracle and SQLServer should work)
  * Configurable cache layer (Redis, Memcached, APCu)
+ * GDPR Registry Auto-generation
 
 Usage
 -----
