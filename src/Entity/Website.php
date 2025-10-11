@@ -8,8 +8,6 @@ use App\Behavior\HasTimestamp;
 use App\Behavior\Impl\HasTimestampImpl;
 use App\Behavior\IndirectlyHasAgency;
 use App\Repository\WebsiteRepository;
-use App\ValueObject\RecipientType;
-use App\ValueObject\SecurityMeasure;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -23,7 +21,6 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Valid;
@@ -118,87 +115,6 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
     {
         $tracker->website = null;
         $this->trackers->removeElement($tracker);
-    }
-
-    public function getGDPRTreatments(): iterable
-    {
-        /** @var WebsiteDomain[] $domains */
-        $domains = $this->domains;
-
-        if ($this->addAccessLogToGDPR && 0 !== count($domains)) {
-            $treatment = new GDPRTreatment();
-            $treatment->name = 'Journaux d\'accès';
-            $treatment->ref = new AsciiSlugger()->slug($domains[0]->domain ?: '')->ascii()->lower()->toString().'-access-log';
-            $treatment->client = $this->client;
-            $treatment->processingPurpose = 'Journalisation des accès au site';
-            $treatment->processingSubPurpose1 = 'Estimation de la charge sur le site';
-            $treatment->processingSubPurpose2 = 'Détection d\'attaques et de comportements anormaux';
-            $treatment->processingSubPurpose3 = 'Mise à disposition des forces de l\'ordre en cas d\'enquête';
-
-            $category = new PersonalDataCategory();
-            $category->name = 'Données de connexion (adresse IP, logs, etc.)';
-            $personalDataTreatmentCategory = new PersonalDataTreatmentCategory();
-            $personalDataTreatmentCategory->category = $category;
-            $personalDataTreatmentCategory->description = 'Stockage du tuple Date/Heure, Adresse IP, URL demandée, User-Agent pour chaque page vue';
-            $personalDataTreatmentCategory->duration = '1 an';
-            $treatment->addPersonalDataCategoryTreatment($personalDataTreatmentCategory);
-
-            $recipient = new TreatmentRecipientType();
-            $recipient->recipientType = RecipientType::INTERN;
-            $recipient->details = 'Personnel technique';
-            $treatment->addRecipientType($recipient);
-
-            $securityMeasure = new TreatmentSecurityMeasure();
-            $securityMeasure->securityMeasure = SecurityMeasure::ACCESS_CONTROL;
-            $securityMeasure->details = 'Accès restreint aux seuls personnels habilités (contrôle par clé privé)';
-            $treatment->addSecurityMeasure($securityMeasure);
-
-            yield $treatment;
-        }
-
-        if ($this->addTrackerToGDPR && 0 !== count($domains)) {
-            // TODO : fake code, generate from trackers.
-            $treatment = new GDPRTreatment();
-            $treatment->name = 'Pisteur statistique';
-            $treatment->ref = new AsciiSlugger()->slug($domains[0]->domain ?: '')->ascii()->lower()->toString().'-analytics';
-            $treatment->client = $this->client;
-            $treatment->processingPurpose = 'Collecte des données de fréquentation du site';
-            $treatment->processingSubPurpose1 = 'Analyse de la fréquentation du site';
-            $treatment->processingSubPurpose2 = 'Estimation de la charge du site';
-
-            $category = new PersonalDataCategory();
-            $category->name = 'Données de connexion (adresse IP, logs, etc.)';
-            $personalDataTreatmentCategory = new PersonalDataTreatmentCategory();
-            $personalDataTreatmentCategory->category = $category;
-            $personalDataTreatmentCategory->description = 'Stockage des données de connexion selon configuration';
-            $personalDataTreatmentCategory->duration = '2 an';
-            $treatment->addPersonalDataCategoryTreatment($personalDataTreatmentCategory);
-
-            $category2 = new PersonalDataCategory();
-            $category2->name = 'Données de localisation (déplacements, données GPS, GSM, etc.)';
-            $personalDataTreatmentCategory2 = new PersonalDataTreatmentCategory();
-            $personalDataTreatmentCategory2->category = $category2;
-            $personalDataTreatmentCategory2->description = 'Stockage des données de localisation selon configuration';
-            $personalDataTreatmentCategory2->duration = '2 an';
-            $treatment->addPersonalDataCategoryTreatment($personalDataTreatmentCategory2);
-
-            $recipient = new TreatmentRecipientType();
-            $recipient->recipientType = RecipientType::CONTRACTOR;
-            $recipient->details = 'Google Analytics';
-            $treatment->addRecipientType($recipient);
-
-            $recipient = new TreatmentRecipientType();
-            $recipient->recipientType = RecipientType::INTERN;
-            $recipient->details = 'Matomo en interne';
-            $treatment->addRecipientType($recipient);
-
-            $securityMeasure = new TreatmentSecurityMeasure();
-            $securityMeasure->securityMeasure = SecurityMeasure::ACCESS_CONTROL;
-            $securityMeasure->details = 'Accès restreint aux seuls personnels habilités)';
-            $treatment->addSecurityMeasure($securityMeasure);
-
-            yield $treatment;
-        }
     }
 
     #[\Override]

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Client;
 use App\Entity\Person;
+use App\Generator\GDPRWebsiteTreatmentGenerator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -29,11 +30,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
+ * @psalm-suppress PropertyNotSetInConstructor
+ *
  * @extends AbstractCrudController<Client>
  */
 final class ClientCrudController extends AbstractCrudController
 {
     use AgencyAwareCrudController;
+
+    public function __construct(
+        private readonly GDPRWebsiteTreatmentGenerator $treatmentGenerator,
+    ) {
+    }
 
     #[\Override]
     public static function getEntityFqcn(): string
@@ -127,7 +135,13 @@ final class ClientCrudController extends AbstractCrudController
     #[Template('admin/client/viewRegister.html.twig')]
     public function viewRegister(AdminContext $adminContext): array
     {
-        return ['client' => $adminContext->getEntity()->getInstance()];
+        $client = $adminContext->getEntity()->getInstance();
+        assert($client instanceof Client);
+
+        return [
+            'client' => $client,
+            'website_treatments' => $this->treatmentGenerator->generateForClient($client),
+        ];
     }
 
     #[AdminRoute('/{entityId}/view-pdf-register', name: 'viewPDFRegister')]
@@ -141,7 +155,13 @@ final class ClientCrudController extends AbstractCrudController
         return new StreamedResponse(
             function () use ($client): void {
                 $dompdf = new Dompdf();
-                $dompdf->loadHtml($this->renderView('admin/client/viewPDFRegister.html.twig', ['client' => $client]));
+                $dompdf->loadHtml($this->renderView(
+                    'admin/client/viewPDFRegister.html.twig',
+                    [
+                        'client' => $client,
+                        'website_treatments' => $this->treatmentGenerator->generateForClient($client),
+                    ]
+                ));
                 $dompdf->setPaper('A4');
                 $dompdf->render();
 
