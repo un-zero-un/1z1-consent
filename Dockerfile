@@ -24,7 +24,7 @@ VOLUME /var/www/.cache
 RUN --mount=type=cache,target=/var/cache/apt \
     set -eux; \
     apt-get update; \
-    apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates sqlite3; \
+    apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates sqlite3 weasyprint; \
     php -v; \
     install-php-extensions zip pdo_pgsql pdo_mysql pcntl opcache intl apcu memcached redis; \
     apt-get clean; \

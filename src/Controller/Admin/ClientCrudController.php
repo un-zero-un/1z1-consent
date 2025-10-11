@@ -8,7 +8,6 @@ use App\Generator\GDPRWebsiteTreatmentGenerator;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Dompdf\Dompdf;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminRoute;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
@@ -24,6 +23,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Pontedilana\PhpWeasyPrint\Pdf;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +40,7 @@ final class ClientCrudController extends AbstractCrudController
 
     public function __construct(
         private readonly GDPRWebsiteTreatmentGenerator $treatmentGenerator,
+        private readonly Pdf $pdf,
     ) {
     }
 
@@ -154,18 +155,16 @@ final class ClientCrudController extends AbstractCrudController
 
         return new StreamedResponse(
             function () use ($client): void {
-                $dompdf = new Dompdf();
-                $dompdf->loadHtml($this->renderView(
-                    'admin/client/viewPDFRegister.html.twig',
-                    [
-                        'client' => $client,
-                        'website_treatments' => $this->treatmentGenerator->generateForClient($client),
-                    ]
-                ));
-                $dompdf->setPaper('A4');
-                $dompdf->render();
+                echo $this->pdf->getOutputFromHtml(
+                    $this->renderView(
+                        'admin/client/viewPDFRegister.html.twig',
+                        [
+                            'client' => $client,
+                            'website_treatments' => $this->treatmentGenerator->generateForClient($client),
+                        ],
+                    )
+                );
 
-                echo $dompdf->output();
                 flush();
             },
             201,
