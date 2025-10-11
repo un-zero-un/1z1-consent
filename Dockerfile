@@ -123,7 +123,7 @@ COPY --chown=www-data:www-data bin bin/
 COPY --chown=www-data:www-data config config/
 COPY --chown=www-data:www-data migrations migrations/
 COPY --chown=www-data:www-data --from=node /app/public public/
-COPY --chown=www-data:www-data public/index.php public/prod.php public/
+COPY --chown=www-data:www-data public public/
 COPY --chown=www-data:www-data src src/
 COPY --chown=www-data:www-data templates templates/
 COPY --chown=www-data:www-data translations translations/
