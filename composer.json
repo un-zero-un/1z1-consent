@@ -108,14 +108,14 @@
             "php bin/console cache:pool:clear cache.adapter.auto",
             "php bin/console doctrine:schema:drop --force --full-database",
             "php bin/console doctrine:schema:create",
-            "php bin/console foundry:load-fixtures main --no-interaction"
+            "php bin/console foundry:load-fixtures main --no-interaction --append"
         ],
         "reset-test": [
             "php bin/console -etest cache:pool:clear cache.adapter.auto",
             "php bin/console -etest doctrine:database:drop -f || true",
             "php bin/console -etest doctrine:database:create || true",
             "php bin/console -etest doctrine:schema:create",
-            "php bin/console -etest foundry:load-fixtures main --no-interaction"
+            "php bin/console -etest foundry:load-fixtures main --no-interaction --append"
         ]
     },
     "conflict": {
