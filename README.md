@@ -13,6 +13,8 @@ Features
 --------
  * User-friendly interface for managing consent preferences 
    ![Screenshot](./tests/e2e/consent-dialog.spec.ts-snapshots/Consent-dialog-box-It-checks-trackers-manually-1-chromium-linux.png)
+ * Light and fast dialog script (~8KB compressed, ~50req/s on a single Scaleway Stardust instance)
+ * Referer Based (no need for script configuration. Include anywhere, and activate on demand via back-office)
  * Saas-Like (multi-site, multi-client and multi-tenant)
  * Highly configurable, customizable and extensible
  * DNT support (optional)
@@ -22,8 +24,8 @@ Features
  * Configurable cache layer (Redis, Memcached, APCu)
  * GDPR Registry Auto-generation
 
-Usage
------
+Getting Started
+---------------
 
 ### Single Container run
 
@@ -82,3 +84,21 @@ The application is configured via environment variables. Available variables are
 | GOOGLE_CLIENT_SECRET           | Google OAuth Client Secret for admin login              |                                                 |
 | EMAIL_FROM_ADDRESS             | The email address used as the sender                    | no-reply@localhost                              |
 | DNT_ENABLED                    | Enable Do Not Track support                             | 1                                               |
+
+### Usage
+
+Once the application is running, you can access the back-office at `https://<MAIN_DOMAIN>/admin`.
+
+If you load the data fixtures, the admin user is `admin@example.com` and the password is `admin`.
+
+The front-end script can be included in any website by adding the following script tag:
+
+```html
+<script src="//<MAIN_DOMAIN>/api.js" async></script>
+```
+
+#### Manually showing the dialog
+
+```js
+document.dispatchEvent(new CustomEvent('1z1-content:show-dialog'));
+```
