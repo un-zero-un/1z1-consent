@@ -11,11 +11,11 @@
     dialogBox.setAttribute('data-post-consent-url', {{ url('post_consent')|json_encode|raw }});
     dialogBox.setAttribute('data-show-open-button', {{ website.showOpenButton|json_encode|raw }});
     dialogBox.setAttribute('data-custom-css', {{ website.customCss|json_encode|raw }});
-    dialogBox.setAttribute('data-trackers', '{{ website.trackers|map(t => {id: t.id, type: t.type, name: t.name})|json_encode|raw }}');
+    dialogBox.setAttribute('data-trackers', '{{ trackers|map(t => {id: t.id, type: t.type, name: t.name})|json_encode|raw }}');
     dialogBox.setAttribute('data-dialog-title', '{{ website.dialogTitle }}');
     dialogBox.setAttribute('data-dialog-text', '{{ website.dialogText }}');
     dialogBox.snippets = {
-        {% for tracker in website.trackers %}
+        {% for tracker in trackers %}
         '{{ tracker.id.toRfc4122()|raw }}': () => {
             const trackerId = '{{ tracker.trackerId }}';
             {% if tracker.useDefaultSnippet %}

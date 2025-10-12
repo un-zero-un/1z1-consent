@@ -11,34 +11,17 @@ use Symfony\Component\HttpFoundation\Request;
  */
 readonly class Fingerprint
 {
+    public private(set) bool $dnt;
+
+    public private(set) bool $gpc;
+
     private function __construct(
-        private Request $request,
+        private(set) Request $request,
         private string $refererHostname,
         private string $websiteId,
-        private bool $dntEnabled,
     ) {
-    }
-
-    public function getHash(): string
-    {
-        return hash(
-            'sha256',
-            $this->refererHostname.'#'.
-            ($this->request->headers->get('dnt') ?: uniqid()).'#'.
-            $this->request->getHost().'#'.
-            $this->websiteId.'#'.
-            ($this->dntEnabled ? 'DNT' : 'TRACK'),
-        );
-    }
-
-    public function getRequest(): Request
-    {
-        return $this->request;
-    }
-
-    public function getRefererHostname(): string
-    {
-        return $this->refererHostname;
+        $this->dnt = '1' === $request->headers->get('dnt');
+        $this->gpc = '1' === $request->headers->get('sec-gpc');
     }
 
     public function getWebsiteId(): string
@@ -46,8 +29,20 @@ readonly class Fingerprint
         return $this->websiteId;
     }
 
-    public static function create(Request $request, string $refererHostname, string $websiteId, bool $dnt): self
+    public function getHash(): string
     {
-        return new self($request, $refererHostname, $websiteId, $dnt);
+        return hash(
+            'sha256',
+            $this->refererHostname.'#'.
+            $this->request->getHost().'#'.
+            $this->websiteId.'#'.
+            ($this->dnt ? 'DNT' : 'TRACK').'#'.
+            ($this->gpc ? 'GPC' : 'NO_GPC'),
+        );
+    }
+
+    public static function create(Request $request, string $refererHostname, string $websiteId): self
+    {
+        return new self($request, $refererHostname, $websiteId);
     }
 }

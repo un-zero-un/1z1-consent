@@ -49,6 +49,9 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
     public bool $respectDoNotTrack = true;
 
     #[Column(type: Types::BOOLEAN)]
+    public bool $respectGlobalPrivacyControl = true;
+
+    #[Column(type: Types::BOOLEAN)]
     public bool $showOpenButton = true;
 
     #[Column(type: Types::STRING, nullable: true)]

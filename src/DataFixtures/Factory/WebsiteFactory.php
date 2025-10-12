@@ -24,6 +24,7 @@ final class WebsiteFactory extends PersistentObjectFactory
             'addAccessLogToGDPR' => true,
             'addTrackerToGDPR' => true,
             'respectDoNotTrack' => true,
+            'respectGlobalPrivacyControl' => true,
             'showOpenButton' => true,
         ];
     }

@@ -37,9 +37,15 @@ final class TrackerCrudController extends AbstractCrudController
                        ->setFormTypeOption('choice_label', 'label')
                        ->onlyOnForms()
                        ->setColumns('col-md-12'),
+            BooleanField::new('gpcCompliant', 'Conforme GPC (Global Privacy Control)')
+                ->setHelp('Désactiver si le tracker revend des données malgré l\'envoi du signal GPC')
+                ->setColumns('col-md-12'),
             TextField::new('trackerId', 'Identifiant de suivi (ex G-XXXXXX)')->setColumns('col-md-12'),
             UrlField::new('customUrl', 'URL personnalisée')->onlyOnForms()->setColumns('col-md-12'),
-            BooleanField::new('useDefaultSnippet', 'Utiliser le code par défaut')->onlyOnForms()->setColumns('col-md-12'),
+            BooleanField::new('useDefaultSnippet', 'Utiliser le code par défaut')
+                ->setHelp('Désactiver pour saisir vous même le code du tracker')
+                ->onlyOnForms()
+                ->setColumns('col-md-12'),
             MonacoEditorField::new('customCode', 'Code personnalisé')
                              ->onlyOnForms()
                              ->setColumns('col-md-12')

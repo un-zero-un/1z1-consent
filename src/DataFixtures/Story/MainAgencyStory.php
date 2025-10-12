@@ -51,6 +51,7 @@ final class MainAgencyStory extends Story
         $website = WebsiteFactory::createOne(['client' => $testClient, 'server' => $server1]);
         WebsiteDomainFactory::createOne(['domain' => 'www.'.$this->mainDomain, 'website' => $website]);
         TrackerFactory::new()->with(['website' => $website])->googleAnalytics()->create();
+        TrackerFactory::new()->with(['website' => $website])->facebook()->create();
         TrackerFactory::new()->with(['website' => $website])->custom()->create();
 
         AdminUserFactory::new()
