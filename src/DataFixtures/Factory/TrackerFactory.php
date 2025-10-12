@@ -26,6 +26,7 @@ final class TrackerFactory extends PersistentObjectFactory
             'type' => self::faker()->randomElement(TrackerType::cases()),
             'useDefaultSnippet' => self::faker()->boolean(),
             'website' => WebsiteFactory::first(),
+            'gpcCompliant' => true,
         ];
     }
 
@@ -35,6 +36,16 @@ final class TrackerFactory extends PersistentObjectFactory
             'name' => 'Google Analytics',
             'type' => TrackerType::GOOGLE_ANALYTICS,
             'trackerId' => self::faker()->bothify('G-##########'),
+        ]);
+    }
+
+    public function facebook(): self
+    {
+        return $this->with([
+            'name' => 'Facebook Pixel',
+            'type' => TrackerType::FACEBOOK_PIXEL,
+            'trackerId' => self::faker()->asciify('**-******-**'),
+            'gpcCompliant' => false,
         ]);
     }
 

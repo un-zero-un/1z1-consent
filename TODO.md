@@ -12,3 +12,4 @@ Planned features / improvements
  * [ ] Adds confidentiality configuration for page views (IP anonymization)
  * [x] Fix GDPR registry auto-generation should be base on tracker type
  * [x] Use better PDF Generator
+ * [x] Implement Global Privacy Control support

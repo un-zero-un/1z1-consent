@@ -31,6 +31,7 @@ final readonly class WebsiteIdProvider
 
                 $expected = $website->client?->getAgency()?->host;
                 assert(null !== $expected);
+
                 if ($expected !== $hostname) {
                     throw new HostMismatchException($expected, $hostname);
                 }

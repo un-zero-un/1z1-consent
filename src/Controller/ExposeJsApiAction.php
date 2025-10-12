@@ -7,7 +7,9 @@ namespace App\Controller;
 use App\Cache\ApiBypasser;
 use App\Cache\Fingerprint;
 use App\Cache\WebsiteIdProvider;
+use App\Entity\Tracker;
 use App\Exception\MissingRefererException;
+use App\Provider\PrivacyContextProvider;
 use App\Repository\WebsiteHitRepository;
 use App\Repository\WebsiteRepository;
 use App\Util\WebsiteViaReferrerController;
@@ -32,13 +34,12 @@ final readonly class ExposeJsApiAction
         private WebsiteHitRepository $websiteHitRepository,
         private WebsiteIdProvider $websiteIdProvider,
         private ApiBypasser $apiBypasser,
-        private bool $dntEnabled,
+        private PrivacyContextProvider $privacyContextProvider,
     ) {
     }
 
     public function __invoke(Request $request): Response
     {
-        $dnt = '1' === $request->headers->get('dnt');
         $refererHost = $this->getRefererHost($request);
 
         try {
@@ -48,18 +49,15 @@ final readonly class ExposeJsApiAction
             return new Response('// No sites configured for this host : '.$refererHost, 202, ['Content-Type' => 'text/javascript']);
         }
 
-        $fingerPrint = Fingerprint::create($request, $refererHost, $websiteId, $dnt);
+        $fingerPrint = Fingerprint::create($request, $refererHost, $websiteId);
 
         if ($this->apiBypasser->canBypass($fingerPrint)) {
             return $this->apiBypasser->bypass($fingerPrint, $request);
         }
 
         $website = $this->websiteRepository->findOneById($websiteId);
-        if (
-            $dnt
-            && $this->dntEnabled
-            && $website->respectDoNotTrack
-        ) {
+        $privacyContext = $this->privacyContextProvider->getContext($website, $request);
+        if ($privacyContext->doNotTrack) {
             return new Response(
                 'console.log("Votre navigateur nous indique que vous souhaitez ne pas être pisté. Nous comprenons et respectons ce choix, donc nous ne chargerons même pas notre script 🙂");',
                 200,
@@ -68,7 +66,15 @@ final readonly class ExposeJsApiAction
         }
 
         $response = new Response(
-            $this->twig->render('exposeJsApi.js.twig', ['website' => $website]),
+            $this->twig->render(
+                'exposeJsApi.js.twig',
+                [
+                    'website' => $website,
+                    'trackers' => $website->trackers
+                        ->filter(static fn (Tracker $tracker) => $tracker->gpcCompliant || !$privacyContext->globalPrivacyControl)
+                        ->getValues(),
+                ],
+            ),
             200,
             ['Content-Type' => 'text/javascript'],
         );

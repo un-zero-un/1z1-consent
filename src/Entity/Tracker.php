@@ -61,6 +61,9 @@ class Tracker implements HasTimestamp, \Stringable
     #[Column(type: Types::BOOLEAN, nullable: false, options: ['default' => true])]
     public bool $useDefaultSnippet = true;
 
+    #[Column(type: Types::BOOLEAN, nullable: false)]
+    public bool $gpcCompliant = true;
+
     public function __construct()
     {
         $this->id = Uuid::v7();
