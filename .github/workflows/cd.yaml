@@ -66,17 +66,17 @@ jobs:
         if: github.event_name == 'release'
         env:
             DOCKER_HOST: 'ssh://${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}'
-            APP_ENV: ${{ secrets.APP_ENV }}
+            APP_ENV: ${{ env.APP_ENV }}
             APP_SECRET: ${{ secrets.APP_SECRET }}
             DATABASE_URL: ${{ secrets.DATABASE_URL }}
-            SERVER_NAME: ${{ secrets.SERVER_NAME }}
+            SERVER_NAME: ${{ env.SERVER_NAME }}
             MAILER_DSN: ${{ secrets.MAILER_DSN }}
-            AUTHORIZED_ADMIN_EMAIL_DOMAINS: ${{ secrets.AUTHORIZED_ADMIN_EMAIL_DOMAINS }}
-            EMAIL_FROM_ADDRESS: ${{ secrets.EMAIL_FROM_ADDRESS }}
+            AUTHORIZED_ADMIN_EMAIL_DOMAINS: ${{ env.AUTHORIZED_ADMIN_EMAIL_DOMAINS }}
+            EMAIL_FROM_ADDRESS: ${{ env.EMAIL_FROM_ADDRESS }}
             GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
             REDIS_URL: ${{ secrets.REDIS_URL }}
-            MAIN_DOMAIN: ${{ secrets.MAIN_DOMAIN }}
+            MAIN_DOMAIN: ${{ env.MAIN_DOMAIN }}
             IMAGE_TAG: ${{ github.ref_name }}
         steps:
             - name: Checkout
