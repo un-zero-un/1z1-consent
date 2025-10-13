@@ -40,7 +40,7 @@ final class ConsentRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('consent')
                     ->innerJoin('consent.website', 'website')
-                    ->select('COUNT(consent.id) AS count, SUBSTRING(consent.createdAt, 5, 2) AS month, SUBSTRING(consent.createdAt, 0, 4) AS year')
+                    ->select('COUNT(consent.id) AS count, EXTRACT_DATE_PART(consent.createdAt, \'month\') AS month, EXTRACT_DATE_PART(consent.createdAt, \'year\') AS year')
                     ->groupBy('month, year')
                     ->orderBy('year, month', 'ASC')
                     ->where('website.id = :website_id')
@@ -55,7 +55,7 @@ final class ConsentRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('consent')
                     ->innerJoin('consent.website', 'website')
-                    ->select('COUNT(consent.id) AS count, SUBSTRING(consent.createdAt, 8, 2) AS day, SUBSTRING(consent.createdAt, 5, 2) AS month, SUBSTRING(consent.createdAt, 0, 4) AS year')
+                    ->select('COUNT(consent.id) AS count, EXTRACT_DATE_PART(consent.createdAt, \'day\') AS day, EXTRACT_DATE_PART(consent.createdAt, \'month\') AS month, EXTRACT_DATE_PART(consent.createdAt, \'year\') AS year')
                     ->groupBy('day, month, year')
                     ->orderBy('year, month, day', 'ASC')
                     ->where('website.id = :website_id')

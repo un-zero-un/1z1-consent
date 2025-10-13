@@ -135,6 +135,7 @@ final class WebsiteCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         $showConsents = Action::new('showConsents', 'Consentements')
+            ->setIcon('fa fa-handshake')
             ->linkToUrl(
                 fn (Website $website) => $this->adminUrlGenerator
                     ->setController(ConsentCrudController::class)
@@ -145,8 +146,9 @@ final class WebsiteCrudController extends AbstractCrudController
             );
 
         return parent::configureActions($actions)
+            ->add(Action::INDEX, Action::DETAIL)
             ->add(Action::INDEX, $showConsents)
-            ->add(Action::INDEX, Action::DETAIL);
+            ->update(Action::INDEX, Action::DETAIL, fn (Action $action) => $action->setIcon('fa fa-eye'));
     }
 
     #[\Override]

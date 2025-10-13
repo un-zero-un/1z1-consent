@@ -17,6 +17,9 @@ doctrine:
         auto_mapping: false
         controller_resolver:
             auto_mapping: false
+        dql:
+            string_functions:
+                EXTRACT_DATE_PART: App\Extension\Doctrine\ExtractDatePart
         mappings:
             App:
                 is_bundle: false
