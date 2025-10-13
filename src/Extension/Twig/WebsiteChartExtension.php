@@ -33,6 +33,7 @@ final class WebsiteChartExtension extends AbstractExtension
         return [
             new TwigFunction('website_hit_chart_month', $this->getWebsiteHitChartMonth(...), ['needs_environment' => true]),
             new TwigFunction('website_hit_chart_day', $this->getWebsiteHitChartDay(...), ['needs_environment' => true]),
+            new TwigFunction('website_co2_chart_month', $this->getWebsiteCo2ChartMonth(...), ['needs_environment' => true]),
         ];
     }
 
@@ -42,17 +43,8 @@ final class WebsiteChartExtension extends AbstractExtension
         $consentsByMonth = $this->consentRepository->getCountByWebsiteGroupedByMonthOnAYear($website);
 
         /** @var Month[] $months */
-        $months = array_reverse(iterator_to_array(
-            (function () {
-                $currentMonth = new Calendar()->getMonth((int) date('Y'), (int) date('m'));
-                for ($i = 0; $i < 12; ++$i) {
-                    yield $currentMonth;
-
-                    $currentMonth = $currentMonth->getPrevious();
-                }
-            })(),
-        ));
-        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $months = $this->getMonthsLabels();
+        $chart = $this->create0ScaledChart();
         $chart->setData(
             [
                 'labels' => array_map(fn (Month $month) => $this->intlExtension->formatDate($env, $month->getBegin(), pattern: 'MMMM'), $months),
@@ -103,7 +95,7 @@ final class WebsiteChartExtension extends AbstractExtension
             })(),
         ));
 
-        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart = $this->create0ScaledChart();
         $chart->setData(
             [
                 'labels' => array_map(fn (Day $day) => $this->intlExtension->formatDate($env, $day->getBegin(), pattern: 'dd/MM'), $days),
@@ -137,6 +129,74 @@ final class WebsiteChartExtension extends AbstractExtension
                 ],
             ]
         );
+
+        return $chart;
+    }
+
+    public function getWebsiteCo2ChartMonth(Environment $env, Website $website): ?Chart
+    {
+        $quantityOfCO2eqPerYear = $website->server?->quantityOfCO2eqPerYear;
+        if (!$quantityOfCO2eqPerYear) {
+            return null;
+        }
+
+        /** @var array<array{count: int, month: string|int, year: string|int}> $hitsByMonth */
+        $hitsByMonth = $this->websiteHitRepository->getCountByWebsiteGroupedByMonthOnAYear($website);
+        $totalHits = array_sum(array_map(fn (array $hit): int => $hit['count'], $hitsByMonth)) ?: 1;
+        $co2ByMonth = array_map(
+            fn (array $hit) => [...$hit, 'co2' => ($hit['count'] ?: 0) * $quantityOfCO2eqPerYear / $totalHits],
+            $hitsByMonth,
+        );
+
+        /** @var Month[] $months */
+        $months = $this->getMonthsLabels();
+        $chart = $this->create0ScaledChart();
+        $chart->setData(
+            [
+                'labels' => array_map(fn (Month $month) => $this->intlExtension->formatDate($env, $month->getBegin(), pattern: 'MMMM'), $months),
+                'datasets' => [
+                    [
+                        'label' => 'Émissions de GES par mois (kg CO2eq)',
+                        'borderColor' => '#bada55',
+                        'data' => array_map(
+                            fn (Month $month) => array_values(array_filter(
+                                $co2ByMonth,
+                                fn (array $hit) => str_pad((string) $hit['month'], 2, '0', STR_PAD_LEFT) === $month->format('m') && $hit['year'] === $month->format('Y'),
+                            ))[0]['co2'] ?? 0,
+                            $months,
+                        ),
+                    ],
+                ],
+            ]
+        );
+
+        return $chart;
+    }
+
+    public function getMonthsLabels(): array
+    {
+        return array_reverse(iterator_to_array(
+            (function () {
+                $currentMonth = new Calendar()->getMonth((int) date('Y'), (int) date('m'));
+                for ($i = 0; $i < 12; ++$i) {
+                    yield $currentMonth;
+
+                    $currentMonth = $currentMonth->getPrevious();
+                }
+            })(),
+        ));
+    }
+
+    public function create0ScaledChart(): Chart
+    {
+        $chart = $this->chartBuilder->createChart(Chart::TYPE_LINE);
+        $chart->setOptions([
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                ],
+            ],
+        ]);
 
         return $chart;
     }

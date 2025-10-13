@@ -1,2 +1,5 @@
 {{ render_chart(website_hit_chart_month(entity.instance)) }}
 {{ render_chart(website_hit_chart_day(entity.instance)) }}
+
+{% set co2_chart = website_co2_chart_month(entity.instance) %}
+{{ co2_chart ? render_chart(co2_chart) }}
