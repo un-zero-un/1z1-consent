@@ -7,6 +7,7 @@ namespace App\Entity;
 use App\Behavior\HasTimestamp;
 use App\Behavior\Impl\HasTimestampImpl;
 use App\Behavior\IndirectlyHasAgency;
+use App\ValueObject\PrivacyContext;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -53,11 +54,15 @@ class Consent implements HasTimestamp, IndirectlyHasAgency, \Stringable
     #[OneToMany(targetEntity: TrackerConsent::class, mappedBy: 'consent', cascade: ['all'])]
     public private(set) Collection $trackerConsents;
 
-    public function __construct(Website $website, string $userId)
+    #[Column(type: Types::BOOLEAN, options: ['default' => false])]
+    private(set) bool $gpcEnabled = false;
+
+    public function __construct(Website $website, string $userId, bool $gpcEnabled)
     {
         $this->id = Uuid::v7();
         $this->website = $website;
         $this->userId = $userId;
+        $this->gpcEnabled = $gpcEnabled;
         $this->trackerConsents = new ArrayCollection();
 
         $this->initialize();

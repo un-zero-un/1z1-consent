@@ -9,6 +9,7 @@ use App\Cache\Fingerprint;
 use App\Cache\WebsiteIdProvider;
 use App\Entity\Consent;
 use App\Exception\MissingUserIdException;
+use App\Provider\PrivacyContextProvider;
 use App\Repository\ConsentRepository;
 use App\Repository\WebsiteRepository;
 use App\Util\CorsController;
@@ -31,8 +32,8 @@ final readonly class PostConsentAction
     public function __construct(
         private ConsentRepository $consentRepository,
         private WebsiteRepository $websiteRepository,
-        private ApiBypasser $apiBypasser,
-        private WebsiteIdProvider $websiteIdProvider,
+        private ApiBypasser       $apiBypasser,
+        private WebsiteIdProvider $websiteIdProvider, private PrivacyContextProvider $privacyContextProvider,
     ) {
     }
 
@@ -60,7 +61,11 @@ final readonly class PostConsentAction
         try {
             $consent = $this->consentRepository->findOneByWebsiteAndUserId($website, $userId);
         } catch (NoResultException) {
-            $consent = new Consent($website, $userId);
+            $consent = new Consent(
+                $website,
+                $userId,
+                $this->privacyContextProvider->getContext($website, $request)->globalPrivacyControl,
+            );
             $this->consentRepository->save($consent);
         }
 

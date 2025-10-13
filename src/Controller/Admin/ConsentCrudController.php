@@ -17,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -37,7 +38,8 @@ final class ConsentCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Consentement')
             ->setEntityLabelInPlural('Consentements')
             ->setDefaultSort(['updatedAt' => 'DESC'])
-            ->setEntityPermission('IS_OWNER');
+            ->setEntityPermission('IS_OWNER')
+            ->showEntityActionsInlined();
     }
 
     #[\Override]
@@ -48,11 +50,13 @@ final class ConsentCrudController extends AbstractCrudController
         yield AssociationField::new('website', 'Site');
         yield TextField::new('userId', 'Identifiant utilisateur');
 
-        yield DateTimeField::new('createdAt', 'Recueilli le');
-        yield DateTimeField::new('updatedAt', 'Mis à jour le');
-
         yield CollectionField::new('trackerConsents', 'Consentements')
             ->setTemplatePath('admin/consent/trackerConsents.html.twig');
+        yield BooleanField::new('gpcEnabled', 'GPC activé')
+            ->setHelp('Signal Sec-GPC reçu lors de la collecte du consentement');
+
+        yield DateTimeField::new('createdAt', 'Recueilli le');
+        yield DateTimeField::new('updatedAt', 'Mis à jour le');
     }
 
     #[\Override]
@@ -68,7 +72,8 @@ final class ConsentCrudController extends AbstractCrudController
     {
         return parent::configureFilters($filters)
             ->add('website')
-            ->add(ConsentStatusFilter::new('status', 'État du consentement'));
+            ->add(ConsentStatusFilter::new('status', 'État du consentement'))
+            ->add('gpcEnabled');
     }
 
     #[\Override]
