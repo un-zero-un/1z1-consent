@@ -3,19 +3,19 @@ import * as monaco from 'monaco-editor';
 self.MonacoEnvironment = {
     getWorkerUrl: function (moduleId, label) {
         if (label === 'json') {
-            return './build/json.worker.js';
+            return '/build/json.worker.js';
         }
         if (label === 'css' || label === 'scss' || label === 'less') {
-            return './build/css.worker.js';
+            return '/build/css.worker.js';
         }
         if (label === 'html' || label === 'handlebars' || label === 'razor') {
-            return './build/html.worker.js';
+            return '/build/html.worker.js';
         }
         if (label === 'typescript' || label === 'javascript') {
-            return './build/ts.worker.js';
+            return '/build/ts.worker.js';
         }
 
-        return './build/editor.worker.js';
+        return '/build/editor.worker.js';
     }
 };
 

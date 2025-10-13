@@ -1,8 +1,8 @@
 services:
     php:
         image: ${IMAGE_PREFIX:-ghcr.io/un-zero-un/1z1-consent}:${IMAGE_TAG:-latest}
+        depends_on: [ gotenberg ]
         build:
-            context: .
             target: php
             args:
                 EXTERNAL_USER_ID: ${EXTERNAL_USER_ID:-33}
@@ -31,6 +31,9 @@ services:
             -   target: 443
                 published: ${HTTP3_PORT:-443}
                 protocol: udp
+
+    gotenberg:
+        image: gotenberg/gotenberg:8
 
 volumes:
     caddy_data:

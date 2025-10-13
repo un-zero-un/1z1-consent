@@ -16,15 +16,11 @@ LABEL org.opencontainers.image.description="1z1 Consent is a GDPR-compliant cook
 
 ARG EXTERNAL_USER_ID
 
-VOLUME /var/cache/apt
-VOLUME /var/www/.cache
-
 # persistent / runtime deps
 # hadolint ignore=DL3008
-RUN --mount=type=cache,target=/var/cache/apt \
-    set -eux; \
+RUN set -eux; \
     apt-get update; \
-    apt-get install -y --no-install-recommends libnss3-tools git acl unzip ca-certificates sqlite3 weasyprint; \
+    apt-get install -y --no-install-recommends git unzip ca-certificates sqlite3; \
     php -v; \
     install-php-extensions zip pdo_pgsql pdo_mysql pcntl opcache intl apcu memcached redis; \
     apt-get clean; \
@@ -60,44 +56,37 @@ ARG APP_DEBUG=false
 
 WORKDIR /app
 
-COPY --chown=www-data:www-data composer.json composer.lock symfony.lock ./
-RUN --mount=type=cache,target=/var/www/.cache \
-    set -eux; \
-    composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress; \
-    composer clear-cache; \
-    mkdir -p var
-
-COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
-COPY --from=node_base /usr/local/include/node /usr/local/include/node
-COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
-COPY --from=node_base /opt/yarn* /opt/yarn
-
+COPY --chown=node:node composer.json composer.lock symfony.lock ./
 RUN set -eux; \
-    ln -vs /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm; \
-    ln -vs /opt/yarn/bin/yarn /usr/local/bin/yarn
+    composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress; \
+    composer clear-cache
 
 
-FROM base AS node
+FROM node_base AS node
+
+ARG EXTERNAL_USER_ID
 
 RUN set -eux; \
     mkdir -p /app; \
-    chown -R www-data:www-data /app
+    chown -R node:node /app
 
-USER www-data
+RUN set -eux; \
+    sed -i -r s/"(node:x:)([[:digit:]]+):([[:digit:]]+):"/\\1${EXTERNAL_USER_ID}:${EXTERNAL_USER_ID}:/g /etc/passwd; \
+    sed -i -r s/"(node:x:)([[:digit:]]+):"/\\1${EXTERNAL_USER_ID}:/g /etc/group; \
+    chown -R node:node /app /home/node
+
+USER node
 WORKDIR /app
 
-COPY --chown=www-data:www-data package.json yarn.lock webpack.config.js tsconfig.json ./
-RUN set -eux; \
-    yarn; \
-    sync
+COPY --chown=node:node package.json yarn.lock webpack.config.js tsconfig.json ./
+COPY --chown=node:node --from=base /app/vendor vendor/
 
-COPY --chown=www-data:www-data assets assets/
-COPY --chown=www-data:www-data --from=base /app/public public/
-COPY --chown=www-data:www-data --from=base /app/vendor vendor/
-RUN set -eux; \
-    yarn build; \
-    sync
+RUN yarn
 
+COPY --chown=node:node assets assets/
+COPY --chown=node:node --from=base /app/public public/
+
+RUN yarn build
 
 
 
@@ -106,7 +95,6 @@ FROM base AS php
 
 ARG MAIN_DOMAIN
 ARG APP_ENV=prod
-ARG APP_DEBUG=false
 
 USER root
 
