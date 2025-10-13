@@ -42,5 +42,11 @@ services:
                 published: ${SMTP_PORT:-8025}
                 protocol: tcp
 
+    gotenberg:
+        ports:
+            -   target: 3000
+                published: ${GOTENBERG_PORT:-3000}
+                protocol: tcp
+
 volumes:
     database-data:

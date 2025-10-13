@@ -24,6 +24,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Pontedilana\PhpWeasyPrint\Pdf;
+use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +41,7 @@ final class ClientCrudController extends AbstractCrudController
 
     public function __construct(
         private readonly GDPRWebsiteTreatmentGenerator $treatmentGenerator,
-        private readonly Pdf $pdf,
+        private readonly GotenbergPdfInterface $pdf,
     ) {
     }
 
@@ -153,25 +154,21 @@ final class ClientCrudController extends AbstractCrudController
             throw $this->createNotFoundException('Client not found');
         }
 
-        return new StreamedResponse(
-            function () use ($client): void {
-                echo $this->pdf->getOutputFromHtml(
-                    $this->renderView(
-                        'admin/client/viewPDFRegister.html.twig',
-                        [
-                            'client' => $client,
-                            'website_treatments' => $this->treatmentGenerator->generateForClient($client),
-                        ],
-                    )
-                );
+        $response = $this->pdf
+            ->html()
+            ->content(
+                'admin/client/viewPDFRegister.html.twig',
+                [
+                    'client' => $client,
+                    'website_treatments' => $this->treatmentGenerator->generateForClient($client),
+                ],
+            )
+            ->generate()
+            ->stream();
 
-                flush();
-            },
-            201,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'attachment; filename="registre_rgpd_'.($client->name ?: '').'.pdf"',
-            ]
-        );
+        $response
+            ->headers->set('Content-Disposition', 'inline; filename="registre_rgpd_'.($client->name ?: '').'.pdf"');
+
+        return $response;
     }
 }

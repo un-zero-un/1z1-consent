@@ -20,7 +20,7 @@ ARG EXTERNAL_USER_ID
 # hadolint ignore=DL3008
 RUN set -eux; \
     apt-get update; \
-    apt-get install -y --no-install-recommends git unzip ca-certificates sqlite3 weasyprint; \
+    apt-get install -y --no-install-recommends git unzip ca-certificates sqlite3; \
     php -v; \
     install-php-extensions zip pdo_pgsql pdo_mysql pcntl opcache intl apcu memcached redis; \
     apt-get clean; \
@@ -60,15 +60,6 @@ COPY --chown=node:node composer.json composer.lock symfony.lock ./
 RUN set -eux; \
     composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress; \
     composer clear-cache
-
-# COPY --from=node_base /usr/local/bin/node /usr/local/bin/node
-# COPY --from=node_base /usr/local/include/node /usr/local/include/node
-# COPY --from=node_base /usr/local/lib/node_modules /usr/local/lib/node_modules
-# COPY --from=node_base /opt/yarn* /opt/yarn
-
-# RUN set -eux; \
-#     ln -vs /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm; \
-#     ln -vs /opt/yarn/bin/yarn /usr/local/bin/yarn
 
 
 FROM node_base AS node
