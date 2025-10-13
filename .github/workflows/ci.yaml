@@ -93,9 +93,9 @@ jobs:
             -   name: Composer install
                 run: docker compose run --rm php composer install
             -   name: Yarn install
-                run: docker compose run --rm php yarn install
+                run: docker compose run --rm webpack yarn install
             -   name: Build assets
-                run: docker compose run --rm php yarn dev
+                run: docker compose run --rm webpack yarn dev
             -   name: Start services
                 run: docker compose up --wait --no-build || (docker compose logs && exit 1)
             -   name: Create test database
@@ -145,9 +145,9 @@ jobs:
             -   name: Composer install
                 run: docker compose run --rm php composer install
             -   name: Yarn install
-                run: docker compose run --rm php yarn install
+                run: docker compose run --rm webpack yarn install
             -   name: Build assets
-                run: docker compose run --rm php yarn dev
+                run: docker compose run --rm webpack yarn dev
             -   name: Start services
                 run: docker compose up --wait --no-build || (docker compose logs && exit 1)
             -   name: Create test database
