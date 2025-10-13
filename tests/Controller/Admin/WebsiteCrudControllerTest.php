@@ -116,7 +116,7 @@ final class WebsiteCrudControllerTest extends AbstractCrudTestCase
                 'domains' => [
                     [
                         'domain' => 'www.example.com',
-                    ]
+                    ],
                 ],
             ],
         ]);
@@ -162,7 +162,6 @@ final class WebsiteCrudControllerTest extends AbstractCrudTestCase
 
         $this->assertResponseIsSuccessful();
     }
-
 
     public function testShowConsent(): void
     {

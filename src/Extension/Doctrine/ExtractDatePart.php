@@ -12,9 +12,9 @@ use Doctrine\ORM\Query\SqlWalker;
 use Doctrine\ORM\Query\TokenType;
 
 /**
- * ExtractDatePart ::= "EXTRACT_DATE_PART" "(" ArithmeticPrimary "," StringPrimary ")"
+ * ExtractDatePart ::= "EXTRACT_DATE_PART" "(" ArithmeticPrimary "," StringPrimary ")".
  */
-class ExtractDatePart extends FunctionNode
+final class ExtractDatePart extends FunctionNode
 {
     public const string YEAR = 'year';
     public const string MONTH = 'month';
@@ -29,20 +29,29 @@ class ExtractDatePart extends FunctionNode
     private ?Node $dateExpression = null;
     private ?Node $part = null;
 
+    #[\Override]
     public function parse(Parser $parser): void
     {
         $parser->match(TokenType::T_IDENTIFIER);
         $parser->match(TokenType::T_OPEN_PARENTHESIS);
-        $this->dateExpression = $parser->ArithmeticPrimary();
+        $node = $parser->ArithmeticPrimary();
+
+        assert($node instanceof Node);
+        $this->dateExpression = $node;
+
         $parser->match(TokenType::T_COMMA);
+
         $this->part = $parser->StringPrimary();
+
         $parser->match(TokenType::T_CLOSE_PARENTHESIS);
     }
 
+    #[\Override]
     public function getSql(SqlWalker $sqlWalker): string
     {
         assert($this->dateExpression instanceof Node);
         assert($this->part instanceof Node);
+        assert(isset($this->part->value) && is_string($this->part->value));
 
         if (!in_array($this->part->value, self::PARTS, true)) {
             throw new \InvalidArgumentException(sprintf('Invalid date part "%s" in EXTRACT_DATE_PART function. Allowed parts are: %s', $this->part->value, implode(', ', self::PARTS)));
@@ -70,9 +79,6 @@ class ExtractDatePart extends FunctionNode
             );
         }
 
-        throw new \RuntimeException(sprintf(
-            'The EXTRACT_DATE_PART function is not supported by the "%s" database platform.',
-            get_class($platform),
-        ));
+        throw new \RuntimeException(sprintf('The EXTRACT_DATE_PART function is not supported by the "%s" database platform.', get_class($platform)));
     }
 }
