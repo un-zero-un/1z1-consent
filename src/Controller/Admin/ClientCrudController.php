@@ -23,12 +23,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Pontedilana\PhpWeasyPrint\Pdf;
 use Sensiolabs\GotenbergBundle\GotenbergPdfInterface;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * @psalm-suppress PropertyNotSetInConstructor
