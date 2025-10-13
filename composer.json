@@ -44,7 +44,7 @@
         "twig/extra-bundle": "^3.21.0",
         "twig/intl-extra": "^3.21.0",
         "twig/twig": "^3.21.1",
-        "yohang/calendr": "^1.0.6"
+        "yohang/calendr": "^3.0.0"
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^8.3",

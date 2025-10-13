@@ -25,7 +25,7 @@ class WebsiteHitRepository extends ServiceEntityRepository
     public function getCountByWebsiteGroupedByMonthOnAYear(Website $website): array
     {
         return $this->createQueryBuilder('h')
-                    ->select('COUNT(h.id) AS count, SUBSTRING(h.createdAt, 5, 2) AS month, SUBSTRING(h.createdAt, 0, 4) AS year')
+                    ->select('COUNT(h.id) AS count, EXTRACT_DATE_PART(h.createdAt, \'month\') AS month, EXTRACT_DATE_PART(h.createdAt, \'year\') AS year')
                     ->innerJoin('h.website', 'website')
                     ->groupBy('month, year')
                     ->orderBy('year, month', 'ASC')
@@ -40,7 +40,7 @@ class WebsiteHitRepository extends ServiceEntityRepository
     public function getCountByWebsiteGroupedByDayOnAMonth(Website $website): array
     {
         return $this->createQueryBuilder('h')
-                        ->select('COUNT(h.id) AS count, SUBSTRING(h.createdAt, 8, 2) AS day, SUBSTRING(h.createdAt, 5, 2) AS month, SUBSTRING(h.createdAt, 0, 4) AS year')
+                        ->select('COUNT(h.id) AS count, EXTRACT_DATE_PART(h.createdAt, \'day\')  AS day, EXTRACT_DATE_PART(h.createdAt, \'month\') AS month, EXTRACT_DATE_PART(h.createdAt, \'year\') AS year')
                         ->innerJoin('h.website', 'website')
                         ->groupBy('day, month, year')
                         ->orderBy('year, month, day', 'ASC')
