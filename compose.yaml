@@ -2,7 +2,6 @@ services:
     php:
         image: ${IMAGE_PREFIX:-ghcr.io/un-zero-un/1z1-consent}:${IMAGE_TAG:-latest}
         build:
-            context: .
             target: php
             args:
                 EXTERNAL_USER_ID: ${EXTERNAL_USER_ID:-33}

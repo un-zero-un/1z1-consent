@@ -53,10 +53,10 @@ vendor/: composer.lock composer.json symfony.lock
 	@$(DOCKER_COMPOSE) run --rm php composer install
 
 node_modules/: package.json yarn.lock
-	@$(DOCKER_COMPOSE) run --rm php yarn install
+	@$(DOCKER_COMPOSE) run --rm webpack yarn install
 
 public/build/:
-	@$(DOCKER_COMPOSE) run --rm php yarn dev
+	@$(DOCKER_COMPOSE) run --rm webpack yarn dev
 
 php/tls/cert.pem:
 	@mkdir -p infra/docker/php/tls
