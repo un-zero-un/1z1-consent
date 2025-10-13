@@ -32,7 +32,7 @@ final readonly class PostConsentAction
     public function __construct(
         private ConsentRepository $consentRepository,
         private WebsiteRepository $websiteRepository,
-        private ApiBypasser       $apiBypasser,
+        private ApiBypasser $apiBypasser,
         private WebsiteIdProvider $websiteIdProvider, private PrivacyContextProvider $privacyContextProvider,
     ) {
     }
