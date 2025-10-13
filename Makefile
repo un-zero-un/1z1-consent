@@ -39,6 +39,7 @@ first_run: php/tls/cert.pem pull build vendor/ up node_modules/ public/build/ re
 reset: env=dev
 reset: ## Reset project fixtures
 	$(DOCKER_COMPOSE) exec -e$(env) php composer reset
+	$(DOCKER_COMPOSE) exec -e$(env) php bin/console foundry:load-fixtures dev --no-interaction --append
 
 cc: env=dev
 cc: ## Clear the Symfony cache

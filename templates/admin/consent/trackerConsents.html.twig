@@ -1,6 +1,8 @@
+{% types consent: 'App\Entity\Consent' %}
+{% set consent = entity.instance %}
 {% if 'index' == ea.crud.currentAction %}
-    {% set accepted_trackers = entity.instance.trackerConsents.toArray|filter(tc => true == tc.accepted)|length %}
-    {% set total_trackers = entity.instance.website.trackers|length %}
+    {% set accepted_trackers = consent.trackerConsents.toArray|filter(tc => true == tc.accepted)|length %}
+    {% set total_trackers = consent.website.trackers|length %}
 
     {% if accepted_trackers == total_trackers %}
         <span class="badge badge-success">{{ accepted_trackers }} / {{ total_trackers }}</span>
@@ -11,14 +13,16 @@
     {% endif %}
 {% else %}
     <ul>
-        {% for tracker in entity.instance.website.trackers %}
-            {% set tracker_consent = entity.instance.trackerConsents.toArray|filter(tc => tc.tracker == tracker) %}
+        {% for tracker in consent.website.trackers %}
+            {% set tracker_consent = consent.trackerConsents.toArray|filter(tc => tc.tracker == tracker) %}
             <li>
                 {{ tracker.name }} :
                 {% if 0 == tracker_consent|length %}
                     <span class="badge-warning badge">Inconnu</span>
                 {% elseif (tracker_consent|first).accepted %}
                     <span class="badge-success badge">Accepté</span>
+                {% elseif not tracker.gpcCompliant and consent.gpcEnabled %}
+                    <span class="badge-info badge">Désactivé par GPC</span>
                 {% else %}
                     <span class="badge-danger badge">Refusé</span>
                 {% endif %}
