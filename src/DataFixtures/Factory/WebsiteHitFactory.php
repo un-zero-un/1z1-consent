@@ -27,4 +27,20 @@ final class WebsiteHitFactory extends PersistentObjectFactory
             'website' => WebsiteFactory::random(),
         ];
     }
+
+    #[\Override]
+    protected function initialize(): static
+    {
+        return parent::initialize()
+            ->afterInstantiate(function (WebsiteHit $websiteHit): void {
+                $reflectionClass = new \ReflectionClass(WebsiteHit::class);
+                $property = $reflectionClass->getProperty('createdAt');
+                $property->setValue(
+                    $websiteHit,
+                    \DateTimeImmutable::createFromMutable(
+                        self::faker()->dateTimeBetween('-2 years'),
+                    ),
+                );
+            });
+    }
 }
