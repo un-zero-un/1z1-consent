@@ -64,15 +64,6 @@ jobs:
                         *.cache-from=type=gha,scope=${{github.ref}}
                         *.cache-from=type=gha,scope=refs/heads/main
                         *.cache-to=type=gha,scope=${{github.ref}},mode=max
-            -   name: Install mkcert
-                run: |
-                    sudo apt-get install --no-install-recommends libnss3-tools
-                    curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
-                    chmod +x mkcert-v*-linux-amd64
-                    sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
-                    mkcert -install
-                    mkdir -p infra/docker/php/tls
-                    mkcert -key-file infra/docker/php/tls/key.pem -cert-file infra/docker/php/tls/cert.pem localhost
             -   name: Set up Docker Compose
                 uses: docker/setup-compose-action@v1
                 with:
@@ -97,6 +88,8 @@ jobs:
             -   name: Build assets
                 run: docker compose run --rm webpack yarn dev
             -   name: Start services
+                env:
+                    CADDY_SERVER_EXTRA_DIRECTIVES: ' '
                 run: docker compose up --wait --no-build || (docker compose logs && exit 1)
             -   name: Create test database
                 run: docker compose exec -T php composer reset-test
@@ -131,15 +124,6 @@ jobs:
                         *.cache-from=type=gha,scope=${{github.ref}}
                         *.cache-from=type=gha,scope=refs/heads/main
                         *.cache-to=type=gha,scope=${{github.ref}},mode=max
-            -   name: Install mkcert
-                run: |
-                    sudo apt-get install --no-install-recommends libnss3-tools
-                    curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
-                    chmod +x mkcert-v*-linux-amd64
-                    sudo cp mkcert-v*-linux-amd64 /usr/local/bin/mkcert
-                    mkcert -install
-                    mkdir -p infra/docker/php/tls
-                    mkcert -key-file infra/docker/php/tls/key.pem -cert-file infra/docker/php/tls/cert.pem localhost
             -   name: Set up Docker Compose
                 uses: docker/setup-compose-action@v1
                 with:
@@ -151,6 +135,8 @@ jobs:
             -   name: Build assets
                 run: docker compose run --rm webpack yarn dev
             -   name: Start services
+                env:
+                    CADDY_SERVER_EXTRA_DIRECTIVES: ' '
                 run: docker compose up --wait --no-build || (docker compose logs && exit 1)
             -   name: Create test database
                 run: docker compose exec -T php composer reset
