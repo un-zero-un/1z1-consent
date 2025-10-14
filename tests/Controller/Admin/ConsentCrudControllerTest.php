@@ -32,7 +32,7 @@ final class ConsentCrudControllerTest extends AbstractCrudTestCase
     public function testFilters(): void
     {
         $this->login('admin@example.com', '!ChangeMe!');
-        $this->client->request('GET', $this->generateIndexUrl() . '?filters[status]=accepted&filters[gpcEnabled]=1');
+        $this->client->request('GET', $this->generateIndexUrl().'?filters[status]=accepted&filters[gpcEnabled]=1');
 
         $this->assertResponseIsSuccessful();
         $this->assertIndexPageEntityCount(20);
@@ -41,8 +41,7 @@ final class ConsentCrudControllerTest extends AbstractCrudTestCase
         $this->assertAnySelectorTextNotContains('[data-label="Consentements"]', '0 / 3');
         $this->assertAnySelectorTextNotContains('[data-label="Consentements"]', '3 / 3');
 
-
-        $this->client->request('GET', $this->generateIndexUrl() . '?filters[status]=declined');
+        $this->client->request('GET', $this->generateIndexUrl().'?filters[status]=declined');
 
         $this->assertResponseIsSuccessful();
         $this->assertIndexPageEntityCount(20);
