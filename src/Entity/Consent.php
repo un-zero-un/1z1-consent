@@ -41,7 +41,7 @@ class Consent implements HasTimestamp, IndirectlyHasAgency, \Stringable
     public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Website::class)]
-    #[JoinColumn(nullable: false)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     public private(set) Website $website;
 
     #[Column(type: Types::STRING, unique: true, nullable: false)]

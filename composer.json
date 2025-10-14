@@ -115,7 +115,8 @@
             "php bin/console -etest doctrine:database:drop -f || true",
             "php bin/console -etest doctrine:database:create || true",
             "php bin/console -etest doctrine:schema:create",
-            "php bin/console -etest foundry:load-fixtures main --no-interaction --append"
+            "php bin/console -etest foundry:load-fixtures main --no-interaction --append",
+            "php bin/console -etest foundry:load-fixtures dev --no-interaction --append"
         ]
     },
     "conflict": {

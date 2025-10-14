@@ -36,7 +36,7 @@ class TrackerConsent implements HasTimestamp
     public private(set) Uuid $id;
 
     #[ManyToOne(targetEntity: Consent::class, inversedBy: 'trackerConsents')]
-    #[JoinColumn(nullable: false)]
+    #[JoinColumn(nullable: false, onDelete: 'CASCADE')]
     public private(set) Consent $consent;
 
     #[ManyToOne(targetEntity: Tracker::class)]

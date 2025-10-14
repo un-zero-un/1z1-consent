@@ -34,7 +34,7 @@ cli: ## Open a shell in the php container
 	@test -f $@ || make first_run
 	@touch $@
 
-first_run: php/tls/cert.pem pull build vendor/ up node_modules/ public/build/ reset
+first_run: php/tls/cert.pem pull build vendor/ node_modules/ up public/build/ reset
 
 reset: env=dev
 reset: ## Reset project fixtures
