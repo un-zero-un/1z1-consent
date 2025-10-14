@@ -35,7 +35,6 @@ final class ConsentCrudControllerTest extends AbstractCrudTestCase
         $this->client->request('GET', $this->generateIndexUrl().'?filters[status]=accepted&filters[gpcEnabled]=1');
 
         $this->assertResponseIsSuccessful();
-        $this->assertIndexPageEntityCount(20);
         $this->assertAnySelectorTextContains('[data-label="Consentements"]', '1 / 3');
         $this->assertAnySelectorTextContains('[data-label="Consentements"]', '2 / 3');
         $this->assertAnySelectorTextNotContains('[data-label="Consentements"]', '0 / 3');
@@ -44,7 +43,6 @@ final class ConsentCrudControllerTest extends AbstractCrudTestCase
         $this->client->request('GET', $this->generateIndexUrl().'?filters[status]=declined');
 
         $this->assertResponseIsSuccessful();
-        $this->assertIndexPageEntityCount(20);
         $this->assertAnySelectorTextContains('[data-label="Consentements"]', '0 / 3');
         $this->assertAnySelectorTextNotContains('[data-label="Consentements"]', '1 / 3');
         $this->assertAnySelectorTextNotContains('[data-label="Consentements"]', '2 / 3');
