@@ -22,6 +22,7 @@ use Doctrine\ORM\Mapping\Table;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Valid;
 
 /**
  * @api
@@ -72,30 +73,35 @@ class GDPRTreatment implements HasTimestamp, IndirectlyHasAgency
     /**
      * @var Collection<int, PersonalDataTreatmentCategory>
      */
+    #[Valid]
     #[OneToMany(targetEntity: PersonalDataTreatmentCategory::class, mappedBy: 'treatment', cascade: ['all'], orphanRemoval: true)]
     public private(set) Collection $personalDataCategoryTreatments;
 
     /**
      * @var Collection<int, SensitiveDataTreatmentCategory>
      */
+    #[Valid]
     #[OneToMany(targetEntity: SensitiveDataTreatmentCategory::class, mappedBy: 'treatment', cascade: ['all'], orphanRemoval: true)]
     public private(set) Collection $sensitiveDataCategoryTreatments;
 
     /**
      * @var Collection<int, TreatmentConcernedPersonCategory>
      */
+    #[Valid]
     #[OneToMany(targetEntity: TreatmentConcernedPersonCategory::class, mappedBy: 'treatment', cascade: ['all'], orphanRemoval: true)]
     public private(set) Collection $concernedPersonCategories;
 
     /**
      * @var Collection<int, TreatmentRecipientType>
      */
+    #[Valid]
     #[OneToMany(targetEntity: TreatmentRecipientType::class, mappedBy: 'treatment', cascade: ['all'], orphanRemoval: true)]
     public private(set) Collection $recipientTypes;
 
     /**
      * @var Collection<int, TreatmentSecurityMeasure>
      */
+    #[Valid]
     #[OneToMany(targetEntity: TreatmentSecurityMeasure::class, mappedBy: 'treatment', cascade: ['all'], orphanRemoval: true)]
     public private(set) Collection $securityMeasures;
 

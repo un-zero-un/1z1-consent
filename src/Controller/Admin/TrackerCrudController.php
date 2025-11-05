@@ -31,12 +31,12 @@ final class TrackerCrudController extends AbstractCrudController
         return [
             TextField::new('name', 'Nom')->setColumns('col-md-12'),
             ChoiceField::new('type', 'Type de tracker')
-                       ->setChoices(['' => TrackerType::cases()])
-                       ->setFormType(EnumType::class)
-                       ->setFormTypeOption('class', TrackerType::class)
-                       ->setFormTypeOption('choice_label', 'label')
-                       ->onlyOnForms()
-                       ->setColumns('col-md-12'),
+                ->setChoices(['' => TrackerType::cases()])
+                ->setFormType(EnumType::class)
+                ->setFormTypeOption('class', TrackerType::class)
+                ->setFormTypeOption('choice_label', 'label')
+                ->onlyOnForms()
+                ->setColumns('col-md-12'),
             BooleanField::new('gpcCompliant', 'Conforme GPC (Global Privacy Control)')
                 ->setHelp('Désactiver si le tracker revend des données malgré l\'envoi du signal GPC')
                 ->setColumns('col-md-12'),
@@ -47,13 +47,13 @@ final class TrackerCrudController extends AbstractCrudController
                 ->onlyOnForms()
                 ->setColumns('col-md-12'),
             MonacoEditorField::new('customCode', 'Code personnalisé')
-                             ->onlyOnForms()
-                             ->setColumns('col-md-12')
-                             ->setFormTypeOption(
-                                 'help',
-                                 'Le code personnalisé sera utilisé à la place ou en complément du code par défaut. '.
-                                 'les variables du trackers sont accessibles, ainsi que l\'object "tracker"'
-                             ),
+                ->onlyOnForms()
+                ->setColumns('col-md-12')
+                ->setFormTypeOption(
+                    'help',
+                    'Le code personnalisé sera utilisé à la place ou en complément du code par défaut. '.
+                    'les variables du trackers sont accessibles, ainsi que l\'object "tracker"'
+                ),
         ];
     }
 
@@ -61,10 +61,10 @@ final class TrackerCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return parent::configureActions($actions)
-                     ->disable(Action::NEW)
-                     ->disable(Action::EDIT)
-                     ->disable(Action::DETAIL)
-                     ->disable(Action::INDEX)
-                     ->disable(Action::DELETE);
+            ->disable(Action::NEW)
+            ->disable(Action::EDIT)
+            ->disable(Action::DETAIL)
+            ->disable(Action::INDEX)
+            ->disable(Action::DELETE);
     }
 }

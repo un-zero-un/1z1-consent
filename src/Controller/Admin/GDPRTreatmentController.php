@@ -34,6 +34,7 @@ final class GDPRTreatmentController extends AbstractCrudController
     {
         $agency = $this->getAgency();
 
+        yield FormField::addTab('Généralités');
         yield AssociationField::new('client', 'Client')->setQueryBuilder(
             fn (QueryBuilder $queryBuilder): QueryBuilder => $queryBuilder
                     ->innerJoin('entity.agency', 'agency')
@@ -44,16 +45,20 @@ final class GDPRTreatmentController extends AbstractCrudController
         yield IntegerField::new('ref', 'N° / RÉF');
         yield TextField::new('name', 'Nom du traitement');
 
-        yield FormField::addPanel('Finalité(s) du traitement effectué');
+        yield DateTimeField::new('createdAt', 'Créé le')->hideOnForm();
+        yield DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm();
 
-        yield TextField::new('processingPurpose', 'Finalité principale');
+        yield FormField::addTab('Finalité(s)');
+
+        yield TextField::new('processingPurpose', 'Finalité principale')
+            ->setHelp('Finalité du traitement effectué');
         yield TextField::new('processingSubPurpose1', 'Sous-finalité 1')->hideOnIndex();
         yield TextField::new('processingSubPurpose2', 'Sous-finalité 2')->hideOnIndex();
         yield TextField::new('processingSubPurpose3', 'Sous-finalité 3')->hideOnIndex();
         yield TextField::new('processingSubPurpose4', 'Sous-finalité 4')->hideOnIndex();
         yield TextField::new('processingSubPurpose5', 'Sous-finalité 5')->hideOnIndex();
 
-        yield FormField::addPanel('Catégories de données');
+        yield FormField::addTab('Catégories de données');
         yield CollectionField::new('personalDataCategoryTreatments', 'Catégories de données personnelles concernées')
                              ->allowAdd()
                              ->allowDelete()
@@ -68,7 +73,7 @@ final class GDPRTreatmentController extends AbstractCrudController
                              ->useEntryCrudForm()
                              ->hideOnIndex();
 
-        yield FormField::addPanel('Personnes / Échanges');
+        yield FormField::addTab('Personnes / Échanges');
         yield CollectionField::new('concernedPersonCategories', 'Catégories de personnes concernées')
                              ->allowAdd()
                              ->allowDelete()
@@ -82,22 +87,19 @@ final class GDPRTreatmentController extends AbstractCrudController
                              ->useEntryCrudForm()
                              ->hideOnIndex();
 
-        yield FormField::addPanel('Sécurité');
+        yield FormField::addTab('Sécurité');
         yield CollectionField::new('securityMeasures', 'Mesures de sécurité')
                              ->allowAdd()
                              ->allowDelete()
                              ->setEntryIsComplex()
                              ->useEntryCrudForm()
                              ->hideOnIndex();
-        yield CollectionField::new('outOfEUTransfers', '̂Transferts hors UE')
+        yield CollectionField::new('outOfEUTransfers', 'Transferts hors UE')
                              ->allowAdd()
                              ->allowDelete()
                              ->setEntryIsComplex()
                              ->useEntryCrudForm()
                              ->hideOnIndex();
-
-        yield DateTimeField::new('createdAt', 'Créé le')->hideOnForm();
-        yield DateTimeField::new('updatedAt', 'Mis à jour le')->hideOnForm();
     }
 
     #[\Override]
