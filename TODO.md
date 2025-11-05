@@ -7,3 +7,4 @@ Planned features / improvements
  * [ ] Improve documentation
  * [ ] Make consent duration configurable (currently 2 years)
  * [ ] I18N (Only FR for now)
+ * [ ] Cache invalidate on website / trackers update
