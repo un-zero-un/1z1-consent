@@ -51,7 +51,7 @@ final class TrackerCrudController extends AbstractCrudController
                 ->setColumns('col-md-12')
                 ->setFormTypeOption(
                     'help',
-                    'Le code personnalisé sera utilisé à la place ou en complément du code par défaut. ' .
+                    'Le code personnalisé sera utilisé à la place ou en complément du code par défaut. '.
                     'les variables du trackers sont accessibles, ainsi que l\'object "tracker"'
                 ),
         ];
