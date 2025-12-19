@@ -34,16 +34,18 @@ final readonly class ApiBypasser
 
     public function bypass(Fingerprint $fingerprint, Request $request): Response
     {
+        $response = $this->apiBypasserCache->get(
+            $fingerprint->getHash(),
+            fn () => throw new \RuntimeException('This should not happen'),
+        );
+
         $this->websiteHitRepository->saveFromRawData(
             $fingerprint->getWebsiteId(),
             $request->getClientIp() ?: '',
             $request->headers->get('referer') ?: '',
         );
 
-        return $this->apiBypasserCache->get(
-            $fingerprint->getHash(),
-            fn () => throw new \RuntimeException('This should not happen'),
-        );
+        return $response;
     }
 
     public function save(Fingerprint $fingerprint, Response $response): void

@@ -23,13 +23,13 @@ final class PrivacyContextProviderTest extends TestCase
     ): void {
         $provider = new PrivacyContextProvider($dntEnabled);
 
-        $request = $this->createMock(Request::class);
+        $request = $this->createStub(Request::class);
         $request->headers = new HeaderBag([
             'DNT' => $dntHeader,
             'Sec-GPC' => $secGpcHeader,
         ]);
 
-        $website = $this->createMock(Website::class);
+        $website = $this->createStub(Website::class);
         $website->respectDoNotTrack = $respectDoNotTrack;
         $website->respectGlobalPrivacyControl = $respectGlobalPrivacyControl;
 
