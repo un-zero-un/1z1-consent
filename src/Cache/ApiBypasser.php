@@ -38,6 +38,7 @@ final readonly class ApiBypasser
             $fingerprint->getHash(),
             fn () => throw new \RuntimeException('This should not happen'),
         );
+        assert($response instanceof Response);
 
         $this->websiteHitRepository->saveFromRawData(
             $fingerprint->getWebsiteId(),
