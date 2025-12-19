@@ -54,6 +54,9 @@ class Website implements HasTimestamp, IndirectlyHasAgency, \Stringable
     #[Column(type: Types::BOOLEAN)]
     public bool $showOpenButton = true;
 
+    #[Column(type: Types::BOOLEAN, options: ['default' => true])]
+    public bool $autoOpen = true;
+
     #[Column(type: Types::STRING, nullable: true)]
     public ?string $dialogTitle = null;
 

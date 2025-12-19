@@ -108,6 +108,8 @@
             "php bin/console cache:pool:clear cache.adapter.auto",
             "php bin/console doctrine:schema:drop --force --full-database",
             "php bin/console doctrine:schema:create",
+            "php bin/console doctrine:migration:sync-metadata-storage",
+            "php bin/console doctrine:migrations:version --add --all",
             "php bin/console foundry:load-fixtures main --no-interaction --append"
         ],
         "reset-test": [
@@ -115,6 +117,8 @@
             "php bin/console -etest doctrine:database:drop -f || true",
             "php bin/console -etest doctrine:database:create || true",
             "php bin/console -etest doctrine:schema:create",
+            "php bin/console -etest doctrine:migration:sync-metadata-storage",
+            "php bin/console -etest doctrine:migrations:version --add --all",
             "php bin/console -etest foundry:load-fixtures main --no-interaction --append",
             "php bin/console -etest foundry:load-fixtures dev --no-interaction --append"
         ]
