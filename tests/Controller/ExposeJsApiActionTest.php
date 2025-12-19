@@ -62,7 +62,7 @@ class ExposeJsApiActionTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('Content-Type', 'text/javascript; charset=UTF-8');
         $this->assertStringContainsString(
-            'const trackerId = \'G-2596164706\';',
+            'const trackerId = \'G-1234567890\';',
             $client->getResponse()->getContent(),
         );
     }
