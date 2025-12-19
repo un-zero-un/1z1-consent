@@ -46,7 +46,7 @@ final class ApiBypasserTest extends TestCase
         $fingerprint = $this->createMock(Fingerprint::class);
         $fingerprint->expects($this->once())->method('getHash')->willReturn('hash');
 
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
 
         $this->repository->expects($this->never())->method($this->anything());
         $this->cache
@@ -69,7 +69,7 @@ final class ApiBypasserTest extends TestCase
         $request->headers = new HeaderBag();
         $request->headers->set('referer', 'https://example.com');
 
-        $response = $this->createMock(Response::class);
+        $response = $this->createStub(Response::class);
 
         $this->repository
             ->expects($this->once())
@@ -91,17 +91,10 @@ final class ApiBypasserTest extends TestCase
 
         $fingerprint = $this->createMock(Fingerprint::class);
         $fingerprint->expects($this->once())->method('getHash')->willReturn('hash');
-        $fingerprint->expects($this->once())->method('getWebsiteId')->willReturn('00000000-0000-0000-0000-000000000042');
 
-        $request = $this->createMock(Request::class);
-        $request->expects($this->once())->method('getClientIp')->willReturn('0.42.42.1');
+        $request = $this->createStub(Request::class);
         $request->headers = new HeaderBag();
         $request->headers->set('referer', 'https://example.com');
-
-        $this->repository
-            ->expects($this->once())
-            ->method('saveFromRawData')
-            ->with('00000000-0000-0000-0000-000000000042', '0.42.42.1', 'https://example.com');
 
         $this->cache
             ->expects($this->once())
@@ -109,15 +102,19 @@ final class ApiBypasserTest extends TestCase
             ->with('hash', $this->isInstanceOf(\Closure::class))
             ->willReturnCallback(fn (string $hash, \Closure $callback) => $callback());
 
+        $this->repository->expects($this->never())->method($this->anything());
+
         $this->object->bypass($fingerprint, $request);
     }
 
     public function testItSaves(): void
     {
-        $fingerprint = $this->createMock(Fingerprint::class);
-        $fingerprint->expects($this->any())->method('getHash')->willReturn('hash');
+        $this->repository->expects($this->never())->method($this->anything());
 
-        $response = $this->createMock(Response::class);
+        $fingerprint = $this->createMock(Fingerprint::class);
+        $fingerprint->expects($this->atLeastOnce())->method('getHash')->willReturn('hash');
+
+        $response = $this->createStub(Response::class);
 
         $this->cache->expects($this->once())->method('delete')->with('hash');
 
@@ -140,6 +137,8 @@ final class ApiBypasserTest extends TestCase
         $fingerprint->expects($this->once())->method('getHash')->willReturn('hash');
 
         $this->cache->expects($this->once())->method('delete')->with('hash');
+
+        $this->repository->expects($this->never())->method($this->anything());
 
         $this->object->remove($fingerprint);
     }

@@ -85,6 +85,7 @@ class AdminUser implements HasTimestamp, UserInterface, PasswordAuthenticatedUse
         return $this->roles;
     }
 
+    #[\Deprecated]
     #[\Override]
     public function eraseCredentials(): void
     {
