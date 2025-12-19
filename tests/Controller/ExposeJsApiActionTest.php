@@ -61,6 +61,10 @@ class ExposeJsApiActionTest extends WebTestCase
         ]);
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('Content-Type', 'text/javascript; charset=UTF-8');
+        $this->assertStringContainsString(
+            'const trackerId = \'G-2596164706\';',
+            $client->getResponse()->getContent(),
+        );
     }
 
     public function testMissingRefererThrowsException(): void
