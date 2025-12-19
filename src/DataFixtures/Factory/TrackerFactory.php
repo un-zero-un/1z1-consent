@@ -30,12 +30,12 @@ final class TrackerFactory extends PersistentObjectFactory
         ];
     }
 
-    public function googleAnalytics(): self
+    public function googleAnalytics(?string $trackerId = null): self
     {
         return $this->with([
             'name' => 'Google Analytics',
             'type' => TrackerType::GOOGLE_ANALYTICS,
-            'trackerId' => self::faker()->bothify('G-##########'),
+            'trackerId' => $trackerId ?? self::faker()->bothify('G-##########'),
         ]);
     }
 

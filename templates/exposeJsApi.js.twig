@@ -17,12 +17,9 @@
     dialogBox.snippets = {
         {% for tracker in trackers %}
         '{{ tracker.id.toRfc4122()|raw }}': () => {
-            const trackerId = '{{ tracker.trackerId }}';
+            const trackerId = '{{ tracker.trackerId|raw }}';
             {% if tracker.useDefaultSnippet %}
-                {{ include(
-                    'trackerSnippet/' ~ tracker.type.value ~ '.js.twig'
-                        , {tracker: tracker}
-                , true, true) }}
+                {{ include('trackerSnippet/' ~ tracker.type.value ~ '.js.twig', {tracker: tracker}, true, true) }}
             {% else %}
                 {{ tracker.customCode|trim|raw }}
             {% endif %}
