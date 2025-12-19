@@ -80,6 +80,7 @@ final class WebsiteCrudController extends AbstractCrudController
                 ->setHelp('Les trackers revendant les données des visiteurs ne seront pas chargés si le visiteur a activé l\'option "Global Privacy Control" dans son navigateur.')
                 ->hideOnIndex(),
             BooleanField::new('showOpenButton', 'Afficher le bouton d\'ouverture de la popup')->hideOnIndex(),
+            BooleanField::new('autoOpen', 'Afficher automatiquement la popup')->hideOnIndex(),
             BooleanField::new('addAccessLogToGDPR', 'Ajouter le journal d\'accès au registre')->hideOnIndex(),
             BooleanField::new('addTrackerToGDPR', 'Ajouter les trackers au registre')->hideOnIndex(),
 

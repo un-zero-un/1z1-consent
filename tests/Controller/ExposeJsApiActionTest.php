@@ -65,6 +65,10 @@ class ExposeJsApiActionTest extends WebTestCase
             'const trackerId = \'G-1234567890\';',
             $client->getResponse()->getContent(),
         );
+        $this->assertStringContainsString(
+            'dialogBox.setAttribute(\'data-auto-open\', true);',
+            $client->getResponse()->getContent(),
+        );
     }
 
     public function testMissingRefererThrowsException(): void

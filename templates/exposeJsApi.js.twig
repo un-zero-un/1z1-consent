@@ -9,6 +9,7 @@
     const dialogBox = d.createElement('uzu-consent');
     dialogBox.setAttribute('data-website-id', {{ website.id|json_encode|raw }});
     dialogBox.setAttribute('data-post-consent-url', {{ url('post_consent')|json_encode|raw }});
+    dialogBox.setAttribute('data-auto-open', {{ website.autoOpen|json_encode|raw }});
     dialogBox.setAttribute('data-show-open-button', {{ website.showOpenButton|json_encode|raw }});
     dialogBox.setAttribute('data-custom-css', {{ website.customCss|json_encode|raw }});
     dialogBox.setAttribute('data-trackers', '{{ trackers|map(t => {id: t.id, type: t.type, name: t.name})|json_encode|raw }}');

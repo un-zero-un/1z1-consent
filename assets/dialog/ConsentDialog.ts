@@ -25,6 +25,7 @@ class ConsentDialog extends HTMLElement {
     private trackers: HTMLUListElement;
     private trackerConsent: Consent | null = null;
     private consentUserId: string | null = null;
+    private autoOpen: boolean = true;
     private showOpenButton: boolean = true;
     private customCss: string | null = null;
 
@@ -79,13 +80,14 @@ class ConsentDialog extends HTMLElement {
         });
 
         this.showOpenButton = JSON.parse(this.dataset.showOpenButton || 'true') as boolean;
+        this.autoOpen = JSON.parse(this.dataset.autoOpen || 'true') as boolean;
         this.customCss = this.dataset.customCss || null;
 
         this.acceptAllButton.addEventListener('click', this.acceptAll.bind(this));
         this.declineAllButton.addEventListener('click', this.declineAll.bind(this));
         this.form.addEventListener('submit', this.submit.bind(this));
 
-        if (!this.trackerConsent.done) {
+        if (!this.trackerConsent.done && this.autoOpen) {
             this.dialogBox.setAttribute('open', '');
         }
 
