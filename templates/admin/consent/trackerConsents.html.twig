@@ -1,4 +1,5 @@
-{% types consent: 'App\Entity\Consent' %}
+{% types consent: 'App\\Entity\\Consent' %}
+
 {% set consent = entity.instance %}
 {% if 'index' == ea.crud.currentAction %}
     {% set accepted_trackers = consent.trackerConsents.toArray|filter(tc => true == tc.accepted)|length %}
